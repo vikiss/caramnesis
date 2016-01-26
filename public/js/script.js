@@ -2,6 +2,8 @@ $(function(){
 
 
 
+
+
 //******************************************************************************
 
 //get the input and UL list
@@ -20,12 +22,18 @@ $(function(){
 //	list.append(li);
 //}
 
+
+
 //******************************************************************************
 	
 	var dropbox = $('#dropbox'),
   filebutton = $('#fileinput'), //***//
   car_id = $('#car_id').val(),
 	message = $('.message', dropbox);
+  
+  $( "#new_event_form" ).submit(function( event ) {
+  resetFormElement(filebutton);
+});
   
   
   /*filebutton.change(function() {
@@ -44,6 +52,8 @@ $(function(){
 		
 		uploadFinished:function(i,file,response){
 			$.data(file).addClass('done');
+      //prevent file from uploading again when the form is submitted:
+      $('#fileinput').addClass( 'uploaded' );
       $('#user_images').val(function(i,val) { 
      return val + (val ? ',' : '') + response['name'];
       });
@@ -196,5 +206,15 @@ $(function(){
 	function showMessage(msg){
 		message.html(msg);
 	}
+  
+  
+  function resetFormElement(e) {
+  e.wrap('<form>').closest('form').get(0).reset();
+  e.unwrap();
+
+  // Prevent form submission
+  e.stopPropagation();
+  e.preventDefault();
+}
 
 });
