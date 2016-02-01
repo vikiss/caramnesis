@@ -31,9 +31,10 @@ $(function(){
   car_id = $('#car_id').val(),
 	message = $('.message', dropbox);
   
+  /*
   $( "#new_event_form" ).submit(function( event ) {
   resetFormElement(filebutton);
-});
+});         */
   
   
   /*filebutton.change(function() {
@@ -53,7 +54,7 @@ $(function(){
 		uploadFinished:function(i,file,response){
 			$.data(file).addClass('done');
       //prevent file from uploading again when the form is submitted:
-      $('#fileinput').addClass( 'uploaded' );
+     // $('#fileinput').addClass( 'uploaded' );
       $('#user_images').val(function(i,val) { 
      return val + (val ? ',' : '') + response['name'];
       });
@@ -68,10 +69,10 @@ $(function(){
 					showMessage('Your browser does not support HTML5 file uploads!');
 					break;
 				case 'TooManyFiles':
-					alert('Too many files! Please select 5 at most! (configurable)');
+					alert('Too many files!');
 					break;
 				case 'FileTooLarge':
-					alert(file.name+' is too large! Please upload files up to 2mb (configurable).');
+					alert(file.name+' is too large!');
 					break;
 				default:
 					break;
@@ -110,8 +111,8 @@ $(function(){
 		// The name of the $_FILES entry:
 		paramname:'pic',
 		
-		maxfiles: 5,
-    	maxfilesize: 2,
+		maxfiles: 2,
+    	maxfilesize: 4,
 		url: '/car/pic_upl?car_id='+car_id,
 		
 		uploadFinished:function(i,file,response){
@@ -130,10 +131,10 @@ $(function(){
 					showMessage('Your browser does not support HTML5 file uploads!');
 					break;
 				case 'TooManyFiles':
-					alert('Too many files! Please select 5 at most! (configurable)');
+					alert('Too many files!');
 					break;
 				case 'FileTooLarge':
-					alert(file.name+' is too large! Please upload files up to 2mb (configurable).');
+					alert(file.name+' is too large!');
 					break;
 				default:
 					break;
@@ -208,13 +209,5 @@ $(function(){
 	}
   
   
-  function resetFormElement(e) {
-  e.wrap('<form>').closest('form').get(0).reset();
-  e.unwrap();
-
-  // Prevent form submission
-  e.stopPropagation();
-  e.preventDefault();
-}
 
 });

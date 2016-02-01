@@ -124,4 +124,5 @@ return array(
   "EVENT_TYPE" => "Įrašo tipas",
   "EVENT_ODO" => "Rida",
   "EVENT_DATE" => "Data",
+  "EVENT_AMOUNT" => "Išleista pinigų",
 );

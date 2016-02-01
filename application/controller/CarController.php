@@ -42,7 +42,7 @@ class CarController extends Controller
     
      public function create_event()
     {
-        CarModel::createEvent(array('car_id' => Request::post('car_id'), 'event_content' => Request::post('event_content'), 'event_type' => Request::post('event_type'), 'event_date' => Request::post('event_date'), 'event_odo' => Request::post('event_odo'), 'images' => Request::post('user_images') ));
+        CarModel::createEvent(array('car_id' => Request::post('car_id'), 'event_amount' => Request::post('event_amount'), 'event_content' => Request::post('event_content'), 'event_type' => Request::post('event_type'), 'event_date' => Request::post('event_date'), 'event_odo' => Request::post('event_odo'), 'images' => Request::post('user_images') ));
         Redirect::to('car/index/'.Request::post('car_id'));
     }
 
@@ -57,7 +57,7 @@ class CarController extends Controller
     
     public function eventEditSave()
     {  
-        CarModel::editEvent(array('event_content' => Request::post('event_content'), 'event_type' => Request::post('event_type'), 'car_id' => Request::post('car_id'), 'event_time' => Request::post('event_time'), 'event_microtime' => Request::post('event_microtime') ));
+        CarModel::editEvent(array('event_amount' => Request::post('event_amount'), 'event_content' => Request::post('event_content'), 'event_type' => Request::post('event_type'), 'car_id' => Request::post('car_id'), 'event_time' => Request::post('event_time'), 'event_microtime' => Request::post('event_microtime') ));
         Redirect::to('car/index/'.Request::post('car_id'));
     }
     

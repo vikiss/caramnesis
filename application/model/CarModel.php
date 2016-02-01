@@ -76,9 +76,13 @@ class CarModel
         //patikrinam ar vartotojas turi teisę rašyti į šitą mašiną!!!
        $casscluster   = Cassandra::cluster()  ->build();
        $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-       $statement = $casssession->prepare('INSERT INTO events (car, event_author, event_content, event_time, event_type, event_entered, event_odo, images) VALUES (?,?,?,?,?,dateOf(now()),?,?)');
+       $statement = $casssession->prepare('INSERT INTO events (car, event_author, event_content, event_data, event_time, event_type, event_entered, event_odo, images) VALUES (?,?,?,?,?,?,dateOf(now()),?,?)');
        $microtime = gettimeofday(); $microtime = $microtime['usec'];
        $imagelist = new Cassandra\Collection(Cassandra::TYPE_TEXT);
+       $event_blob = array(
+       'amount' => self::Getfloat($event_data['event_amount']),
+       //'something else' => 'some future data'
+       );
        if ($event_data['images']) { 
        $uplimages = explode(',', $event_data['images']);
        foreach ($uplimages as $uplimage) {$imagelist->add($uplimage);}
@@ -87,6 +91,7 @@ class CarModel
        'car' => new Cassandra\Uuid($event_data['car_id']),
        'event_author' => new Cassandra\Uuid(Session::get('user_uuid')),
        'event_content' => $event_data['event_content'],
+       'event_data' => serialize($event_blob),
        'event_time' => new Cassandra\Timestamp(strtotime($event_data['event_date'].date(' H:i:s ')), $microtime),
        'event_type' => $event_data['event_type'],                      
        'event_odo' => intval($event_data['event_odo']),
@@ -230,6 +235,22 @@ class CarModel
         Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_EDITING_FAILED'));
         return false;
     }
+    
+    
+    
+    private function Getfloat($str) {
+  if(strstr($str, ",")) {
+    $str = str_replace(".", "", $str); // replace dots (thousand seps) with blancs
+    $str = str_replace(",", ".", $str); // replace ',' with '.'
+  }
+ 
+  if(preg_match("#([0-9\.]+)#", $str, $match)) { // search for number that may contain '.'
+    $res = floatval($match[0]);
+  } else {
+    $res = floatval($str); // take some last chances with floatval
+  }
+  return number_format((float)$res, 2, '.', '');
+} 
 
     
-}
+}  

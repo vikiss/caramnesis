@@ -124,5 +124,6 @@ return array(
   "EVENT_TYPE" => "Event type",
   "EVENT_ODO" => "Event odo",
   "EVENT_DATE" => "Event date",
+  "EVENT_AMOUNT" => "Money spent",
    
 );
