@@ -125,5 +125,8 @@ return array(
   "EVENT_ODO" => "Event odo",
   "EVENT_DATE" => "Event date",
   "EVENT_AMOUNT" => "Money spent",
+  "UPLOAD_IMAGES" => "Add photo(s)",
+  "DROP_IMAGES" => "Drag and drop photos here",
+  "EVENT_CREATED" => "Event created",
    
 );

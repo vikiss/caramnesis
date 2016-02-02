@@ -120,6 +120,10 @@ return array(
 	'AVATAR_SIZE' => 44,
 	'AVATAR_JPEG_QUALITY' => 85,
 	'AVATAR_DEFAULT_IMAGE' => 'default.jpg',
+  
+  
+  'CAR_IMAGE_PATH' => '/var/www/usrimg/',
+  'CAR_EMPTY_IMAGE' => '/var/www/html/public/img/empty.gif',
     /**
      * Configuration for: Encryption Keys
      *

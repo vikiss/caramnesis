@@ -27,6 +27,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/basscss.css" />
+    <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/fontello.css" />
     <script src="http://cdn.jquerytools.org/1.2.6/full/jquery.tools.min.js"></script>
 </head>
 <body>

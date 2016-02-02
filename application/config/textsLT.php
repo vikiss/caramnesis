@@ -125,4 +125,7 @@ return array(
   "EVENT_ODO" => "Rida",
   "EVENT_DATE" => "Data",
   "EVENT_AMOUNT" => "Išleista pinigų",
+  "UPLOAD_IMAGES" => "Nuotrauka/-os",
+  "DROP_IMAGES" => "Čia galima įmesti nuotrauką(s)",
+  "EVENT_CREATED" => "Įrašas sukurtas",
 );
