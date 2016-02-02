@@ -10,8 +10,8 @@ if (ctype_digit($this->size)) {
    if (($this->size > 29) && ($this->size < 1201)) {
    $file = '/var/www/usrimg/'.$this->user.'/'.$this->size.'/'.$this->image;
    if (!file_exists($file)) {
-      makeItSmaller($this->image, $this->user, $this->size)    ;
-      exit;
+      if (!makeItSmaller($this->image, $this->user, $this->size))
+      {$file = Config::get('CAR_EMPTY_IMAGE') ;} //if resample fails
    }
    }
 };
@@ -37,12 +37,12 @@ if ($ok) {
 
 $thumb = new Imagick();
 $thumb->readImage(Config::get('CAR_IMAGE_PATH').$user.'/'.$image);
-$thumb->resizeImage(320,240,Imagick::FILTER_LANCZOS,1);
+$thumb->resizeImage($size,$size,Imagick::FILTER_LANCZOS,1,true);
 $thumb->writeImage(Config::get('CAR_IMAGE_PATH').$user.'/'.$size.'/'.$image);
 $thumb->clear();
 $thumb->destroy(); 
-
-}
+return true;
+} else {return false;}
 
 }
 ?>              

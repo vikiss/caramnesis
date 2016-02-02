@@ -64,13 +64,13 @@
        </ul><?php }; ?> 
        <div class="bold"><?= date('Y-m-d', $event_time); ?></div>
        <?php if($event['event_odo']) { ?><div><?= $event['event_odo'].' '.$units['distance']; ?></div><?php }; ?>
-       <?php if($entry_data['amount']) { ?><div><?= $entry_data['amount'].', '.$units['currency']; ?></div><?php }; ?>
+       <?php if($entry_data['amount']) { ?><div><?= $entry_data['amount'].' '.$units['currency']; ?></div><?php }; ?>
        <div class="small absolute bottom-0 left-0 px2"><?= Text::get("EVENT_CREATED").' '.date('Y-m-d H:i:s', $entry_time); ?></div>
      </div>
      <div class="col col-5 mr2 ">
      <?= $event['event_content']; ?>
      </div>
-     <div class="col border">
+     <div class="col ">
      
                    <?php
                    if ($images) {
