@@ -252,5 +252,29 @@ class CarModel
   return number_format((float)$res, 2, '.', '');
 } 
 
+
+
+  public static function makeItSmaller($image, $user, $size)
+{
+$ok = false;
+if (!is_dir(Config::get('CAR_IMAGE_PATH').$user.'/'.$size)) {
+  if (mkdir(Config::get('CAR_IMAGE_PATH').$user.'/'.$size, 0755)) {
+  $ok = true;
+  }
+} else {$ok = true;}
+
+if ($ok) {
+
+$thumb = new Imagick();
+$thumb->readImage(Config::get('CAR_IMAGE_PATH').$user.'/'.$image);
+$thumb->resizeImage($size,$size,Imagick::FILTER_LANCZOS,1,true);
+$thumb->writeImage(Config::get('CAR_IMAGE_PATH').$user.'/'.$size.'/'.$image);
+$thumb->clear();
+$thumb->destroy(); 
+return true;
+} else {return false;}
+
+}
+
     
 }  

@@ -23,7 +23,7 @@ class Application
      */
     public function __construct()
     {
-        // create array with URL parts in $url
+          // create array with URL parts in $url
         $this->splitUrl();
 
 	    // creates controller and action names (from URL input)
@@ -36,6 +36,29 @@ class Application
             // example: if controller would be "car", then this line would translate into: $this->car = new car();
             require Config::get('PATH_CONTROLLER') . $this->controller_name . '.php';
             $this->controller = new $this->controller_name();
+            
+            /* gettext */
+$available_locales = array('en'=>'en_US.UTF-8', 'lt'=>'lt_LT.UTF-8'); //cia kalbos, reikia prideti naujas jei bus  
+if ((Request::get('lang')) && (array_key_exists(strtolower(Request::get('lang')), $available_locales))) //ar kas get parametre siaip kokiu bleniu neprirase  
+{
+$locale = $available_locales[strtolower(Request::get('lang'))];
+} 
+elseif (Session::get('locale')) {$locale = Session::get('locale');}
+else {$locale = 'en_US.UTF-8';}
+Session::set('locale', $locale); 
+putenv("LANGUAGE=".$locale);
+putenv("LANG=".$locale);
+putenv("LC_ALL=".$locale);
+setlocale(LC_ALL, $locale);
+$domain="messages";
+bindtextdomain($domain, '/var/www/html/application/Locale');
+bind_textdomain_codeset($domain, 'UTF-8');
+textdomain($domain);  
+            /* gettext */
+            
+            
+            
+            
 
             // check for method: does such a method exist in the controller ?
             if (method_exists($this->controller, $this->action_name)) {

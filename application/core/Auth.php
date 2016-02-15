@@ -17,8 +17,9 @@ class Auth
     {
         // initialize the session (if not initialized yet)
         Session::init();
-
-        // self::checkSessionConcurrency();
+        
+        
+         self::checkSessionConcurrency();
 
         // if user is NOT logged in...
         // (if user IS logged in the application will not run the code below and therefore just go on)

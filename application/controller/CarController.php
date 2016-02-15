@@ -32,6 +32,11 @@ class CarController extends Controller
         $this->View->renderWithoutHeaderAndFooter('car/image', array('user' => $user_id, 'image' => $image_id, 'size' => $size));
     }}
     
+    public function imagepg($user_id, $image_id, $size = 'full')
+    {    if ($image_id) {
+        $this->View->renderWithoutHeaderAndFooter('car/imagepg', array('user' => $user_id, 'image' => $image_id, 'size' => $size));
+    }}
+    
     
     public function create_car()
     {

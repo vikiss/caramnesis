@@ -2,8 +2,8 @@
   <div class="clearfix">
 
     <div class="relative center">
-    <h1 class="fw300 mt2 mb2 hero-header has-text-shadow">CARAMNESIS</h1>
-    <p><i><?php echo Text::get("HERO_BLURB"); ?></i></p>
+    <h1 class="fw300 mt2 mb2"><img src="/img/caramnesis.svg" width="50%" alt="caramnesis" /></h1>
+    <p><i><?php echo _("HERO_BLURB"); ?></i></p>
     </div>
 
     <?php $this->renderFeedbackMessages(); ?>
@@ -23,7 +23,7 @@
             <!-- register box on right side -->
             <div class="sm-col md-col-6 lg-col-6">
             <div class="m2">
-            <p><strong>Caramnesis.com</strong><?php echo Text::get("HERO_WRITEUP"); ?></p>
+            <p><strong>Caramnesis.com</strong><?php echo _("HERO_WRITEUP"); ?></p>
             </div></div>
 
         

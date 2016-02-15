@@ -4,9 +4,9 @@
         <?php $this->renderFeedbackMessages(); ?>
 	</div>
 	<?php
-//echo Text::get("FEEDBACK_LANGUAGE_TEST"); 
+
 if ($this->car) { ?>
-<h1><?php echo Text::get("HEADER_MY_CARS"); ?></h1>
+<h1><?php echo _("MENU_MY_CARS"); ?></h1>
 <?php
 foreach ($this->car as $row) {   
       $id = (array) $row['id']; //typecas cass uuid object into array otherwise cant get to values
@@ -16,7 +16,7 @@ foreach ($this->car as $row) {
                  
 <?php  } } else echo '<h1>No cars found</h1>' ?>
  
- <p><a href="<?php echo Config::get('URL'); ?>car/new_car"><?php echo Text::get("ADD_NEW_CAR"); ?></a></p>
+ <p><a href="<?php echo Config::get('URL'); ?>car/new_car"><?php echo _("NEWCAR_ADD"); ?></a></p>
  
  
 </div>

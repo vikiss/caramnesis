@@ -27,6 +27,7 @@ ini_set("display_errors", 1);
  * @see php.net/manual/en/session.configuration.php#ini.session.cookie-httponly
  */
 ini_set('session.cookie_httponly', 1);
+include ('tags.php');
 
 /**
  * Returns the full configuration.
@@ -78,6 +79,7 @@ return array(
 	*/
 	'CASS_KEYSPACE' => 'bxamnesis',
   'DEFAULT_LANGUAGE' => 'EN',
+  'AVAILABLE_TAGS' => $available_tags,
 	/**
 	 * Configuration for: Captcha size
 	 * The currently used Captcha generator (https://github.com/Gregwar/Captcha) also runs without giving a size,
@@ -164,3 +166,5 @@ return array(
 	'EMAIL_VERIFICATION_SUBJECT' => 'CARAMNESIS account activation',
 	'EMAIL_VERIFICATION_CONTENT' => 'Please click on this link to activate your account: ',
 );
+
+        

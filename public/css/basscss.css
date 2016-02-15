@@ -245,6 +245,23 @@ hr {
   background-color: transparent;
 }
 
+.sbtn {
+  font-family: inherit;
+  font-size: 90%;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1.125rem;
+  padding: .5rem 1rem;
+  margin: 0;
+  height: auto;
+  border: 1px solid transparent;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  color: inherit;
+  background-color: transparent;
+}
+
 .btn:hover {
   text-decoration: none;
 }
@@ -1005,3 +1022,51 @@ hr {
 	border-radius:3px;
 	background:#fff;
 	}
+  
+/*-------------------------
+	modal
+--------------------------*/
+
+/* the overlayed element */
+.apple_overlay {
+ 
+    /* initially overlay is hidden */
+    display:none;
+ 
+    /* growing background image */
+  /*  background-image:url(/img/overlay/white.png); */
+ 
+    /*
+      width after the growing animation finishes
+      height is automatically calculated
+      */
+    width:640px;
+ 
+    /* some padding to layout nested elements nicely  */
+    padding:35px;
+ 
+    /* a little styling */
+    font-size:11px;
+}
+ 
+/* default close button positioned on upper right corner */
+.apple_overlay .close {
+    background-image:url(/img/overlay/close.png);
+    position:absolute; right:0px; top:0px;
+    cursor:pointer;
+    height:35px;
+    width:35px;
+}  
+  
+    #overlay {
+    background-image:url(/img/empty.gif);
+    color:#efefef;
+    height:450px;
+  }
+  
+  div.contentWrap {
+    max-height:90%;
+    
+  }
+  
+  div.contentWrap img {}

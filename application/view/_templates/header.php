@@ -35,36 +35,38 @@
     <nav class="clearfix white bg-kcms">
         <!-- navigation -->
         <div class="sm-col">
-          <a href="<?php echo Config::get('URL'); ?>index/index" class="btn py2"><img src="/img/tiny-exhaust-header-gasket.png" alt="caramnesis" /></a>
+          <a href="<?php echo Config::get('URL'); ?>index/index" class="sbtn py2"><img src="/img/tiny-exhaust-header-gasket.png" alt="caramnesis" /></a>
           
           
             
             <?php if (Session::userIsLoggedIn()) { ?>
-                    <a href="<?php echo Config::get('URL'); ?>car/index" class="btn py2"><?php echo Text::get("MENU_MY_CARS"); ?></a>
+                    <a href="<?php echo Config::get('URL'); ?>car/index" class="sbtn py2"><?php echo _("MENU_MY_CARS"); ?></a>
             <?php } else {  // for not logged-in users 
             ?>
                                 
                 <?php if (!View::checkForActiveControllerAndAction($filename, "login/index")) {  ?>
-                    <a href="<?php echo Config::get('URL'); ?>login/index" class="btn py2"><?php echo Text::get("MENU_LOGIN"); ?></a>
+                    <a href="<?php echo Config::get('URL'); ?>login/index" class="sbtn py2"><?php echo _("MENU_LOGIN"); ?></a>
                 <?php };
                 if (!View::checkForActiveControllerAndAction($filename, "login/register")) {  ?>
-                    <a href="<?php echo Config::get('URL'); ?>login/register" class="btn py2"><?php echo Text::get("MENU_REGISTER"); ?></a>
+                    <a href="<?php echo Config::get('URL'); ?>login/register" class="sbtn py2"><?php echo _("MENU_REGISTER"); ?></a>
                 
             <?php }} ?>
         </div>
+
+        <div class="sm-col-right"><a href="?lang=lt">LT</a> <a href="?lang=en">EN</a></div>
 
         <!-- my account -->
         <div class="sm-col-right">
         <?php if (Session::userIsLoggedIn()) { ?> 
                     
-                <a href="<?php echo Config::get('URL'); ?>login/showprofile" class="btn py2"><?php echo Session::get('user_name') ; ?><?php // echo Text::get("MENU_MY_ACCOUNT"); ?></a>
+                <a href="<?php echo Config::get('URL'); ?>login/showprofile" class="sbtn py2"><?php echo Session::get('user_name') ; ?><?php // echo _("MENU_MY_ACCOUNT"); ?></a>
                                      
-                        <a href="<?php echo Config::get('URL'); ?>login/logout" class="btn py2"><?php echo Text::get("MENU_LOGOUT"); ?></a>
+                        <a href="<?php echo Config::get('URL'); ?>login/logout" class="sbtn py2"><?php echo _("MENU_LOGOUT"); ?></a>
                     
                
         <?php } else { if (!View::checkForActiveControllerAndAction($filename, "index/about")) { ?>
         
-          <a href="<?php echo Config::get('URL'); ?>aboutCaramnesis" class="btn py2"><?php echo Text::get("MENU_ABOUT_CARAMNESIS"); ?></a>
+          <a href="<?php echo Config::get('URL'); ?>aboutCaramnesis" class="sbtn py2"><?php echo _("MENU_ABOUT_CARAMNESIS"); ?></a>
         
         <?php } }; ?>
         </div>

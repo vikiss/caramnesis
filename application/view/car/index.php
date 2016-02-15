@@ -65,7 +65,7 @@
        <div class="bold"><?= date('Y-m-d', $event_time); ?></div>
        <?php if($event['event_odo']) { ?><div><?= $event['event_odo'].' '.$units['distance']; ?></div><?php }; ?>
        <?php if($entry_data['amount']) { ?><div><?= $entry_data['amount'].' '.$units['currency']; ?></div><?php }; ?>
-       <div class="small absolute bottom-0 left-0 px2"><?= Text::get("EVENT_CREATED").' '.date('Y-m-d H:i:s', $entry_time); ?></div>
+       <div class="small absolute bottom-0 left-0 px2"><?= _("EVENT_CREATED").' '.date('Y-m-d H:i:s', $entry_time); ?></div>
      </div>
      <div class="col col-5 mr2 ">
      <?= $event['event_content']; ?>
@@ -75,7 +75,7 @@
                    <?php
                    if ($images) {
                     foreach($images AS $image) {
-                    print '<img src="/car/image/'.Session::get('user_uuid').'/'.$car_id.'_'.$image.'/120" /> '; 
+                    print '<a href="'.Config::get('URL').'/car/imagepg/'.Session::get('user_uuid').'/'.$car_id.'_'.$image.'" rel="#overlay"><img src="/car/image/'.Session::get('user_uuid').'/'.$car_id.'_'.$image.'/120" /></a> '; 
               
                                                 }
                                 } ?>
@@ -83,10 +83,38 @@
      
      </div>
     </div>
-      <a href="<?= Config::get('URL') . 'car/edit_event/' . $event_id; ?>" class="h5 btn btn-primary mt1 black bg-kcms right "><?php echo Text::get("EDIT"); ?></a>
+      <a href="<?= Config::get('URL') . 'car/edit_event/' . $event_id; ?>" class="h5 btn btn-primary mt1 black bg-kcms right "><?php echo _("EDIT"); ?></a>
   </div> 
            
                        
 <?php }}            ?>
     </div>
 </div>
+
+
+<div class="apple_overlay" id="overlay">
+  <div class="contentWrap"></div>
+</div>
+
+<script>
+$(function() {
+ 
+    // if the function argument is given to overlay,
+    // it is assumed to be the onBeforeLoad event listener
+    $("a[rel]").overlay({
+ 
+        mask: '#CC9',
+        effect: 'apple',
+ 
+        onBeforeLoad: function() {
+ 
+            // grab wrapper element inside content
+            var wrap = this.getOverlay().find(".contentWrap");
+ 
+            // load the page specified in the trigger
+            wrap.load(this.getTrigger().attr("href"));
+        }
+ 
+    });
+});
+</script>
