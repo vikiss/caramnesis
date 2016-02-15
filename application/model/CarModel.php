@@ -79,6 +79,8 @@ class CarModel
        $statement = $casssession->prepare('INSERT INTO events (car, event_author, event_content, event_data, event_time, event_type, event_entered, event_odo, images) VALUES (?,?,?,?,?,?,dateOf(now()),?,?)');
        $microtime = gettimeofday(); $microtime = $microtime['usec'];
        $imagelist = new Cassandra\Collection(Cassandra::TYPE_TEXT);
+       $eventtype = new Cassandra\Collection(Cassandra::TYPE_TEXT);
+       $eventtype->add($event_data['event_type']);
        $event_blob = array(
        'amount' => self::Getfloat($event_data['event_amount']),
        //'something else' => 'some future data'
@@ -93,7 +95,7 @@ class CarModel
        'event_content' => $event_data['event_content'],
        'event_data' => serialize($event_blob),
        'event_time' => new Cassandra\Timestamp(strtotime($event_data['event_date'].date(' H:i:s ')), $microtime),
-       'event_type' => $event_data['event_type'],                      
+       'event_type' => $eventtype,                      
        'event_odo' => intval($event_data['event_odo']),
        'images' => $imagelist
        );

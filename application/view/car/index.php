@@ -27,7 +27,10 @@
       <div class="icon-cab"> <?php
        print $car_make.' '.$car_model.' | '.$car_vin.' | '.$car_plates[0]; 
        ?></div>
-    
+       
+       <?php 
+       $tags = Config::get('AVAILABLE_TAGS');
+       ?>
     
     <div class="bg-kclite p2 mt2 fauxfield relative"><?php include('event_form.php'); ?></div>
   
@@ -45,11 +48,14 @@
      $event_id = urlencode(serialize(array('car' => $car_id, 'time' => $event_time, 'microtime' => $event_microtime)));
      
      $entry_time = (array) $event['event_entered'];
-     $entry_time =  $entry_time['seconds'];
+     if ($entry_time) {$entry_time =  $entry_time['seconds'];} else {$entry_time = 0;} // šitas if tik tam kad seni įrašai su tuščia data neduotų klaidų
      
      $entry_data = unserialize($event['event_data']);
           
      $images = $event['images'];
+     $event_type = '';
+     $event_types = $event['event_type'];
+     if ($event_types) {foreach ($event_types AS $type) {$event_type=$type;};}
      
      
       ?>
@@ -58,9 +64,9 @@
   <div class="bg-white p2 mt2 fauxfield clearfix relative">
     <div class="clearfix">
      <div class="col col-3 mr2">
-       <?php if($event['event_type']) { ?>
+       <?php if($event_type) { ?>
        <ul class="tags list-reset pb2">
-        <li><a href="#"><?= $event['event_type']; ?></a></li>
+        <li><a href="#"><?= _($event_type); ?></a></li>
        </ul><?php }; ?> 
        <div class="bold"><?= date('Y-m-d', $event_time); ?></div>
        <?php if($event['event_odo']) { ?><div><?= $event['event_odo'].' '.$units['distance']; ?></div><?php }; ?>
