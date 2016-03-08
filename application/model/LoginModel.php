@@ -20,7 +20,7 @@ class LoginModel
     {
         // we do negative-first checks here, for simplicity empty username and empty password in one line
         if (empty($user_name) OR empty($user_password)) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_OR_PASSWORD_FIELD_EMPTY'));
+            Session::add('feedback_negative', _('FEEDBACK_USERNAME_OR_PASSWORD_FIELD_EMPTY'));
             return false;
         }
 
@@ -35,13 +35,13 @@ class LoginModel
 
         // stop the user's login if account has been soft deleted
         if ($result->user_deleted == 1) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_DELETED'));
+            Session::add('feedback_negative', _('FEEDBACK_DELETED'));
             return false;
         }
 
         // stop the user from logging in if user has a suspension, display how long they have left in the feedback.
         if ($result->user_suspension_timestamp != null && $result->user_suspension_timestamp - time() > 0) {
-            $suspensionTimer = Text::get('FEEDBACK_ACCOUNT_SUSPENDED') . round(abs($result->user_suspension_timestamp - time())/60/60, 2) . " hours left";
+            $suspensionTimer = _('FEEDBACK_ACCOUNT_SUSPENDED') . round(abs($result->user_suspension_timestamp - time())/60/60, 2) . " hours left";
             Session::add('feedback_negative', $suspensionTimer);
             return false;
         }
@@ -84,7 +84,7 @@ class LoginModel
 		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
 		// (limits user searches in database)
 		if (Session::get('failed-login-count') >= 3 AND (Session::get('last-failed-login') > (time() - 30))) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_LOGIN_FAILED_3_TIMES'));
+			Session::add('feedback_negative', _('FEEDBACK_LOGIN_FAILED_3_TIMES'));
 			return false;
 		}
 		
@@ -97,26 +97,26 @@ class LoginModel
             // increment the user not found count, helps mitigate user enumeration
             self::incrementUserNotFoundCounter();
             // user does not exist, but we won't to give a potential attacker this details, so we just use a basic feedback message
-            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_OR_PASSWORD_WRONG'));
+            Session::add('feedback_negative', _('FEEDBACK_USERNAME_OR_PASSWORD_WRONG'));
 			return false;
 		}
 
 		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
 		if (($result->user_failed_logins >= 3) AND ($result->user_last_failed_login > (time() - 30))) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_WRONG_3_TIMES'));
+			Session::add('feedback_negative', _('FEEDBACK_PASSWORD_WRONG_3_TIMES'));
 			return false;
 		}
 
 		// if hash of provided password does NOT match the hash in the database: +1 failed-login counter
 		if (!password_verify($user_password, $result->user_password_hash)) {
 			self::incrementFailedLoginCounterOfUser($result->user_name);
-			Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_OR_PASSWORD_WRONG')); 
+			Session::add('feedback_negative', _('FEEDBACK_USERNAME_OR_PASSWORD_WRONG')); 
 			return false;
 		}
 
 		// if user is not active (= has not verified account by verification mail)
 		if ($result->user_active != 1) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET'));
+			Session::add('feedback_negative', _('FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET'));
 			return false;
 		}
 
@@ -159,13 +159,13 @@ class LoginModel
     {
         // do we have a cookie ?
         if (!$cookie) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
+            Session::add('feedback_negative', _('FEEDBACK_COOKIE_INVALID'));
             return false;
         }
 
         // before list(), check it can be split into 3 strings.
         if(count (explode(':', $cookie)) !== 3){
-            Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
+            Session::add('feedback_negative', _('FEEDBACK_COOKIE_INVALID'));
             return false;
         }
 
@@ -176,7 +176,7 @@ class LoginModel
         $user_id = Encryption::decrypt($user_id);
 
         if ($hash !== hash('sha256', $user_id . ':' . $token) OR empty($token) OR empty($user_id)) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
+            Session::add('feedback_negative', _('FEEDBACK_COOKIE_INVALID'));
             return false;
         }
 
@@ -194,10 +194,10 @@ class LoginModel
             // be invalid after a certain amount of time, so the user has to login with username/password
             // again from time to time. This is good and safe ! ;)
 
-            Session::add('feedback_positive', Text::get('FEEDBACK_COOKIE_LOGIN_SUCCESSFUL'));
+            Session::add('feedback_positive', _('FEEDBACK_COOKIE_LOGIN_SUCCESSFUL'));
             return true;
         } else {
-            Session::add('feedback_negative', Text::get('FEEDBACK_COOKIE_INVALID'));
+            Session::add('feedback_negative', _('FEEDBACK_COOKIE_INVALID'));
             return false;
         }
     }

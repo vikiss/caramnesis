@@ -1,4 +1,11 @@
 <?php
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+// 5 minutes execution time
+@set_time_limit(5 * 60);
 //image storage: folder = username, filename = car id _ microtime
 //don't want to . dots . in filename
 $fnamend =  str_replace('.','-',microtime(true));
@@ -18,16 +25,15 @@ if(strtolower($_SERVER['REQUEST_METHOD']) != 'post'){
 	exit_status('Error! Wrong HTTP method!');
 }
 
-if(array_key_exists('pic',$_FILES) && $_FILES['pic']['error'] == 0 ){
+if(array_key_exists('file',$_FILES) && $_FILES['file']['error'] == 0 ){
 
-  $pic = $_FILES['pic'];
+  $pic = $_FILES['file'];
   
   $info = getimagesize($pic['tmp_name']);
   if ($info === FALSE) {
   	exit_status('Unable to determine image type of uploaded file!');
 }
 
-	//put_it_in_usrimg($pic, $allowed_ext, $upload_dir, $car_id, $fnamend);
   if(!in_array(get_extension($pic['name']),$allowed_ext)){
 		exit_status('Only '.implode(',',$allowed_ext).' files are allowed!');
 	}	
@@ -43,14 +49,6 @@ $ext = pathinfo($pic['name'], PATHINFO_EXTENSION);
 }
 
 
-/*
-if(count($_FILES['uploads']['filesToUpload'])) {
-	foreach ($_FILES['uploads']['filesToUpload'] as $pic) {
-
-		put_it_in_usrimg($pic, $allowed_ext, $upload_dir, $car_id, $fnamend);
-		
-	}
-}      */
 
 
 
@@ -70,21 +68,5 @@ function get_extension($file_name){
 }
 
 
-/*function put_it_in_usrimg($pic, $allowed_ext, $upload_dir, $car_id, $fnamend) {
-
-
-if(!in_array(get_extension($pic['name']),$allowed_ext)){
-		exit_status('Only '.implode(',',$allowed_ext).' files are allowed!');
-	}	
-
-  
-$ext = pathinfo($pic['name'], PATHINFO_EXTENSION);
-  
-  if(move_uploaded_file($pic['tmp_name'], $upload_dir.$car_id.'_'.$fnamend.'.'.$ext)){
-		exit_status('File was uploaded successfuly!', $fnamend.'.'.$ext);
-    //exit_status('File was uploaded successfuly! user: '.Session::get('user_uuid').' car: '.$car_id);
-	}
-  
-} */
 
 ?>

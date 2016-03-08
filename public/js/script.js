@@ -27,7 +27,7 @@ $(function(){
 //******************************************************************************
 	
 	var dropbox = $('#dropbox'),
-  filebutton = $('#fileinput'), //***//
+  filebutton = $('#fileinput'), 
   car_id = $('#car_id').val(),
 	message = $('.message', dropbox);
   
@@ -111,8 +111,8 @@ $(function(){
 		// The name of the $_FILES entry:
 		paramname:'pic',
 		
-		maxfiles: 2,
-    	maxfilesize: 4,
+		maxfiles: 5,
+    	maxfilesize: 6,
 		url: '/car/pic_upl?car_id='+car_id,
 		
 		uploadFinished:function(i,file,response){

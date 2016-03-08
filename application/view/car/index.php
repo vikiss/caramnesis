@@ -32,7 +32,7 @@
        $tags = Config::get('AVAILABLE_TAGS');
        ?>
     
-    <div class="bg-kclite p2 mt2 fauxfield relative"><?php include('event_form.php'); ?></div>
+      <?php include('event_form.php'); ?>
   
     <div>
      <?php 
@@ -104,9 +104,7 @@
 
 <script>
 $(function() {
- 
-    // if the function argument is given to overlay,
-    // it is assumed to be the onBeforeLoad event listener
+    
     $("a[rel]").overlay({
  
         mask: '#CC9',

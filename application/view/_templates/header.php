@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>CARAMNESIS</title>
-    <!-- META -->
     <meta charset="utf-8">
     <meta name="google-site-verification" content="k2m_5lCV-bnPaS6nDYZy65_66i5YGRRaRhOHVWCoOps" />
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
@@ -28,7 +27,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/basscss.css" />
     <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/fontello.css" />
-    <script src="http://cdn.jquerytools.org/1.2.6/full/jquery.tools.min.js"></script>
+    <script src="/js/jquery.tools.min.js"></script>                  
 </head>
 <body>
     <div class="flex flex-column" style="min-height:100vh">

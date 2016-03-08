@@ -873,69 +873,29 @@ hr {
 
 
 /*-------------------------
-	Dropbox Element
+	Image upload form
 --------------------------*/
 
 
-#dropbox .message{
-    text-align: center;
-}
 
-
-/*-------------------------
-	Image Previews
---------------------------*/
-
-#dropbox .preview{
-	width:200px;
-	height: 180px;
-	float:left;
-	margin: 55px 40px 0 0px;
-	position: relative;
-	text-align: center;
-}
-
-#dropbox .preview img{
-	max-width: 200px;
-	max-height:160px;
-	border:1px solid #CC9;
-	display: block;
-}
-
-#dropbox .imageHolder{
+#dropbox #filelist li{
 	display: inline-block;
 	position:relative;
+  width: 120px;
+  margin-right: 20px;
 }
-
-#dropbox .uploaded{
-	position: absolute;
-	top:0;
-	left:0;
-	height:100%;
-	width:100%;
-	background: url('../img/done.png') no-repeat center center rgba(255,255,255,0.5);
-	display: none;
-}
-
-#dropbox .preview.done .uploaded{
-	display: block;
-}
-
-/*-------------------------
-	Progress Bars
---------------------------*/
 
 #dropbox .progressHolder{
 	position: absolute;
-	background-color:#252f38;
-	height:12px;
+	background-color:#CC9;
+	height:8px;
 	width:100%;
-	left:0;
+	top:0;
 	bottom: 0;
 }
 
 #dropbox .progress{
-	background-color:#CC9;
+	background-color:#A0A06B;
 	position: absolute;
 	height:100%;
 	left:0;
@@ -946,9 +906,6 @@ hr {
 	transition:0.25s;
 }
 
-#dropbox .preview.done .progress{
-	width:100% !important;
-}
 
 
 /*-------------------------
