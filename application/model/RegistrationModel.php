@@ -38,13 +38,13 @@ class RegistrationModel
 
 		// check if username already exists
 		if (UserModel::doesUsernameAlreadyExist($user_name)) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_ALREADY_TAKEN'));
+			Session::add('feedback_negative', _('FEEDBACK_USERNAME_ALREADY_TAKEN'));
 			$return = false;
 		}
 
 		// check if email already exists
 		if (UserModel::doesEmailAlreadyExist($user_email)) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_USER_EMAIL_ALREADY_TAKEN'));
+			Session::add('feedback_negative', _('FEEDBACK_USER_EMAIL_ALREADY_TAKEN'));
 			$return = false;
 		}
 
@@ -56,7 +56,7 @@ class RegistrationModel
 
 		// write user data to database
 		if (!self::writeNewUserToDatabase($user_name, $user_password_hash, $user_email, time(), $user_activation_hash)) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_CREATION_FAILED'));
+			Session::add('feedback_negative', _('FEEDBACK_ACCOUNT_CREATION_FAILED'));
             return false; // no reason not to return false here
 		}
 
@@ -64,19 +64,19 @@ class RegistrationModel
 		$user_id = UserModel::getUserIdByUsername($user_name);
 
 		if (!$user_id) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_UNKNOWN_ERROR'));
+			Session::add('feedback_negative', _('FEEDBACK_UNKNOWN_ERROR'));
 			return false;
 		}
 
 		// send verification email
 		if (self::sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
-			Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED'));
+			Session::add('feedback_positive', _('FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED'));
 			return true;
 		}
 
 		// if verification email sending failed: instantly delete the user
 		self::rollbackRegistrationByUserId($user_id);
-		Session::add('feedback_negative', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED'));
+		Session::add('feedback_negative', _('FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED'));
 		return false;
 	}
 
@@ -97,7 +97,7 @@ class RegistrationModel
 
 		// perform all necessary checks
 		if (!CaptchaModel::checkCaptcha($captcha)) {
-			Session::add('feedback_negative', Text::get('FEEDBACK_CAPTCHA_WRONG'));
+			Session::add('feedback_negative', _('FEEDBACK_CAPTCHA_WRONG'));
             $return = false;
 		}
 
@@ -119,13 +119,13 @@ class RegistrationModel
     public static function validateUserName($user_name)
     {
         if (empty($user_name)) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_FIELD_EMPTY'));
+            Session::add('feedback_negative', _('FEEDBACK_USERNAME_FIELD_EMPTY'));
             return false;
         }
 
         // if username is too short (2), too long (64) or does not fit the pattern (aZ09)
         if (!preg_match('/^[a-zA-Z0-9]{2,64}$/', $user_name)) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN'));
+            Session::add('feedback_negative', _('FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN'));
             return false;
         }
 
@@ -141,7 +141,7 @@ class RegistrationModel
     public static function validateUserEmail($user_email)
     {
         if (empty($user_email)) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_EMAIL_FIELD_EMPTY'));
+            Session::add('feedback_negative', _('FEEDBACK_EMAIL_FIELD_EMPTY'));
             return false;
         }
 
@@ -149,7 +149,7 @@ class RegistrationModel
         // side-fact: Max length seems to be 254 chars
         // @see http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
         if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN'));
+            Session::add('feedback_negative', _('FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN'));
             return false;
         }
 
@@ -166,17 +166,17 @@ class RegistrationModel
     public static function validateUserPassword($user_password_new, $user_password_repeat)
     {
         if (empty($user_password_new) OR empty($user_password_repeat)) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_FIELD_EMPTY'));
+            Session::add('feedback_negative', _('FEEDBACK_PASSWORD_FIELD_EMPTY'));
             return false;
         }
 
         if ($user_password_new !== $user_password_repeat) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_REPEAT_WRONG'));
+            Session::add('feedback_negative', _('FEEDBACK_PASSWORD_REPEAT_WRONG'));
             return false;
         }
 
         if (strlen($user_password_new) < 6) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_PASSWORD_TOO_SHORT'));
+            Session::add('feedback_negative', _('FEEDBACK_PASSWORD_TOO_SHORT'));
             return false;
         }
 
@@ -252,10 +252,10 @@ class RegistrationModel
 		);
 
 		if ($mail_sent) {
-			Session::add('feedback_positive', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL'));
+			Session::add('feedback_positive', _('FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL'));
 			return true;
 		} else {
-			Session::add('feedback_negative', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR') . $mail->getError() );
+			Session::add('feedback_negative', _('FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR') . $mail->getError() );
 			return false;
 		}
 	}
@@ -278,11 +278,11 @@ class RegistrationModel
 		$query->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_activation_verification_code));
 
 		if ($query->rowCount() == 1) {
-			Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL'));
+			Session::add('feedback_positive', _('FEEDBACK_ACCOUNT_ACTIVATION_SUCCESSFUL'));
 			return true;
 		}
 
-		Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_ACTIVATION_FAILED'));
+		Session::add('feedback_negative', _('FEEDBACK_ACCOUNT_ACTIVATION_FAILED'));
 		return false;
 	}
 }

@@ -27,7 +27,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/basscss.css" />
     <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/fontello.css" />
-    <script src="/js/jquery.tools.min.js"></script>                  
+    <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/jquery-ui.css" /> 
 </head>
 <body>
     <div class="flex flex-column" style="min-height:100vh">

@@ -27,7 +27,7 @@ ini_set("display_errors", 1);
  * @see php.net/manual/en/session.configuration.php#ini.session.cookie-httponly
  */
 ini_set('session.cookie_httponly', 1);
-include ('tags.php');
+include ('settings.php');
 
 /**
  * Returns the full configuration.
@@ -81,7 +81,10 @@ return array(
 	'CASS_KEYSPACE' => 'bxamnesis',
   'DEFAULT_LANGUAGE' => 'EN',
   'AVAILABLE_TAGS' => $available_tags,
-	/**
+  'NO_SHO_TAGS' => $no_sho_tags,
+  'USER_UNITS' => $user_units,
+  'CAR_DATA_BITS' => $car_data_bits,
+  	/**
 	 * Configuration for: Captcha size
 	 * The currently used Captcha generator (https://github.com/Gregwar/Captcha) also runs without giving a size,
 	 * so feel free to use ->build(); inside CaptchaModel.

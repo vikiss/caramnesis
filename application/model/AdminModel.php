@@ -30,7 +30,7 @@ class AdminModel
 		));
 
 		if ($query->rowCount() == 1) {
-			Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_SUSPENSION_DELETION_STATUS'));
+			Session::add('feedback_positive', _('FEEDBACK_ACCOUNT_SUSPENSION_DELETION_STATUS'));
 			return true;
 		}
 	}

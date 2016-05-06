@@ -73,7 +73,7 @@ class AvatarModel
             self::resizeAvatarImage($_FILES['avatar_file']['tmp_name'], $target_file_path, Config::get('AVATAR_SIZE'), Config::get('AVATAR_SIZE'));
             self::writeAvatarToDatabase(Session::get('user_id'));
             Session::set('user_avatar_file', self::getPublicUserAvatarFilePathByUserId(Session::get('user_id')));
-            Session::add('feedback_positive', Text::get('FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL'));
+            Session::add('feedback_positive', _('FEEDBACK_AVATAR_UPLOAD_SUCCESSFUL'));
         }
     }
 
@@ -88,7 +88,7 @@ class AvatarModel
             return true;
         }
 
-        Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE'));
+        Session::add('feedback_negative', _('FEEDBACK_AVATAR_FOLDER_DOES_NOT_EXIST_OR_NOT_WRITABLE'));
         return false;
     }
 
@@ -102,13 +102,13 @@ class AvatarModel
     public static function validateImageFile()
     {
         if (!isset($_FILES['avatar_file'])) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED'));
+            Session::add('feedback_negative', _('FEEDBACK_AVATAR_IMAGE_UPLOAD_FAILED'));
             return false;
         }
 
         // if input file too big (>5MB)
         if ($_FILES['avatar_file']['size'] > 5000000) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_UPLOAD_TOO_BIG'));
+            Session::add('feedback_negative', _('FEEDBACK_AVATAR_UPLOAD_TOO_BIG'));
             return false;
         }
 
@@ -117,13 +117,13 @@ class AvatarModel
 
         // if input file too small, [0] is the width, [1] is the height
         if ($image_proportions[0] < Config::get('AVATAR_SIZE') OR $image_proportions[1] < Config::get('AVATAR_SIZE')) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_UPLOAD_TOO_SMALL'));
+            Session::add('feedback_negative', _('FEEDBACK_AVATAR_UPLOAD_TOO_SMALL'));
             return false;
         }
 
         // if file type is not jpg, gif or png
         if (!in_array($image_proportions['mime'], array('image/jpeg', 'image/gif', 'image/png'))) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE'));
+            Session::add('feedback_negative', _('FEEDBACK_AVATAR_UPLOAD_WRONG_TYPE'));
             return false;
         }
 
@@ -209,7 +209,7 @@ class AvatarModel
     public static function deleteAvatar($userId)
     {
         if (!ctype_digit($userId)) {
-            Session::add("feedback_negative", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_FAILED"));
+            Session::add("feedback_negative", _("FEEDBACK_AVATAR_IMAGE_DELETE_FAILED"));
             return false;
         }
 
@@ -224,10 +224,10 @@ class AvatarModel
 
         if ($sth->rowCount() == 1) {
             Session::set('user_avatar_file', self::getPublicUserAvatarFilePathByUserId($userId));
-            Session::add("feedback_positive", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_SUCCESSFUL"));
+            Session::add("feedback_positive", _("FEEDBACK_AVATAR_IMAGE_DELETE_SUCCESSFUL"));
             return true;
         } else {
-            Session::add("feedback_negative", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_FAILED"));
+            Session::add("feedback_negative", _("FEEDBACK_AVATAR_IMAGE_DELETE_FAILED"));
             return false;
         }
     }
@@ -242,13 +242,13 @@ class AvatarModel
     {
         // Check if file exists
         if (!file_exists(Config::get('PATH_AVATARS') . $userId . ".jpg")) {
-            Session::add("feedback_negative", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_NO_FILE"));
+            Session::add("feedback_negative", _("FEEDBACK_AVATAR_IMAGE_DELETE_NO_FILE"));
             return false;
         }
 
         // Delete avatar file
         if (!unlink(Config::get('PATH_AVATARS') . $userId . ".jpg")) {
-            Session::add("feedback_negative", Text::get("FEEDBACK_AVATAR_IMAGE_DELETE_FAILED"));
+            Session::add("feedback_negative", _("FEEDBACK_AVATAR_IMAGE_DELETE_FAILED"));
             return false;
         }
 

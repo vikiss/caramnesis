@@ -47,7 +47,7 @@ class NoteModel
     public static function createNote($note_text)
     {
         if (!$note_text || strlen($note_text) == 0) {
-            Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_CREATION_FAILED'));
+            Session::add('feedback_negative', _('FEEDBACK_NOTE_CREATION_FAILED'));
             return false;
         }
 
@@ -62,7 +62,7 @@ class NoteModel
         }
 
         // default return
-        Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_CREATION_FAILED'));
+        Session::add('feedback_negative', _('FEEDBACK_NOTE_CREATION_FAILED'));
         return false;
     }
     
@@ -120,7 +120,7 @@ class NoteModel
             return true;
         }
 
-        Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_EDITING_FAILED'));
+        Session::add('feedback_negative', _('FEEDBACK_NOTE_EDITING_FAILED'));
         return false;
     }
 
@@ -146,7 +146,7 @@ class NoteModel
         }
 
         // default return
-        Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_DELETION_FAILED'));
+        Session::add('feedback_negative', _('FEEDBACK_NOTE_DELETION_FAILED'));
         return false;
     }
 }

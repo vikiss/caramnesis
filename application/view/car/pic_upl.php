@@ -7,15 +7,16 @@ header("Pragma: no-cache");
 // 5 minutes execution time
 @set_time_limit(5 * 60);
 //image storage: folder = username, filename = car id _ microtime
-//don't want to . dots . in filename
-$fnamend =  str_replace('.','-',microtime(true));
+//don't want .[EN] and ,[LT]  in filename
+$fnamend =  str_replace(array('.',','),'-',microtime(true));
 $car_id = $_GET['car_id'];
 if (!preg_match('/^[A-Za-z0-9-]+$/',$car_id)) {
 exit_status('Error! Wrong car id!');
 }
 
 $upload_dir = '/var/www/usrimg/'.Session::get('user_uuid').'/';
-$allowed_ext = array('jpg','jpeg','png','gif');
+$allowed_ext = array('jpg','jpeg','png','gif','pdf');
+$allowed_nonimage_ext = array('pdf','xls');
 
 if (!file_exists($upload_dir)) { mkdir($upload_dir, 0775, true);  }
 
@@ -29,12 +30,13 @@ if(array_key_exists('file',$_FILES) && $_FILES['file']['error'] == 0 ){
 
   $pic = $_FILES['file'];
   
+if(!in_array(CarModel::get_extension($pic['name']),$allowed_nonimage_ext)){
   $info = getimagesize($pic['tmp_name']);
   if ($info === FALSE) {
   	exit_status('Unable to determine image type of uploaded file!');
-}
+} }
 
-  if(!in_array(get_extension($pic['name']),$allowed_ext)){
+  if(!in_array(CarModel::get_extension($pic['name']),$allowed_ext)){
 		exit_status('Only '.implode(',',$allowed_ext).' files are allowed!');
 	}	
 
@@ -61,11 +63,7 @@ function exit_status($str, $fname=''){
 	exit;
 }
 
-function get_extension($file_name){
-	$ext = explode('.', $file_name);
-	$ext = array_pop($ext);
-	return strtolower($ext);
-}
+
 
 
 

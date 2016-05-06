@@ -24,10 +24,10 @@ class UserRoleModel
 
 		// save new role to database
 		if (self::saveRoleToDatabase($type)) {
-			Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_TYPE_CHANGE_SUCCESSFUL'));
+			Session::add('feedback_positive', _('FEEDBACK_ACCOUNT_TYPE_CHANGE_SUCCESSFUL'));
 			return true;
 		} else {
-			Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_TYPE_CHANGE_FAILED'));
+			Session::add('feedback_negative', _('FEEDBACK_ACCOUNT_TYPE_CHANGE_FAILED'));
 			return false;
 		}
 	}
