@@ -1,0 +1,5 @@
+/application/config/
+/application/core/
+/vendor/
+.htaccess
+/public/htaccess/

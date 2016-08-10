@@ -1,0 +1,21 @@
+iskelti is config siunciamu patvirtinimo laisku tekstus ir juos su-i18N-inti
+
+
+
+
+
+  public static function getUserDataByUuid($uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT *
+                  FROM users
+                 WHERE (user_uuid = :user_uuid)
+                 LIMIT 1";
+        $query = $database->prepare($sql);
+                
+        $query->execute(array(':user_uuid' => $uuid));
+
+        
+        return $query->fetch();
+    }
