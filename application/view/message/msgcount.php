@@ -1,1 +1,0 @@
-{"MessageCount": "<?= $this->msgcount; ?>"}
