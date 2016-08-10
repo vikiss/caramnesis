@@ -17,7 +17,9 @@
 
         <!-- register form -->
         <form method="post" action="<?php echo Config::get('URL'); ?>login/register_action">
-            <input type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" placeholder="<?php echo _("REGISTER_USERNAME"); ?>" class="block col-12 field mt1 " required />
+        <div class="block col-12 field mt1 "><label for="user_name" ><?= _("REGISTER_USERNAME"); ?></label>
+            <input type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" id="user_name"  required />
+        </div>
             <input type="text" name="user_email" placeholder="<?php echo _("REGISTER_EMAIL"); ?>" class="block col-12 field mt1 " required />
             <input type="password" name="user_password_new" pattern=".{6,}" placeholder="<?php echo _("REGISTER_PASSWORD"); ?>" class="block col-12 field mt1 " required autocomplete="off" />
             <input type="password" name="user_password_repeat" pattern=".{6,}" required placeholder="<?php echo _("REGISTER_REPEAT_PASSWORD"); ?>" autocomplete="off" class="block col-12 field mt1 " />
