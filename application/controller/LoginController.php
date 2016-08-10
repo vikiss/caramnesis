@@ -96,12 +96,84 @@ class LoginController extends Controller
     {
         Auth::checkAuthentication();
         $this->View->render('login/showProfile', array(
-            'user_name' => Session::get('user_name'),
+           /* 'user_name' => Session::get('user_name'),
             'user_email' => Session::get('user_email'),
             'user_gravatar_image_url' => Session::get('user_gravatar_image_url'),
             'user_avatar_file' => Session::get('user_avatar_file'),
-            'user_account_type' => Session::get('user_account_type')
+            'user_account_type' => Session::get('user_account_type')*/
+           'profile_data' => UserModel::getUserDataByUuid(Session::get('user_uuid')),
+           'languages' => Config::get('AVAILABLE_LOCALES'),
+           'currencies' => Config::get('CURRENCIES'),
+           'distance_units' => Config::get('DISTANCE_UNITS'),
+           'cons_units' => Config::get('CONSUMPTION_UNITS')
         ));
+    }
+    
+     public function country_list($country_id)
+    {    
+        $this->View->renderWithoutHeaderAndFooter('login/country_list', array('countries' => UserModel::getCountryList(), 'selected_country' => $country_id));
+    }
+    
+     public function state_list($country_id, $state_id = '')
+    {    
+        $this->View->renderWithoutHeaderAndFooter('login/state_list', array('states' => UserModel::getRegionList($country_id), 'selected_state' => $state_id));
+    }
+    
+       public function city_list($country_id, $state_id = '', $city = '')
+    {    
+        $this->View->renderWithoutHeaderAndFooter(
+                        'login/city_list',
+                        array('cities' => UserModel::getCityList($country_id, $state_id), 'selected_city' => $city, 'state_id' => $state_id)
+                        );
+    }
+    
+    
+    public function setlang($lang)
+    {
+        UserModel::setLanguage($lang, Session::get('user_uuid'));
+        Redirect::to('login/showprofile');
+    }
+    
+     public function setcurr($currency)
+    {
+        UserModel::setCurrency($currency, Session::get('user_uuid'));
+        Redirect::to('login/showprofile');
+    }
+    
+     public function setdist($distance_unit) //set distance unit
+    {
+        UserModel::setDistanceUnit($distance_unit, Session::get('user_uuid'));
+        Redirect::to('login/showprofile');
+    }
+    
+     public function setcons($cons_unit) //set consumption (MPG) unit  
+    {
+        UserModel::setConsumptionUnit($cons_unit, Session::get('user_uuid'));
+        Redirect::to('login/showprofile');
+    }
+    
+     public function setcountry($country_code, $old_country='') //set country
+    {
+        UserModel::setCountry($country_code, Session::get('user_uuid'), $old_country);
+        Redirect::to('login/showprofile');
+    }
+    
+    public function setregion($state_id, $old_state_id) //set state / region / district
+    {
+        UserModel::setRegion($state_id, Session::get('user_uuid'), $old_state_id);
+        Redirect::to('login/showprofile');
+    }
+    
+    public function resetregion() //set state / region / district
+    {
+        UserModel::resetRegion(Session::get('user_uuid'));
+        Redirect::to('login/showprofile');
+    }
+    
+     public function setcity($city, $region='') //set state / region / district
+    {
+        UserModel::setCity($city, $region, Session::get('user_uuid'));
+        Redirect::to('login/showprofile');
     }
 
     /**
@@ -229,7 +301,11 @@ class LoginController extends Controller
         if (LoginModel::isUserLoggedIn()) {
             Redirect::home();
         } else {
-            $this->View->render('login/register');
+            $this->View->render('login/register', array(
+                'languages' => Config::get('AVAILABLE_LOCALES'),
+                'current_language' => UserModel::getCurrentLanguage(),
+                'language_names' => Config::get('LANGUAGE_NAMES')
+                ));
         }
     }
 

@@ -21,11 +21,18 @@ class IndexController extends Controller
               
         if (LoginModel::isUserLoggedIn()) {              
               
-              if ( $cars = CarModel::getCars()  )
+              if ( $cars = CarModel::getCars(Session::get('user_uuid'))  )
                          
-	               {$this->View->render('index/index', array('car' => $cars)); } else
-              
-                 {$this->View->render('car/new_car'); } 
+	               {
+					$this->View->render('index/index', array('car' => $cars));
+				   
+				   } else {
+					
+					$this->View->render('car/new_car', array(
+            'makes' => CarModel::getCarMakeList('all')
+        ));
+					
+					} 
           
           } else {
     $this->View->render('index/welcome');

@@ -37,14 +37,33 @@ class Application
             require Config::get('PATH_CONTROLLER') . $this->controller_name . '.php';
             $this->controller = new $this->controller_name();
             
-            /* gettext */
-$available_locales = array('en'=>'en_US.UTF-8', 'lt'=>'lt_LT.UTF-8'); //cia kalbos, reikia prideti naujas jei bus  
-if ((Request::get('lang')) && (array_key_exists(strtolower(Request::get('lang')), $available_locales))) //ar kas get parametre siaip kokiu bleniu neprirase  
-{
-$locale = $available_locales[strtolower(Request::get('lang'))];
-} 
-elseif (Session::get('locale')) {$locale = Session::get('locale');}
-else {$locale = 'en_US.UTF-8';}
+			/* gettext */
+            
+    $available_locales = Config::get('AVAILABLE_LOCALES');            
+    
+    if ((Request::get('lang')) && (array_key_exists(strtolower(Request::get('lang')), $available_locales))) //change locale if passed by GET request  
+    {
+        $locale = $available_locales[strtolower(Request::get('lang'))];
+    }
+	elseif (
+			(!Session::get('locale')) && (Session::get('user_lang')) && (array_key_exists(strtolower(Session::get('user_lang')), $available_locales))
+		)  //set locale on logged in user session lang variable
+    {
+           $locale = $available_locales[strtolower(Session::get('user_lang'))];
+    }
+    elseif ((Session::get('locale')) && (in_array(Session::get('locale'), $available_locales)))  //set locale if stored in session
+    {
+        $locale = Session::get('locale');
+    } 
+    elseif (($_SERVER['HTTP_ACCEPT_LANGUAGE']) && (array_key_exists(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2), $available_locales)))  //set locale after users http request settings
+    {
+        $locale = $available_locales[substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2)]; 
+    }
+    else
+    {
+        $locale = 'en_US.UTF-8'; //if all else fails, leave it in plain English
+    }
+   
 Session::set('locale', $locale); 
 putenv("LANGUAGE=".$locale);
 putenv("LANG=".$locale);
@@ -55,10 +74,7 @@ bindtextdomain($domain, '/var/www/html/application/Locale');
 bind_textdomain_codeset($domain, 'UTF-8');
 textdomain($domain);  
             /* gettext */
-            
-            
-            
-            
+			
 
             // check for method: does such a method exist in the controller ?
             if (method_exists($this->controller, $this->action_name)) {
@@ -71,12 +87,29 @@ textdomain($domain);
                 }
             } else {
                 // load 404 error page
+				
                 require Config::get('PATH_CONTROLLER') . 'ErrorController.php';
                 $this->controller = new ErrorController;
                 $this->controller->error404();
             }
         } else {
+			
             // load 404 error page
+			
+			/*gettext again - oh no*/
+$locale = 'en_US.UTF-8';			
+Session::set('locale', $locale); 
+putenv("LANGUAGE=".$locale);
+putenv("LANG=".$locale);
+putenv("LC_ALL=".$locale);
+setlocale(LC_ALL, $locale);
+$domain="messages";
+bindtextdomain($domain, '/var/www/html/application/Locale');
+bind_textdomain_codeset($domain, 'UTF-8');
+textdomain($domain);  
+			/*gettext again - oh no*/			
+			
+			
             require Config::get('PATH_CONTROLLER') . 'ErrorController.php';
             $this->controller = new ErrorController;
             $this->controller->error404();

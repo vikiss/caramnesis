@@ -22,6 +22,19 @@ class RegistrationModel
 		$user_email = strip_tags(Request::post('user_email'));
 		$user_password_new = Request::post('user_password_new');
 		$user_password_repeat = Request::post('user_password_repeat');
+    $geo_lat = Request::post('startLat'); 
+    $geo_lon = Request::post('startLon');
+	$country = ''; $state_name = ''; $state_id = ''; $city = '';
+    if (($geo_lat == 'no_geolocation') or ($geo_lon == 'no_geolocation') or ($geo_lat == '') or ($geo_lon == '')) {
+    $country_by_ip = self::GetGeoLocByIP(self::ConvertIP(self::getRealIpAddr())); $geo_lat = 0; $geo_lon = 0;
+	$country = strtolower($country_by_ip->country_code);
+    } else {
+		if ($place = UserModel::getLocationByCoords($geo_lat, $geo_lon))
+			{
+			$state_name = UserModel::getRegionName($place->Country, $place->Region);
+			$country = $place->Country; $state_id = $place->Region; $city = $place->AccentCity;		
+			}
+	}
 
 		// stop registration flow if registrationInputValidation() returns false (= anything breaks the input check rules)
 		$validation_result = self::registrationInputValidation(Request::post('captcha'), $user_name, $user_password_new, $user_password_repeat, $user_email);
@@ -55,7 +68,7 @@ class RegistrationModel
 		$user_activation_hash = sha1(uniqid(mt_rand(), true));
 
 		// write user data to database
-		if (!self::writeNewUserToDatabase($user_name, $user_password_hash, $user_email, time(), $user_activation_hash)) {
+		if (!self::writeNewUserToDatabase($user_name, $user_password_hash, $user_email, time(), $user_activation_hash, $country, $state_name, $state_id, $city)) {
 			Session::add('feedback_negative', _('FEEDBACK_ACCOUNT_CREATION_FAILED'));
             return false; // no reason not to return false here
 		}
@@ -194,13 +207,15 @@ class RegistrationModel
 	 *
 	 * @return bool
 	 */
-	public static function writeNewUserToDatabase($user_name, $user_password_hash, $user_email, $user_creation_timestamp, $user_activation_hash)
+	public static function writeNewUserToDatabase($user_name, $user_password_hash, $user_email, $user_creation_timestamp, $user_activation_hash, $country, $state_name, $state_id, $city)
 	{
 		$database = DatabaseFactory::getFactory()->getConnection();
 
 		// write new users data into database
-		$sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type, user_uuid, user_lang)
-                    VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type, uuid(), :user_lang)";
+		$sql = "INSERT INTO users
+		( user_name,  user_password_hash,  user_email,  user_creation_timestamp,  user_activation_hash,  user_provider_type, user_uuid, user_lang, country, state, state_id, hometown)
+                    VALUES
+		(:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type, uuid(), :user_lang, :country, :state, :state_id, :city )";
 		$query = $database->prepare($sql);
 		$query->execute(array(':user_name' => $user_name,
 		                      ':user_password_hash' => $user_password_hash,
@@ -208,7 +223,12 @@ class RegistrationModel
 		                      ':user_creation_timestamp' => $user_creation_timestamp,
 		                      ':user_activation_hash' => $user_activation_hash,
 		                      ':user_provider_type' => 'DEFAULT',
-                          ':user_lang' => 'EN'));
+							  ':user_lang' => strtoupper(UserModel::getCurrentLanguage()),
+							  ':country' => $country,
+							  ':state' => $state_name,
+							  ':state_id' => $state_id,
+							  ':city' => $city 
+						  ));
 		$count =  $query->rowCount();
 		if ($count == 1) {
 			return true;
@@ -284,5 +304,66 @@ class RegistrationModel
 
 		Session::add('feedback_negative', _('FEEDBACK_ACCOUNT_ACTIVATION_FAILED'));
 		return false;
+	}
+  
+  public static function GetGeoLocByIP($ip) {
+    if ($ip['address'] !== 0) {
+  $database = DatabaseFactory::getFactory()->getConnection();
+    if ($ip['version'] == 'IpV4') {
+		$sql = "SELECT country_code, country_name FROM ip2location_db1
+                WHERE :ip_addr BETWEEN ip_from AND ip_to LIMIT 1";
+	}
+	
+	if ($ip['version'] == 'IpV6') {
+		$sql = "SELECT country_code, country_name FROM ip2location_db1_ipv6
+                WHERE :ip_addr BETWEEN ip_from AND ip_to LIMIT 1";		
+	}
+  	
+		$query = $database->prepare($sql);
+		$query->execute(array(':ip_addr' => $ip['address']));
+		return $query->fetch();
+	} else return false;
+  
+  }
+  
+  
+  
+  
+  
+  public static function getRealIpAddr()
+{
+    if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+    {
+      $ip=$_SERVER['HTTP_CLIENT_IP'];
+    }
+    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
+    {
+      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    else
+    {
+      $ip=$_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
+
+  public static function ConvertIP ($IPaddr) {
+	 if ($IPaddr == "")
+  	 {
+	   return 0;
+  	 } else {
+		
+	 $version = '';
+		
+	if(filter_var($IPaddr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+        $version = 'IpV6';
+    }
+    else if(filter_var($IPaddr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
+        $version = 'IpV4';
+    }
+	   //$ips = explode(".", $IPaddr);
+	   //return ($ips[3] + $ips[2] * 256 + $ips[1] * 256 * 256 + $ips[0] * 256 * 256 * 256);
+	return array('version' => $version, 'address' => ip2long($IPaddr));
+	 }
 	}
 }

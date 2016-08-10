@@ -13,10 +13,12 @@ $available_tags=array (
 
 $no_sho_tags=array('TAG_PUBLIC',	'TAG_PRIVATE');  //tags with no enable/disable checkboxes
 
+/*
 $user_units = array(
-  'distance' => 'km',
-  'currency' => '&euro;',
-);
+  'distance' => 'km',     // km / mi
+  'currency' => '&euro;',           //EUR, USD, GBP etc
+  'consumption' => 'l/100km',     // eu / us / uk => l/100, mpg us, mpg uk
+);  */
 
 $car_data_bits=array(
   'BIT_PROD_DATE',
@@ -37,7 +39,24 @@ $car_data_bits=array(
   'BIT_TYRE_TYPE',
   'BIT_WINDSHIELD_WIPER',
   'default' => 'BIT_OTHER'
-)
+);
+
+$available_languages = array(
+        'en'=>'en_US.UTF-8',
+        'lt'=>'lt_LT.UTF-8'
+    );
+
+$language_names = array(
+        'en'=>'English',
+        'lt'=>'Lietuviškai'
+    );
+
+$available_currencies = array('EUR', 'GBP', 'USD');
+$consumption_units  = array('eu', 'uk', 'us');
+$distance_units  = array('km', 'mi');
+    
+    
+    
 
 
 /*
@@ -79,32 +98,6 @@ DurÅ³ skaiÄius iš sÄ…rašo
 
 Mases irgi reiktÅ³ surašyti , bet dar išsiaiškinsiu kokias 
 
-
-CREATE TABLE IF NOT EXISTS `users` (
-`user_id` int(11) NOT NULL COMMENT 'auto incrementing user_id of each user, unique index',
-  `session_id` varchar(48) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'stores session cookie id to prevent session concurrency',
-  `user_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL COMMENT 'user''s name, unique',
-  `user_password_hash` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'user''s password in salted and hashed format',
-  `user_email` varchar(64) COLLATE utf8_unicode_ci NOT NULL COMMENT 'user''s email, unique',
-  `user_active` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'user''s activation status',
-  `user_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'user''s deletion status',
-  `user_account_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'user''s account type (basic, premium, etc)',
-  `user_has_avatar` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1 if user has a local avatar, 0 if not',
-  `user_remember_me_token` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'user''s remember-me cookie token',
-  `user_creation_timestamp` bigint(20) DEFAULT NULL COMMENT 'timestamp of the creation of user''s account',
-  `user_suspension_timestamp` bigint(20) DEFAULT NULL COMMENT 'Timestamp till the end of a user suspension',
-  `user_last_login_timestamp` bigint(20) DEFAULT NULL COMMENT 'timestamp of user''s last login',
-  `user_failed_logins` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'user''s failed login attempts',
-  `user_last_failed_login` int(10) DEFAULT NULL COMMENT 'unix timestamp of last failed login attempt',
-  `user_activation_hash` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'user''s email verification hash string',
-  `user_password_reset_hash` char(40) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'user''s password reset code',
-  `user_password_reset_timestamp` bigint(20) DEFAULT NULL COMMENT 'timestamp of the password reset request',
-  `user_provider_type` text COLLATE utf8_unicode_ci,
-  `user_uuid` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `user_lang` varchar(2) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'EN',
-  `last_car` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `user_data` blob NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='user data';
 
 
 

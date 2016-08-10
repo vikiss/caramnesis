@@ -56,10 +56,10 @@ $(function(){
       //prevent file from uploading again when the form is submitted:
      // $('#fileinput').addClass( 'uploaded' );
       $('#user_images').val(function(i,val) { 
-     return val + (val ? ',' : '') + response['name'];
+     return val + (val ? ',' : '') + response.name;
       });
       
-      console.log(response);
+     // console.log(response);
 			// response is the JSON object that post_file.php returns
 		},
 		
@@ -118,7 +118,7 @@ $(function(){
 		uploadFinished:function(i,file,response){
 			$.data(file).addClass('done');
       $('#user_images').val(function(i,val) { 
-     return val + (val ? ',' : '') + response['name'];
+     return val + (val ? ',' : '') + response.name;
       });
       
       console.log(response);

@@ -93,7 +93,7 @@ class UserModel
         $query->execute(array(':user_name_or_email' => $user_name_or_email, ':provider_type' => 'DEFAULT'));
 
         return $query->fetch();
-    }
+    } 
 
     /**
      * Checks if a username is already taken
@@ -257,7 +257,7 @@ class UserModel
         // ... then write new email to session, Gravatar too (as this relies to the user's email address)
         if (self::saveNewEmailAddress(Session::get('user_id'), $new_user_email)) {
             Session::set('user_email', $new_user_email);
-            Session::set('user_gravatar_image_url', AvatarModel::getGravatarLinkByEmail($new_user_email));
+            //Session::set('user_gravatar_image_url', AvatarModel::getGravatarLinkByEmail($new_user_email));
             Session::add('feedback_positive', _('FEEDBACK_EMAIL_CHANGE_SUCCESSFUL'));
             return true;
         }
@@ -300,7 +300,7 @@ class UserModel
         $database = DatabaseFactory::getFactory()->getConnection();
 
         $sql = "SELECT user_id, user_name, user_email, user_password_hash, user_active,user_deleted, user_suspension_timestamp, user_account_type,
-                       user_failed_logins, user_last_failed_login, user_uuid, user_lang
+                       user_failed_logins, user_last_failed_login, user_uuid, user_lang, user_currency, user_distance, user_cons, unread_messages
                   FROM users
                  WHERE (user_name = :user_name OR user_email = :user_name)
                        AND user_provider_type = :provider_type
@@ -329,7 +329,7 @@ class UserModel
 
         // get real token from database (and all other data)
         $query = $database->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active,
-                                          user_account_type,  user_has_avatar, user_failed_logins, user_last_failed_login, user_uuid, user_lang
+                                          user_account_type,  user_has_avatar, user_failed_logins, user_last_failed_login, user_uuid, user_lang, user_currency, user_distance, user_cons, unread_messages
                                      FROM users
                                      WHERE user_id = :user_id
                                        AND user_remember_me_token = :user_remember_me_token
@@ -340,4 +340,337 @@ class UserModel
         // return one row (we only have one result or nothing)
         return $query->fetch();
     }
+    
+    
+    public static function getUserDataByUuid($uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT *
+                  FROM users
+                 WHERE (user_uuid = :user_uuid)
+                 LIMIT 1";
+        $query = $database->prepare($sql);
+                
+        $query->execute(array(':user_uuid' => $uuid));
+
+        
+        return $query->fetch();
+    }
+    
+       public static function setLanguage($lang, $uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $available_locales = Config::get('AVAILABLE_LOCALES');
+        if (array_key_exists(strtolower($lang), $available_locales)) {
+        $query = $database->prepare("UPDATE users SET user_lang = :user_lang WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':user_lang' => strtoupper($lang), ':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            Session::set('user_lang', strtoupper($lang));
+            Session::set('locale', '');
+            Session::add('feedback_positive', _('FEEDBACK_LANGUAGE_CHANGE_SUCCESSFUL'));
+            return true;
+        }}
+        Session::add('feedback_negative', _('FEEDBACK_LANGUAGE_CHANGE_FAILED'));
+        return false;
+    }
+    
+          public static function setCurrency($currency, $uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $available_currencies = Config::get('CURRENCIES'); 
+        if (in_array(strtoupper($currency), $available_currencies)) {
+        $query = $database->prepare("UPDATE users SET user_currency = :user_currency WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':user_currency' => strtoupper($currency), ':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            Session::set('user_currency', strtoupper($currency));
+            Session::add('feedback_positive', _('FEEDBACK_CURRENCY_CHANGE_SUCCESSFUL'));
+            return true;
+        }}
+        Session::add('feedback_negative', _('FEEDBACK_CURRENCY_CHANGE_FAILED'));
+        return false;
+    }
+    
+    
+    public static function setDistanceUnit($distance_unit, $uuid)//user_currency, user_distance, user_cons
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $preset_units = Config::get('DISTANCE_UNITS');
+        if (in_array($distance_unit, $preset_units)) {
+        $query = $database->prepare("UPDATE users SET user_distance = :user_distance WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':user_distance' => $distance_unit, ':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            Session::set('user_distance', $distance_unit);
+            Session::add('feedback_positive', _('FEEDBACK_DISTANCE_UNIT_CHANGE_SUCCESSFUL'));
+            return true;
+        }}
+        Session::add('feedback_negative', _('FEEDBACK_DISTANCE_UNIT_CHANGE_FAILED'));
+        return false;
+    }
+    
+    public static function setConsumptionUnit($cons_unit, $uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $preset_units = Config::get('CONSUMPTION_UNITS');
+        if (in_array($cons_unit, $preset_units)) {
+        $query = $database->prepare("UPDATE users SET user_cons = :user_cons WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':user_cons' => $cons_unit, ':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            Session::set('user_cons', $cons_unit);
+            Session::add('feedback_positive', _('FEEDBACK_CONSUMPTION_UNIT_CHANGE_SUCCESSFUL'));
+            return true;
+        }}
+        Session::add('feedback_negative', _('FEEDBACK_CONSUMPTION_UNIT_CHANGE_FAILED'));
+        return false;
+    }
+    
+    public static function getCountryList() {
+        
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT DISTINCT Country FROM worldcities;";
+        $query = $database->prepare($sql);
+        $query->execute();
+        return $query->fetchAll();
+        
+    }
+    
+    public static function getRegionList($country_id) {
+        
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT DISTINCT Region FROM worldcities WHERE Country = :country_id;");
+        $query->execute(array(':country_id' => $country_id));
+        $regions = $query->fetchAll();
+        $result = array();
+        foreach ($regions AS $region) {
+            if (is_numeric($region->Region)) { 
+                $result[$region->Region] = self::getRegionName($country_id, $region->Region);
+            } else {
+                $result[$region->Region] = $region->Region;
+            }
+        }
+        asort($result);        
+        return $result;
+    }
+    
+    public static function getRegionName($country_id, $region_id) {  //find out largest city in te region to pass as region name
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT AccentCity FROM worldcities WHERE Country = :country_id AND Region = :region_id ORDER BY Population DESC LIMIT 1;");
+        $query->execute(array(':country_id' => $country_id, ':region_id' => $region_id));               
+        $city = $query->fetch(); $city = $city->AccentCity;
+        return $city;
+    }
+    
+      public static function getCityList($country_id, $region_id) {
+        
+        $database = DatabaseFactory::getFactory()->getConnection();
+        if (strlen($region_id) > 1) {
+            $query = $database->prepare("Select City, AccentCity FROM worldcities WHERE Country = :country_id AND Region = :region_id;");
+            $query->execute(array(':country_id' => $country_id, ':region_id' => $region_id));    
+        } else {
+            $query = $database->prepare("SELECT City, AccentCity, Region FROM worldcities WHERE Country = :country_id;");
+            $query->execute(array(':country_id' => $country_id));    
+        }
+        return $query->fetchAll();
+        
+    }
+    
+    public static function getCountry($uuid) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT country FROM users WHERE user_uuid = :user_uuid;");
+        $query->execute(array(':user_uuid' => $uuid));
+        $result = $query->fetch();
+        return $result->country;
+    }
+    
+     public static function setCountry($country_id, $uuid, $old_country='')
+    {
+        if ($country_id == $old_country) {return true;} //no change, do nothing
+        $countries = self::getCountryList(''); $country_id_ok = false;
+        foreach ($countries as $country) {
+            if ($country->Country == $country_id) {$country_id_ok = true; break;}
+        }
+        
+        if ($country_id_ok) { //we want to reset region and hometown as well if the user changes country
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("UPDATE users SET country = :country, state_id = '', state = '', hometown = '' WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':country' => $country_id, ':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            Session::add('feedback_positive', _('FEEDBACK_COUNTRY_CHANGE_SUCCESSFUL'));
+            return true;
+        }}
+        Session::add('feedback_negative', _('FEEDBACK_COUNTRY_CHANGE_FAILED'));
+        return false;
+    }
+    
+      public static function setRegion($state_id, $uuid, $old_state_id = '')
+    {
+        if ($state_id == $old_state_id) {return true;} //no change, do nothing
+        $country = self::getCountry($uuid);
+        $regions = self::getRegionList($country); $region_id_ok = false; $thisregion = '';
+        foreach ($regions as $region_key => $region) {
+            if ($region_key == $state_id) {$region_id_ok = true; $thisregion = $region; break;}
+        } 
+        
+        if ($region_id_ok) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("UPDATE users SET state_id = :state_id, state = :state, hometown = '' WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':state_id' => $state_id, ':state' => $thisregion, ':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            Session::add('feedback_positive', _('FEEDBACK_REGION_CHANGE_SUCCESSFUL'));
+            return true;
+        }}
+        Session::add('feedback_negative', _('FEEDBACK_REGION_CHANGE_FAILED'));
+        return false;
+    }
+    
+      public static function resetRegion($uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("UPDATE users SET state_id = '' WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            Session::add('feedback_positive', _('FEEDBACK_REGION_RESET_SUCCESSFUL'));
+            return true;
+        }
+        Session::add('feedback_negative', _('FEEDBACK_REGION_RESET_FAILED'));
+        return false;
+    }
+    
+      public static function setGeoCoords($lat, $lng, $uuid)
+    {
+        if ((is_numeric($lat)) && (is_numeric($lng))) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("UPDATE users SET geolat = :lat, geolng = :lng WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':lat' => $lat, ':lng' => $lng, ':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            return true;
+        }}
+        return false;
+    }
+    
+    public static function getGeoCoords($uuid) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT geolat, geolng FROM users WHERE user_uuid = :user_uuid LIMIT 1;");
+        $query->execute(array(':user_uuid' => $uuid));
+        $result = $query->fetch();
+        if (($result->geolat > 0) && ($result->geolng > 0)) return $result; else return false;
+    }
+    
+    public static function getCityCoords($city, $region, $uuid) {
+        $country = self::getCountry($uuid);
+        $database = DatabaseFactory::getFactory()->getConnection();
+        if (strlen($region) > 1) {
+        $query = $database->prepare("SELECT Latitude, Longitude, AccentCity FROM worldcities WHERE Country = :country AND City = :city AND Region = :region ORDER BY Population DESC LIMIT 1;");
+        $query->execute(array(':country' => $country, ':city' => $city, ':region' => $region));
+                                } else {
+        $query = $database->prepare("SELECT Latitude, Longitude FROM worldcities WHERE Country = :country AND City = :city ORDER BY Population DESC LIMIT 1;");
+        $query->execute(array(':country' => $country, ':city' => $city));                                    
+                                }
+        $result = $query->fetch();
+        if (($result->Latitude > 0) && ($result->Longitude > 0)) return $result; else return false;
+        
+    }
+    
+    
+    
+    public static function setCity($city, $region, $uuid) {
+        
+        if ($cityCoords = self::getCityCoords($city, $region, $uuid)) {
+            
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("UPDATE users SET geolat = :lat, geolng = :lng, hometown = :city WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':lat' => $cityCoords->Latitude, ':lng' => $cityCoords->Longitude, ':city' => $cityCoords->AccentCity ,':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            Session::add('feedback_positive', _('FEEDBACK_CITY_ADD_SUCCESSFUL'));
+            return true;
+        }}
+        Session::add('feedback_negative', _('FEEDBACK_CITY_ADD_FAILED'));
+        return false;
+    }
+    
+    public static function getLocationByCoords($lat, $lng, $distance=25) { //distance in miles
+        if ((is_numeric($lat)) && (is_numeric($lng))) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT Country, City, AccentCity, Region, Latitude, Longitude, SQRT(
+                                    POW(69.1 * (Latitude - :lat), 2) +
+                                    POW(69.1 * (:lng - Longitude) * COS(Latitude / 57.3), 2)) AS distance
+                                    FROM worldcities HAVING distance < :distance ORDER BY distance LIMIT 1;
+                                    ");
+        $query->execute(array(':lat' => $lat, ':lng' => $lng, ':distance' => $distance));
+        $result = $query->fetch();
+        return $result;
+        }
+        else return false;
+        
+    }
+    
+    
+       public static function setLocationByCoords($lat, $lng, $uuid) {
+        if ((is_numeric($lat)) && (is_numeric($lng))) {
+        if ($place = self::getLocationByCoords($lat, $lng)) {
+        $state_name = self::getRegionName($place->Country, $place->Region);
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("UPDATE users SET country = :country, state = :state, state_id = :state_id, hometown = :city WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':country' => $place->Country, ':state' => $state_name, 'state_id' => $place->Region, ':city' => $place->AccentCity ,':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            return true;
+        }}}
+        Session::add('feedback_negative', _('FEEDBACK_UNKNOWN_ERROR'));
+        return false;
+    }
+    
+    public static function getCurrentLanguage() {
+        return array_search (Session::get('locale'), Config::get('AVAILABLE_LOCALES'));
+    }
+    
+    public static function getUserNameByUUid($uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT user_name FROM users
+                                     WHERE user_uuid = :uuid LIMIT 1");
+        $query->execute(array(':uuid' => $uuid));
+        $result = $query->fetch();
+        if ($result) {
+        return $result->user_name;
+        } else {return false;}
+    }
+    
+    public static function getUUidByUserName($user_name)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT user_uuid FROM users
+                                     WHERE user_name = :name LIMIT 1");
+        $query->execute(array(':name' => $user_name));
+        $result = $query->fetch();
+        if ($result) {
+            return $result->user_uuid;
+        } else {return false;}
+    }
+    
+        public static function getUserUnits($uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT user_currency, user_distance, user_cons FROM users WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            return $query->fetch();
+        }
+        Session::add('feedback_negative', _('CANNOT_GET_USER_UNITS'));
+        return false;
+    }
+
+    
+    
+    
 }

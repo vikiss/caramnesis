@@ -16,7 +16,7 @@ class LoginModel
      *
      * @return bool success state
      */
-    public static function login($user_name, $user_password, $user_uuid, $user_lang, $set_remember_me_cookie = null)
+    public static function login($user_name, $user_password, $user_uuid, $set_remember_me_cookie = null)
     {
         // we do negative-first checks here, for simplicity empty username and empty password in one line
         if (empty($user_name) OR empty($user_password)) {
@@ -61,7 +61,8 @@ class LoginModel
 
         // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
         self::setSuccessfulLoginIntoSession(
-            $result->user_id, $result->user_name, $result->user_email, $result->user_account_type, $result->user_uuid, $result->user_lang
+            $result->user_id, $result->user_name, $result->user_email, $result->user_account_type, $result->user_uuid, $result->user_lang,
+			$result->user_currency, $result->user_distance, $result->user_cons, $result->unread_messages
         );
 
         // return true to make clear the login was successful
@@ -186,7 +187,7 @@ class LoginModel
         // if user with that id and exactly that cookie token exists in database
         if ($result) {
             // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
- self::setSuccessfulLoginIntoSession($result->user_id, $result->user_name, $result->user_email, $result->user_account_type, $result->user_uuid, $result->user_lang);
+ self::setSuccessfulLoginIntoSession($result->user_id, $result->user_name, $result->user_email, $result->user_account_type, $result->user_uuid, $result->user_lang, $result->user_currency, $result->user_distance, $result->user_cons, $result->unread_messages);
             // save timestamp of this login in the database line of that user
             self::saveTimestampOfLoginOfUser($result->user_name);
 
@@ -224,7 +225,7 @@ class LoginModel
      * @param $user_email
      * @param $user_account_type
      */
-    public static function setSuccessfulLoginIntoSession($user_id, $user_name, $user_email, $user_account_type, $user_uuid, $user_lang)
+    public static function setSuccessfulLoginIntoSession($user_id, $user_name, $user_email, $user_account_type, $user_uuid, $user_lang, $user_currency, $user_distance, $user_cons, $unread_messages = 0)
     {
         Session::init();
 
@@ -242,10 +243,14 @@ class LoginModel
         Session::set('user_provider_type', 'DEFAULT');
         Session::set('user_uuid', $user_uuid);
         Session::set('user_lang', $user_lang);
+		Session::set('user_currency', $user_currency);
+		Session::set('user_distance', $user_distance);
+		Session::set('user_cons', $user_cons);
+		Session::set('unread_messages', $unread_messages);	
 
         // get and set avatars
-        Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId($user_id));
-        Session::set('user_gravatar_image_url', AvatarModel::getGravatarLinkByEmail($user_email));
+        //Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId($user_id));
+        //Session::set('user_gravatar_image_url', AvatarModel::getGravatarLinkByEmail($user_email));
 
         // finally, set user as logged-in
         Session::set('user_logged_in', true);

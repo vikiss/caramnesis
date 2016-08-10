@@ -33,7 +33,8 @@
         
          ?> 
         
-            <?php $tags = Config::get('AVAILABLE_TAGS'); $units = Config::get('USER_UNITS'); include('event_edit_form.php'); ?>
+            <?php $tags = Config::get('AVAILABLE_TAGS'); $units = $this->units; include('event_edit_form.php');
+                        ?>
             
             
             <?php /* delete event */?>

@@ -101,7 +101,7 @@ var uploader = new plupload.Uploader({
     console.log(object.response);
     var t = JSON.parse(object.response);
     var val = document.getElementById('user_images').value;
-    val = (val ? val + ',' : '') + t['name'];
+    val = (val ? val + ',' : '') + t.name;
    //console.log(val);   
     document.getElementById('user_images').value=val;
     document.getElementById(file.id).getElementsByClassName('progressHolder')[0].getElementsByClassName('progress')[0].style.backgroundColor  = '#2ECC40';

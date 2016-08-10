@@ -10,11 +10,14 @@ header("Pragma: no-cache");
 //don't want .[EN] and ,[LT]  in filename
 $fnamend =  str_replace(array('.',','),'-',microtime(true));
 $car_id = $_GET['car_id'];
+
+if (($owner_id = CarModel::getCarOwner($car_id))  && (CarModel::checkAccessLevel($car_id,Session::get('user_uuid')) >= 80)) {
+	
+
 if (!preg_match('/^[A-Za-z0-9-]+$/',$car_id)) {
 exit_status('Error! Wrong car id!');
 }
-
-$upload_dir = '/var/www/usrimg/'.Session::get('user_uuid').'/';
+$upload_dir = '/var/www/usrimg/'.$owner_id.'/';
 $allowed_ext = array('jpg','jpeg','png','gif','pdf');
 $allowed_nonimage_ext = array('pdf','xls');
 
@@ -48,6 +51,8 @@ $ext = pathinfo($pic['name'], PATHINFO_EXTENSION);
     //exit_status('File was uploaded successfuly! user: '.Session::get('user_uuid').' car: '.$car_id);
 	}           
 
+}
+} else {exit_status('Error! Wrong car id or insufficient permissions!');
 }
 
 

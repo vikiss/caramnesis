@@ -19,6 +19,8 @@ body { margin: 0; padding: 0 }
 img { max-width: 100% }
 svg { max-height: 100% }
 
+body {    width: calc(100vw - 34px); } /* avoids shifting the page horizontally when vertical scrollbar appears*/
+
 input,
 select,
 textarea,
@@ -158,8 +160,8 @@ hr {
   border-bottom-color: rgba(0,0,0,.125);
 }
 
-.small {font-size: .62rem }
-.smallish {font-size: .72rem }
+.small {font-size: .62rem; line-height: .62rem; }
+.smallish {font-size: .72rem; line-height: .72rem; }
 
 .small-field {
 	height: auto !important;
@@ -424,6 +426,11 @@ hr {
 .mxn3 { margin-left: -2rem; margin-right: -2rem; }
 .mxn4 { margin-left: -4rem; margin-right: -4rem; }
 
+.mx1 { margin-left: .5rem; margin-right: .5rem; }
+.mx2 { margin-left: 1rem; margin-right: 1rem; }
+.mx3 { margin-left: 2rem; margin-right: 2rem; }
+.mx4 { margin-left: 4rem; margin-right: 4rem; }
+
 .mx-auto { margin-left: auto; margin-right: auto; }
 .p0 { padding: 0 }
 
@@ -475,19 +482,20 @@ hr {
 }
 
 
-@media (min-width: 40em) {
+@media (max-width: 40em) { 
   .sm-hide { display: none !important }
 }
 
-@media (min-width: 52em) {
+@media (max-width: 52em) {
   .md-hide { display: none !important }
 }
 
-@media (min-width: 64em) {
+@media (max-width: 64em) {
   .lg-hide { display: none !important }
 }
 
 .display-none { display: none !important }
+.display-hide { display: none }
 
 .hide {
   position: absolute !important;
@@ -866,11 +874,13 @@ hr {
 .bg-maroon  { background-color: #85144b }
 .bg-kcms    { background-color: #CC9 }
 .bg-kclite  { background-color: rgba(204, 204, 153, 0.37) }
+.bg-kcultralite  {background-color: rgba(204, 204, 153, 0.17) }
 
 .bg-darken-1 { background-color: rgba(0,0,0,.0625) }
 .bg-darken-2 { background-color: rgba(0,0,0,.125) }
 .bg-darken-3 { background-color: rgba(0,0,0,.25) }
 .bg-darken-4 { background-color: rgba(0,0,0,.5) }
+.bg-darken-5 { background-color: rgba(0,0,0,.92) }
 
 .bg-lighten-1 { background-color: rgba(255,255,255,.0625) }
 .bg-lighten-2 { background-color: rgba(255,255,255,.125) }
@@ -937,7 +947,7 @@ hr {
 	Event type tags
 --------------------------*/
 
-.tags li, .tags a{
+.tags li, .tags a, .tags span {
 	float:left;
 	height:24px;
 	line-height:24px;
@@ -945,7 +955,7 @@ hr {
 	font-size:11px;
 	}
   
-  .tags a{
+  .tags a, .tags span{
 	margin-left:20px;
 	padding:0 10px 0 12px;
 	background:#CC9;
@@ -987,7 +997,7 @@ hr {
 	}
   
 /*-------------------------
-	modal
+	modal---not in use, delete eventually
 --------------------------*/
 
 /* the overlayed element */
@@ -1027,6 +1037,10 @@ hr {
     height:450px;
   }
   
+ /*
+ misc
+ */ 
+  
   div.contentWrap {
     max-height:90%;
     
@@ -1039,3 +1053,71 @@ hr {
   
   .striped tr:nth-child(even) { background-color: rgba(204, 204, 153, 0.37) }
   .striped tr:nth-child(odd) { background-color: rgba(204, 204, 153, 0.17) }
+  
+.vlist {
+  display: table;
+}
+
+.vlist li {
+  display: table-row;
+}
+
+.vlist li label, .vlist li span {
+    display: table-cell;
+    width: 50%;
+    padding: .5rem 2rem .5rem 0;
+    border-bottom: 1px solid #CC9;
+}
+
+.vlist li span {font-weight: bold;}
+.vlist li label {text-align: right;}
+
+.pointer { cursor: pointer;}
+.hilite  { background-color: #CC9 !important; }
+
+#msgcount div {padding: 0 4px; border: 1px solid #fff; }
+#msgcount a {padding-right: .75rem;}
+
+.msgstatus-Q td {font-weight: bold;}
+.crop { object-fit: cover; }
+.square img {width: 120px; height: 94px; }
+.mcenter {margin: 0 auto;}
+.ltop {padding-top: 4px;} /* compensate for logo height */
+.textfield  {min-height: 50vh;}
+.pic120width {width: 120px; min-height: 120px; background-size: cover; background-repeat: no-repeat; background-position: center;}
+.red-triangle {width: 0;
+height: 0;
+border-style: solid;
+border-width: 0 40px 40px 0;
+border-color: transparent rgba(255, 64, 54, 0.67) transparent transparent;
+}
+.imgbutton, .imgbutton img {width: 100px; height: 80px; }
+.imgbutton { border-radius: 6px; border-width: 4px;    }
+.active {
+  outline: none;
+  border-color: #CC9;
+  box-shadow: 0 0 2px 2px rgba(204, 204, 153, 0.5);
+}
+#heroimg-container {height: 50vh; width: 67vh; }
+#heroimg {position:absolute;
+    top:0;
+    bottom:0;
+    margin: auto;
+    max-height: 50vh; max-width: 67vh; 
+    }
+.abscenter {top: 48%; left: 48%;}
+.fs {width: 100%; height: 100%; position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
+#fsimg {text-align: center;}
+#fsimg img {max-height: 100%;}
+#fsclose {width: 8vw; border-bottom-left-radius: 15px;}
+#fspsnext, #fspsprev {bottom: 25%;}
+#fsnext, #fsprev {top: 40%;}
+.right-arrow {border-top-left-radius: 15px; border-bottom-left-radius: 15px;}
+.left-arrow {border-top-right-radius: 15px; border-bottom-right-radius: 15px;}
+#fspicstrip {height: 94px; overflow: hidden;}
+.top-48 {top: 48%;}
+.ui-tooltip {
+    background-color: #CC9 !important;
+    font-size: .78rem !important; 
+  }
+.pic120margin {margin-left: 140px;}

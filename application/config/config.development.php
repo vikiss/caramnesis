@@ -79,11 +79,15 @@ return array(
 		CASSANDRA
 	*/
 	'CASS_KEYSPACE' => 'bxamnesis',
-  'DEFAULT_LANGUAGE' => 'EN',
+  'AVAILABLE_LOCALES' => $available_languages,
+  'LANGUAGE_NAMES' => $language_names,
   'AVAILABLE_TAGS' => $available_tags,
   'NO_SHO_TAGS' => $no_sho_tags,
-  'USER_UNITS' => $user_units,
-  'CAR_DATA_BITS' => $car_data_bits,
+  'CAR_DATA_BITS' => $car_data_bits, //replaced by DATA_BITS
+  'DATA_BITS' => 	file_get_contents(realpath(dirname(__FILE__).'/../../') . '/application/model/databits.xml'),
+  'CURRENCIES' => $available_currencies,
+  'CONSUMPTION_UNITS' => $consumption_units,
+  'DISTANCE_UNITS' => $distance_units,
   	/**
 	 * Configuration for: Captcha size
 	 * The currently used Captcha generator (https://github.com/Gregwar/Captcha) also runs without giving a size,
@@ -107,12 +111,12 @@ return array(
      * COOKIE_HTTP: If set to true, Cookies that can't be accessed by JS - Highly recommended!
      * SESSION_RUNTIME: How long should a session cookie be valid by seconds, 604800 = 1 week.
 	 */
-	'COOKIE_RUNTIME' => 1209600,
+	'COOKIE_RUNTIME' => 1209600, //dvi savaites
 	'COOKIE_PATH' => '/',
     'COOKIE_DOMAIN' => ".caramnesis.com",
-    'COOKIE_SECURE' => false,
+    'COOKIE_SECURE' => true, 
     'COOKIE_HTTP' => true,
-    'SESSION_RUNTIME' => 604800,
+    'SESSION_RUNTIME' => 604800, //savaite
 	/**
 	 * Configuration for: Avatars/Gravatar support
 	 * Set to true if you want to use "Gravatar(s)", a service that automatically gets avatar pictures via using email

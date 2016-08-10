@@ -3,7 +3,6 @@
 <head>
     <title>CARAMNESIS</title>
     <meta charset="utf-8">
-    <meta name="google-site-verification" content="k2m_5lCV-bnPaS6nDYZy65_66i5YGRRaRhOHVWCoOps" />
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
@@ -33,41 +32,40 @@
     <div class="flex flex-column" style="min-height:100vh">
     <nav class="clearfix white bg-kcms">
         <!-- navigation -->
-        <div class="sm-col">
-          <a href="<?php echo Config::get('URL'); ?>index/index" class="sbtn py2"><img src="/img/tiny-exhaust-header-gasket.png" alt="caramnesis" /></a>
+        <div class="col col-6">
+          <a href="<?php echo Config::get('URL'); ?>index/index" class="sbtn py1"><img src="/img/tiny-exhaust-header-gasket.png" alt="caramnesis" /></a>
           
-          
-            
+       
             <?php if (Session::userIsLoggedIn()) { ?>
-                    <a href="<?php echo Config::get('URL'); ?>car/index" class="sbtn py2"><?php echo _("MENU_MY_CARS"); ?></a>
+                    <a href="<?php echo Config::get('URL'); ?>car/index" class="sbtn py1" title="<?php echo _("MENU_MY_CARS"); ?>"><i class ="icon-th"> </i> <span class="sm-hide"><?php echo _("MENU_MY_CARS"); ?></span></a>
             <?php } else {  // for not logged-in users 
             ?>
                                 
                 <?php if (!View::checkForActiveControllerAndAction($filename, "login/index")) {  ?>
-                    <a href="<?php echo Config::get('URL'); ?>login/index" class="sbtn py2"><?php echo _("MENU_LOGIN"); ?></a>
+                    <a href="<?php echo Config::get('URL'); ?>login/index" class="sbtn py1"><?php echo _("MENU_LOGIN"); ?></a>
                 <?php };
                 if (!View::checkForActiveControllerAndAction($filename, "login/register")) {  ?>
-                    <a href="<?php echo Config::get('URL'); ?>login/register" class="sbtn py2"><?php echo _("MENU_REGISTER"); ?></a>
+                    <a href="<?php echo Config::get('URL'); ?>login/register" class="sbtn py1"><?php echo _("MENU_REGISTER"); ?></a>
                 
             <?php }} ?>
         </div>
-
-        <div class="sm-col-right"><a href="?lang=lt">LT</a> <a href="?lang=en">EN</a></div>
-
         <!-- my account -->
-        <div class="sm-col-right">
+        <div class="col col-6 right-align ltop">
         <?php if (Session::userIsLoggedIn()) { ?> 
                     
-                <a href="<?php echo Config::get('URL'); ?>login/showprofile" class="sbtn py2"><?php echo Session::get('user_name') ; ?><?php // echo _("MENU_MY_ACCOUNT"); ?></a>
+                <span id="msgcount" class="relative">
+                <?php MessageModel::getUnreadMessages(Session::get('user_uuid')); ?>                    
+                <a href="<?php echo Config::get('URL'); ?>message" class="sbtn py1" title="<?= _("MESSAGES").' ('.Session::get('unread_messages').')'; ?>"><i class ="icon-mail"> </i> <span class="sm-hide"><?= _("MESSAGES"); ?></span></a>
+                <div class="absolute top-0  right-0 bg-red small bold <?php if (Session::get('unread_messages') == 0) { echo 'hide '; } ?>"><?= Session::get('unread_messages'); ?></div>
+                </span>
+                <a href="<?php echo Config::get('URL'); ?>login/showprofile" class="sbtn py1" title="<?= _("MENU_MY_ACCOUNT").' ('.Session::get('user_name').')'; ?>"><i class ="icon-user"> </i> <span class="sm-hide"><?= _("MENU_MY_ACCOUNT"); ?></span></a>
                                      
-                        <a href="<?php echo Config::get('URL'); ?>login/logout" class="sbtn py2"><?php echo _("MENU_LOGOUT"); ?></a>
-                    
-               
         <?php } else { if (!View::checkForActiveControllerAndAction($filename, "index/about")) { ?>
         
-          <a href="<?php echo Config::get('URL'); ?>aboutCaramnesis" class="sbtn py2"><?php echo _("MENU_ABOUT_CARAMNESIS"); ?></a>
+          <a href="<?php echo Config::get('URL'); ?>aboutCaramnesis" class="sbtn py1"><?php echo _("MENU_ABOUT_CARAMNESIS"); ?></a>
         
         <?php } }; ?>
+            
         </div>
       </nav>
       <section class="flex-auto p2">

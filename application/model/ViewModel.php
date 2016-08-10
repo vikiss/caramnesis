@@ -57,6 +57,22 @@ public static function getCarAccessByCarId($car_id, $level) {
     
     }
     
+    
+      
+    public static function get_public_event_types ($car_id) {
+    
+    $casscluster   = Cassandra::cluster()  ->build();
+       $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
+       $statement = $casssession->prepare('SELECT car_access FROM cars WHERE id = ?');
+       $selectstuff = array('id' => new Cassandra\Uuid($car_id));
+       $options = new Cassandra\ExecutionOptions(array('arguments' => $selectstuff));
+       $result = $casssession->execute($statement, $options);
+       $result = $result[0]; $result = (array) $result['car_access']; if (array_key_exists('values', $result)) $result = $result['values'];
+       return($result);
+    
+    } 
+    
+    
 }    
 
 ?>

@@ -14,8 +14,16 @@ class ViewController extends Controller
       if (ViewModel::getCarAccessByCarId($car_id, 10)) {
       
         $this->View->render('view/car', array(
-            'car' => CarModel::getCar($car_id), 'events' => CarModel::getEvents($car_id), 'car_data_bits' => Config::get('CAR_DATA_BITS'), 'car_data' => CarModel::getCarData($car_id)
-        ));      
+            'car' => CarModel::getCar($car_id),
+            'events' => CarModel::getEvents($car_id),
+            'car_data_bits' => Config::get('CAR_DATA_BITS'),
+            'car_data' => CarModel::getCarData($car_id),
+            'public_events' => ViewModel::get_public_event_types($car_id),
+            'tags' => Config::get('AVAILABLE_TAGS'),
+            'units' => UserModel::getUserUnits(CarModel::getCarOwner($car_id)),
+            'owner' => CarModel::getCarOwner($car_id)
+            )
+        );      
         
                                                        } else {
                                                        
@@ -26,7 +34,7 @@ class ViewController extends Controller
                  }         else Redirect::to('index/index'); 
     }
     
-    public function event($car_id, $event_time)
+    public function event($car_id, $event_time)    //sitas dar nenaudojamas?
     {
     if (($car_id) && ($event_time)) {
         $this->View->render('view/event', array(

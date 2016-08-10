@@ -1,4 +1,4 @@
-<?php //index-index-view ?><div class="container">
+<div class="container">
     <div class="box">
         <!-- echo out the system feedback (error and success messages) -->
         <?php $this->renderFeedbackMessages(); ?>
@@ -23,20 +23,18 @@ foreach ($this->car as $row) {
       ?>
 <div class="mb1 mr1 p1 black bg-kclite left fauxfield square center truncate">
 <a href="<?= Config::get('URL') . 'car/index/' . $id['uuid']; ?>" title="<?= $row['car_name']; ?> (<?= $row['car_make']; ?> <?= $row['car_model']; ?> <?= $plates_or_vin; ?>)"><?= $row['car_name']; ?></a>
-<?php //temporarily so that every owners cars get populated with 99 entries 
-$level = CarModel::checkAccessLevel($id['uuid']); if (!$level) {CarModel::newAccessNode($id['uuid'], 99);};
-?>
 <?php if ($car_images) { ?>
-<br /><a href="<?= Config::get('URL') . 'car/index/' . $id['uuid']; ?>" title="<?= $row['car_name']; ?> (<?= $row['car_make']; ?> <?= $row['car_model']; ?> <?= $plates_or_vin; ?>)">
-<?php print '<img src="/car/image/'.Session::get('user_uuid').'/'.$id['uuid'].'_'.$car_image.'/120" />'; ?>
-</a>
+<div><a href="<?= Config::get('URL') . 'car/index/' . $id['uuid']; ?>" title="<?= $row['car_name']; ?> (<?= $row['car_make']; ?> <?= $row['car_model']; ?> <?= $plates_or_vin; ?>)">
+<?php print '<img class="crop" src="/car/image/'.Session::get('user_uuid').'/'.$id['uuid'].'_'.$car_image.'/120" />'; ?>
+</a></div>
 <?php }; ?>
 </div>
                   
                  
 <?php  } } else echo '<h1>'._("NO_CARS_FOUND").'</h1>' ?>
  
- <div class="mb1 mr1 p1 black bg-kcms left fauxfield square center truncate"><a href="<?php echo Config::get('URL'); ?>car/new_car" title="<?php echo _("NEWCAR_ADD"); ?>"><?php echo _("NEWCAR_ADD"); ?></a></div>
+ <div class="mb1 mr1 p1 black bg-kcms left fauxfield square center table"><div class="table-cell align-middle"><a href="<?php echo Config::get('URL'); ?>car/new_proxy" title="<?php echo _("OTHER_PEOPLES_CARS"); ?>"><?php echo _("OTHER_PEOPLES_CARS"); ?></a></div></div>
+ <div class="mb1 mr1 p1 black bg-kcms left fauxfield square center table"><div class="table-cell align-middle"><a href="<?php echo Config::get('URL'); ?>car/new_car" title="<?php echo _("NEWCAR_ADD"); ?>"><?php echo _("NEWCAR_ADD"); ?></a></div></div>
  
  
 </div>
