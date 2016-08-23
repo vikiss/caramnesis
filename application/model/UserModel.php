@@ -376,6 +376,20 @@ class UserModel
         return false;
     }
     
+            public static function getUserLanguageByUUid($uuid) {
+                
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT user_lang
+                                     FROM users
+                                     WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':user_uuid' => $uuid));
+        // return one row (we only have one result or nothing)
+        if ($result = $query->fetch()) {
+            return $result->user_lang;
+        } else {return false;}
+                
+            }
+    
           public static function setCurrency($currency, $uuid)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
@@ -645,6 +659,19 @@ class UserModel
         } else {return false;}
     }
     
+    
+    public static function getEmailByUUid($uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT user_email FROM users
+                                     WHERE user_uuid = :uuid LIMIT 1");
+        $query->execute(array(':uuid' => $uuid));
+        $result = $query->fetch();
+        if ($result) {
+        return $result->user_email;
+        } else {return false;}
+    }
+    
     public static function getUUidByUserName($user_name)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
@@ -668,6 +695,33 @@ class UserModel
         }
         Session::add('feedback_negative', _('CANNOT_GET_USER_UNITS'));
         return false;
+    }
+    
+              public static function setLastSeen($uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("UPDATE users SET last_seen = :last_seen WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':last_seen' => time(), ':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            return true;
+        }
+        Session::add('feedback_negative', _('FEEDBACK_CURRENCY_CHANGE_FAILED'));
+        return false;
+    }
+    
+    
+     public static function getLastSeen($uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT last_seen FROM users WHERE user_uuid = :user_uuid LIMIT 1");
+                $query->execute(array(':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            $result = $query->fetch();
+            return $result->last_seen;
+        }
+                return false;
     }
 
     

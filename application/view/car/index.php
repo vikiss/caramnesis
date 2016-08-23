@@ -1,6 +1,11 @@
 <div class="container">
 
-<?php 
+<?php
+
+$reflector = new ReflectionClass('Cassandra');
+echo $reflector->getFileName();
+echo $reflector->getStartLine();
+
        $units = $this->units;
        $tags = Config::get('AVAILABLE_TAGS');
        //databits
@@ -96,11 +101,21 @@
                          ?></div>
                         <?php if (!$thisowner) { // no edit link for non-owner ?>
                         <div class="right">
-                                <a href="<?= Config::get('URL') . 'car/edit_car/' . $car_id; ?>" title="<?= _("EDIT"); ?>"><i class="icon-edit"> </i></a>
+                                <a class="context_menu_opener" data-element="editcarmenu" href="#" title="<?= _("EDIT"); ?>"><i class="icon-down-open"> </i></a>
                         </div>
                         <?php }; ?>
                    </div>
-                   <div class="relative overflow-hidden">
+                   <div class="relative ">
+                     <div id="editcarmenu" class="absolute top-0 right-0 border z3 active bg-white display-hide p2 closeonclick ">
+                            <ul class="list-reset">
+                                   <li><a href="<?= Config::get('URL') . 'car/edit_car_id/' . $car_id; ?>"><i class="icon-cab"> </i><?= _('CAR_IDENTIFICATION'); ?></a></li>
+                                   <li><a href="<?= Config::get('URL') . 'car/edit_attributes/' . $car_id; ?>"><i class="icon-th-list"> </i><?= _('CAR_ATTRIBUTES'); ?></a></li>
+                                   <li><a href="<?= Config::get('URL') . 'car/edit_car_access/' . $car_id; ?>"><i class="icon-users"> </i><?= _('CAR_PERMISSIONS'); ?></a></li>
+                                   <li><a href="<?= Config::get('URL') . 'car/authorised_users/' . $car_id; ?>"><i class="icon-wrench"> </i><?= _('CAR_AUTHORISED_USERS'); ?></a></li>
+                                   <li><a href="<?= Config::get('URL') . 'car/edit_car_pictures/' . $car_id; ?>"><i class="icon-camera"> </i><?= _('CAR_PICTURES'); ?></a></li>
+                                   
+                            </ul>
+                     </div>
                      
                   <a id="heroimg-link" href="<?= $initial_img; ?>">   
                         <div class="left pic120width bg-white border-right relative"  style="<?php
@@ -109,7 +124,7 @@
                                 } else {
                                 ?>background-color: rgba(204, 204, 153, 0.37)<?php
                                 }; ?>"><?= $image_meta; ?></div></a>
-                        <div class="absolute left-0 top-0 right-0 pic120margin small"><?php $car_data = $this->car_data; include ('car_data_bit_table_disp.php');?></div>
+                        <div class="absolute left-0 top-0 right-0 overflow-hidden pic120margin pic120height overflow-hidden small"><?php $car_data = $this->car_data; include ('car_data_bit_table_disp.php');?></div>
                    </div>
                    
                   </div>
@@ -260,7 +275,8 @@
 
      
      
-     $event_types = (array) $event['event_type']; $event_types = $event_types['values'];
+     $event_types = (array) $event['event_type'];
+     $event_types = $event_types['values'];
      $event_types_out = ''; 
       if($event_types) { 
         foreach ($event_types AS $event_type) {

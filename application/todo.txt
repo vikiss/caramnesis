@@ -1,7 +1,50 @@
-iskelti is config siunciamu patvirtinimo laisku tekstus ir juos su-i18N-inti
+
+/car/new_proxy padaryti paie6k1 pagal valst. nr. arba VIN, ne pagal vartotojo varda
+
+
+messages prideti xss filter
+
+galima issusti prasyma prieigos redaguoti savo paties auto
+
+nuotrauku meta ir dragndrop rusiavimas, nutempimas i viesa / neviesa zonas
+
+perspejimas pries issunciant uzklausa masinos savininkui
+
+Prieiga = vieša prieiga / statusas (parduodu / nuomoju / parduodu dalis)
+
+kai siunti email notifikacija, gale gali nereiketi atsakymo i zinute nuorodos tuo atveju jei pacioje zinjuteje jau yra nuoroda, pvz duoti prisijungti.
+reikia funkcijoje ideti tokia opcija
+
+galerijos full screene vertikalus scrollas gali buti sumazinus langa
+
+pic stripa reikia rodyti ant hover
+
+prie mašinos viešos nuotraukos ir privačios nuotraukos
+gal įvesti visų nuotraukų meta, kur privatumas, gal ateity koks aprašymas, eiliškumas ir t.t.
+
+prie mašinos rodyti ateinančias notifikacijas
+
+įvykiai  vienu stulpeliu kaip fb ir padidinti, kaip fb wall postai
+
+nuotraukoje maskavimo įrankis
+
+prie remonto kategorijos stambesniu / didesniu investiciju sarasas
+
+galvoje ivardinti vin koda, valst. nr. ir t.t.  
+
+pagal kategorija ivykio redagavime atsiranda laukeliai:
+priminimo laikas / stambesniu investiciju fiksuotas sarasas (padangos, purkštukai, turbina, egr, sankaba, akumas, etc)
+
+atributai kol kas strukturuotu tekstu
+
+pdf galerija
+mygtukas tiesiai žinutė savininkui kai ne prie savop mašinos prisijungęs
 
 
 
+perspektyvoje:
+pasikeitus savininkui reiketu pereiti per reminderius mysql ir pakeisti savininko id
+nenorim automatiskai nustatyti savininko pagal masina siuntimo momentu kad nereiketu kasandros crone
 
 
   public static function getUserDataByUuid($uuid)

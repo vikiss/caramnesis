@@ -23,6 +23,15 @@ placeholder="<?= _('CURRENCY_'.$units->user_currency); ?>"<?php }; ?> />
                 <div class="fileupl left mt1"><span class="fauxinput icon-camera"></span><input type="file" name="fileinput[]" id="fileinput" multiple="multiple" accept="image/*" capture="camera" /></div>
                 <div class="small"><?= _("DROP_IMAGES"); ?></div>
                 </div>
+                 
+                 
+                 <input type="text" name="reminder_time" class="field mt1 " value="<?php $nextWeek = time() + (7 * 24 * 60 * 60); echo $nextWeek; ?>" />
+                 <input type="text" name="reminder_content" class="field mt1 " value="reminder content" />
+                   
+        
+                 
+                 
+                 
                 <input type="submit" id="start-upload" class="btn btn-primary mb1 mt1 black bg-kcms right" value='<?php echo _("SAVE"); ?>' autocomplete="off" />
     <div id="filelist" class="list-reset">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
     <div id="console"></div>

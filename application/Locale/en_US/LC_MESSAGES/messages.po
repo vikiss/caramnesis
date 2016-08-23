@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Caramnesis\n"
 "POT-Creation-Date: 2016-02-06 22:36+0200\n"
-"PO-Revision-Date: 2016-06-26 04:00+0200\n"
+"PO-Revision-Date: 2016-08-15 22:01+0200\n"
 "Last-Translator: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language-Team: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language: en_US\n"
@@ -1509,3 +1509,48 @@ msgstr "New car access request"
 msgid "USER_%s_HAS_REQUESTED_ACCESS_TO_THIS_CAR_HIT_ADD_IF_OK"
 msgstr ""
 "User %s has requested access to this car. Hit ADD if you are OK with this."
+
+msgid "NEW_RECORD"
+msgstr "New record"
+
+msgid "FIND_CARS"
+msgstr "Find cars"
+
+msgid "VIEW"
+msgstr "View"
+
+msgid "FILTER"
+msgstr "Filter"
+
+msgid "EVENT_TYPES"
+msgstr "Event types"
+
+msgid "ALL"
+msgstr "All"
+
+msgid "DISTANCE_km"
+msgstr "kilometres"
+
+msgid "CONSUMPTION_eu"
+msgstr "l/100km"
+
+msgid "FEEDBACK_LANGUAGE_CHANGE_SUCCESSFUL"
+msgstr "Language succesfully changed"
+
+msgid "EMAIL_VERIFICATION_FROM_NAME"
+msgstr "CARAMNESIS registration confirmation"
+
+msgid "EMAIL_PASSWORD_RESET_CONTENT"
+msgstr "Please click on this link to reset your password: "
+
+msgid "EMAIL_PASSWORD_RESET_FROM_NAME"
+msgstr "CARAMNESIS registration"
+
+msgid "EMAIL_PASSWORD_RESET_SUBJECT"
+msgstr "Password reset for CARAMNESIS"
+
+msgid "EMAIL_VERIFICATION_SUBJECT"
+msgstr "CARAMNESIS account activation"
+
+msgid "EMAIL_VERIFICATION_CONTENT"
+msgstr "Please click on this link to activate your account: "

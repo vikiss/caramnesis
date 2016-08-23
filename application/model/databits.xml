@@ -92,6 +92,13 @@
         <display></display>
       </entry>
       <entry>
+        <title>ENGINE_CODE</title>
+        <units></units>
+        <valuetype>TEXT</valuetype>
+        <value></value>
+        <display></display>
+      </entry>
+      <entry>
         <title>FUEL_TYPE</title>
         <units></units>
         <valuetype>CHOICE</valuetype>

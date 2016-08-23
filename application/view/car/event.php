@@ -1,6 +1,3 @@
-<div class="container">
-    <div class="box">
-
         <?php if ($this->event) { 
 $tags = Config::get('AVAILABLE_TAGS'); $units = $this->units;             
 foreach ($this->event as $row) { //this runs only once
@@ -12,7 +9,7 @@ foreach ($this->event as $row) { //this runs only once
         $event_types = $event_types['values']; $event_types_out = '';
         if($event_types) { 
             foreach ($event_types AS $event_type) {
-                $event_types_out.= '<span class="smallish bg-kcms white p1 mx1 rounded ">'._($event_type).'</span>';
+                $event_types_out.= '<span class="smallish bg-kcms white px1 mx1 rounded ">'._($event_type).'</span>';
             };
         };
     
@@ -89,11 +86,12 @@ foreach ($this->event as $row) { //this runs only once
                     }
                     if (count($event_images) < 2) {$picstrip_out = '';}
                                 } ?>
-        
+<div class="container">
+    <div class="box">        
 
 <div class="absolute left-0 top-48 display-hide bg-darken-4 left-arrow py2 z4" id="previous-event-link"><a href="#"><i class="icon-left-open white"> </i></a></div>
 <div class="absolute right-0 top-48 display-hide bg-darken-4 right-arrow py2 z4" id="next-event-link"><a href="#"><i class="icon-right-open white"> </i></a></div>
-            
+<div id="return" class="right bg-darken-4 center p2"><a href="<?= Config::get('URL') . 'car/index/' . $car_id; ?>" title="<?= _('RETURN'); ?>"><i class="icon-cancel white"> </i></a></div>                
             
             
 <div id="container" class="clearfix">
@@ -103,7 +101,7 @@ foreach ($this->event as $row) { //this runs only once
     if ($thisowner) { echo $thisowner.': '; } ?><strong><?= $car_name; ?></strong></a>
       <a href="#" class="jqtooltip" title="<?= $entrytime.$oldversions; ?>"><?= strftime('%x', $event_time); ?></a><span class="smallish"></span>
         <a href="<?= Config::get('URL') . 'car/edit_event/' . $event_id; ?>" title="<?= _("EDIT"); ?>"><i class="icon-edit"> </i></a>
-    <div class="right "><?= $event_types_out; ?></div>  
+    <div class="inline "><?= $event_types_out; ?></div>  
     </div>
     
      <div class=" ">

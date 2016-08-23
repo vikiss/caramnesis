@@ -19,7 +19,7 @@ body { margin: 0; padding: 0 }
 img { max-width: 100% }
 svg { max-height: 100% }
 
-body {    width: calc(100vw - 34px); } /* avoids shifting the page horizontally when vertical scrollbar appears*/
+body {    width: calc(100vw - 16px); } /* avoids shifting the page horizontally when vertical scrollbar appears (buvo 34px)*/
 
 input,
 select,
@@ -50,8 +50,8 @@ input[type=time],
 input[type=url],
 input[type=week],
 .fauxinput {
-  height: 2.25rem;
-  padding: .5rem .5rem;
+  height: 3.25rem;
+  padding: 1.25rem 0.5rem 0.5rem 0.5rem;
   vertical-align: middle;
   -webkit-appearance: none;
 }
@@ -190,7 +190,7 @@ hr {
 
 .field:read-only:not(select),
 .field.is-read-only {
-  background-color: rgba(0,0,0,.125);
+  background-color: #eaeaea;
 }
 
 
@@ -849,6 +849,7 @@ hr {
 .purple  { color: #b10dc9 }
 .maroon  { color: #85144b }
 .kcms    { color: #CC9 }
+.kcdark  { color: #82825c }
 
 .color-inherit { color: inherit }
 .muted { opacity: .5 }
@@ -1085,6 +1086,7 @@ hr {
 .ltop {padding-top: 4px;} /* compensate for logo height */
 .textfield  {min-height: 50vh;}
 .pic120width {width: 120px; min-height: 120px; background-size: cover; background-repeat: no-repeat; background-position: center;}
+.pic120height {height: 120px;}
 .red-triangle {width: 0;
 height: 0;
 border-style: solid;
@@ -1121,3 +1123,5 @@ border-color: transparent rgba(255, 64, 54, 0.67) transparent transparent;
     font-size: .78rem !important; 
   }
 .pic120margin {margin-left: 140px;}
+.lblgrp {position: relative;}
+.lblgrp label {position:absolute; color: #82825c; padding: .5rem; font-size: .72rem; line-height: .72rem;}

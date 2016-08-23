@@ -263,12 +263,12 @@ class RegistrationModel
 	 */
 	public static function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
 	{
-		$body = Config::get('EMAIL_VERIFICATION_CONTENT') . Config::get('URL') . Config::get('EMAIL_VERIFICATION_URL')
+		$body = _('EMAIL_VERIFICATION_CONTENT') . Config::get('URL') . Config::get('EMAIL_VERIFICATION_URL')
 		        . '/' . urlencode($user_id) . '/' . urlencode($user_activation_hash);
 
 		$mail = new Mail;
 		$mail_sent = $mail->sendMail($user_email, Config::get('EMAIL_VERIFICATION_FROM_EMAIL'),
-			Config::get('EMAIL_VERIFICATION_FROM_NAME'), Config::get('EMAIL_VERIFICATION_SUBJECT'), $body
+			_('EMAIL_VERIFICATION_FROM_NAME'), _('EMAIL_VERIFICATION_SUBJECT'), $body
 		);
 
 		if ($mail_sent) {

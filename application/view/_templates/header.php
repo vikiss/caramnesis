@@ -58,6 +58,9 @@
                 <a href="<?php echo Config::get('URL'); ?>message" class="sbtn py1" title="<?= _("MESSAGES").' ('.Session::get('unread_messages').')'; ?>"><i class ="icon-mail"> </i> <span class="sm-hide"><?= _("MESSAGES"); ?></span></a>
                 <div class="absolute top-0  right-0 bg-red small bold <?php if (Session::get('unread_messages') == 0) { echo 'hide '; } ?>"><?= Session::get('unread_messages'); ?></div>
                 </span>
+                <span id="reminderCount" class="relative">
+                <a href="#" class="sbtn py1" title="<?= _("REMINDERS"); ?>"><i class ="icon-bell-alt"> </i> <span class="sm-hide"><?= _("REMINDERS"); ?></span></a>
+                </span>
                 <a href="<?php echo Config::get('URL'); ?>login/showprofile" class="sbtn py1" title="<?= _("MENU_MY_ACCOUNT").' ('.Session::get('user_name').')'; ?>"><i class ="icon-user"> </i> <span class="sm-hide"><?= _("MENU_MY_ACCOUNT"); ?></span></a>
                                      
         <?php } else { if (!View::checkForActiveControllerAndAction($filename, "index/about")) { ?>

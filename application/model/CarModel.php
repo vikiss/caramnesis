@@ -3,6 +3,10 @@
 //todo: clear gravatar stuff from session
 //https://developer.android.com/training/basics/firstapp/creating-project.html
 
+
+//image_meta field in cars
+//image_meta field in events
+
 class CarModel
 {
     
@@ -147,6 +151,7 @@ class CarModel
     
      public static function getCarName($car_id)
     {
+		if (!$car_id) {return false;}
 	   $casscluster   = Cassandra::cluster()  ->build();
        $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
        $statement = $casssession->prepare('SELECT car_name FROM cars WHERE id = ?');
@@ -261,7 +266,7 @@ class CarModel
     
     
     
-     public static function editCar($car_data)
+     public static function editCar($car_data) //no longer used
      {
         
      if (!is_array($car_data)) {
@@ -348,6 +353,179 @@ class CarModel
      
      
      }
+	 
+ 
+	 
+	 
+	 
+public static function editCarId($car_data)
+	{
+        
+     if (!is_array($car_data)) {
+            Session::add('feedback_negative', _('FEEDBACK_CAR_EDIT_FAILED'));
+            return false;
+        }
+        
+             $level = self::checkAccessLevel($car_data['car_id'], Session::get('user_uuid'));
+             if ($level < 80) {
+            Session::add('feedback_negative', _('ACCESS_RESTRICTION'));
+            return false;
+             }
+             
+         
+         array_walk_recursive($car_data, 'Filter::XSSFilter');
+            
+        
+       $existing_plates =  self::getCarPlates($car_data['car_id']);
+               
+       $casscluster   = Cassandra::cluster()  ->build();
+       $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
+       $statement = $casssession->prepare("UPDATE cars
+										  SET 
+										  car_make = ?, car_model = ?, car_name = ?, car_plates = ?,
+										  car_vin = ?, car_year = ?, car_make_id = ?, car_model_id = ?,
+										  car_variant = ?, car_variant_id = ? WHERE id = ?");
+	   
+       $plateslist = new Cassandra\Collection(Cassandra::TYPE_TEXT);
+       $plateslist->add($car_data['car_plates']);
+       foreach ($existing_plates AS $existing_plate) {
+       if ($existing_plate !== $car_data['car_plates']) {
+       	   $plateslist->add($existing_plate);
+       }}
+         
+       $updatestuff = array(
+		'car_make' => $car_data['car_make'],
+		'car_model' => $car_data['car_model'],
+		'car_name' => $car_data['car_name'],
+		'car_plates' => $plateslist,
+		'car_vin' => $car_data['car_vin'],
+		'car_year' => $car_data['car_year'],
+		'car_make_id' => $car_data['car_make_id'],
+		'car_model_id' => $car_data['car_model_id'],
+		'car_variant' => $car_data['car_variant'],
+		'car_variant_id' => $car_data['car_variant_id'],
+      'id' => new Cassandra\Uuid($car_data['car_id'])   
+       );
+       $options = new Cassandra\ExecutionOptions(array('arguments' => $updatestuff)); 
+       if ($result = $casssession->execute($statement, $options)) 
+        {
+        Session::add('feedback_positive', _('FEEDBACK_CAR_EDIT_SUCCESS'));
+        return true; 
+        } else {
+        Session::add('feedback_negative', _('FEEDBACK_CAR_EDIT_FAILED'));
+        return false;
+      };
+     
+     
+     
+     }
+	 
+	 
+	 
+	    public static function editCarAccess($car_data) 
+     {
+        
+     if (!is_array($car_data)) {
+            Session::add('feedback_negative', _('FEEDBACK_CAR_EDIT_FAILED'));
+            return false;
+        }
+        
+             $level = self::checkAccessLevel($car_data['car_id'], Session::get('user_uuid'));
+             if ($level < 80) {
+            Session::add('feedback_negative', _('ACCESS_RESTRICTION'));
+            return false;
+
+             }
+             
+    if ($car_data['enable_car_access'] == $car_data['car_id']) {         
+    if (self::newAccessNode($car_data['car_id'], 10, Session::get('user_uuid'))) {
+        Session::add('feedback_positive', _('FEEDBACK_CAR_ACCESS_EDIT_SUCCESS'));
+    }     else {
+            Session::add('feedback_negative', _('FEEDBACK_CAR_ACCESS_EDIT_FAILED'));
+    }}        
+    
+    if ($car_data['disable_car_access'] == $car_data['car_id']) {         
+    if (self::removeAccessNode($car_data['car_id'], 10, Session::get('user_uuid'))) {
+        Session::add('feedback_positive', _('FEEDBACK_CAR_ACCESS_EDIT_SUCCESS'));
+    }     else {
+            Session::add('feedback_negative', _('FEEDBACK_CAR_ACCESS_EDIT_FAILED'));
+    }}         
+      
+            
+        
+              
+       $casscluster   = Cassandra::cluster()  ->build();
+       $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
+       $statement = $casssession->prepare("UPDATE cars SET car_access = ? WHERE id = ?");
+	   
+       $accesslist = new Cassandra\Set(Cassandra::TYPE_TEXT);
+         if ($access_tags = $car_data['public_tags']) {
+      foreach($access_tags as $access_tag) {
+              $accesslist->add($access_tag);
+                                            }      
+                                                        };
+       $updatestuff = array(
+		'car_access' => $accesslist,	
+      'id' => new Cassandra\Uuid($car_data['car_id'])   
+       );
+       $options = new Cassandra\ExecutionOptions(array('arguments' => $updatestuff)); 
+       if ($result = $casssession->execute($statement, $options)) 
+        {
+        Session::add('feedback_positive', _('FEEDBACK_CAR_EDIT_SUCCESS'));
+        return true; 
+        } else {
+        Session::add('feedback_negative', _('FEEDBACK_CAR_EDIT_FAILED'));
+        return false;
+      };
+     
+     
+     
+     } 
+	 
+	 
+	 
+	 
+	 
+	 public static function editCarImages($car_data)
+     {
+        
+     if (!is_array($car_data)) {
+            Session::add('feedback_negative', _('FEEDBACK_CAR_EDIT_FAILED'));
+            return false;
+        }
+             $level = self::checkAccessLevel($car_data['car_id'], Session::get('user_uuid'));
+             if ($level < 80) {
+            Session::add('feedback_negative', _('ACCESS_RESTRICTION'));
+            return false;
+             }
+               
+       $casscluster   = Cassandra::cluster()  ->build();
+       $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
+       $statement = $casssession->prepare("UPDATE cars SET images  = ?  WHERE id = ?");
+       $imagelist = new Cassandra\Collection(Cassandra::TYPE_TEXT);
+         if ($car_data['images']) { 
+       $uplimages = explode(',', $car_data['images']);
+       foreach ($uplimages as $uplimage) {$imagelist->add($uplimage);}
+       }
+       $updatestuff = array(
+		'images' => $imagelist,
+      'id' => new Cassandra\Uuid($car_data['car_id'])   
+       );
+       $options = new Cassandra\ExecutionOptions(array('arguments' => $updatestuff)); 
+       if ($result = $casssession->execute($statement, $options)) 
+        {
+        Session::add('feedback_positive', _('FEEDBACK_CAR_EDIT_SUCCESS'));
+        return true; 
+        } else {
+        Session::add('feedback_negative', _('FEEDBACK_CAR_EDIT_FAILED'));
+        return false;
+      };
+     
+     }
+	 
+	 
+	 
+	 
      
      
      
@@ -678,7 +856,11 @@ class CarModel
        {$event_data['oldversions'] = $time_id;} 
   self::createEvent($event_data);     
 
-       
+       //reminder
+	   
+	   ReminderModel::setReminder($event_data['car_id'], $event_data['reminder_time'], $event_data['reminder_content'], 'Q');
+	   
+	   //reminder
        
        return true;
        } else {

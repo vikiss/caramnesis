@@ -1,5 +1,12 @@
 var stripPicWidth = 116;
 
+$(window).click(function() {
+    if ($(".closeonclick:visible").length) {
+    $( ".closeonclick" ).hide();
+  }
+});
+
+
 $('.jqtooltip').tooltip({ 
   content: function(callback) { 
      callback($(this).prop('title').replace('|', '<br />')); 
@@ -75,7 +82,7 @@ $( "#nwcardialog #show-all-makes" ).click(function() {
 $( "#nwmodelopener" ).click(function(e) {
     e.preventDefault();
   $( "#nwmodeldialog" ).dialog( "open" );
-  if ($("#car_make_id").val()) {
+  if (($("#car_make_id").val()) && ($("#car_year").val())) {
   $( "#nwmodeldialog" ).html('<div class="icon-spin3 spinner"> </div>');
   $( "#nwmodeldialog" ).load( "/car/model_list/"+$("#car_make_id").val()+"/"+$("#car_year").val() );
                                 }
@@ -496,5 +503,10 @@ $('body').on('click', '.evfltreset', function(e) {
   $(".event").show();
 });
 
-
+/* context menu opener */
+$( ".context_menu_opener" ).click(function(e) {  
+                                  var element = $(this).data("element");
+                                  $("#"+element).toggle();
+                                   e.stopPropagation();
+                                  });
 

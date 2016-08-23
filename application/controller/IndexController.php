@@ -40,8 +40,11 @@ class IndexController extends Controller
 				
 
     }
-    
-    
+	
+	public function jenesaisquoi () //cron job
+    {
+    $this->View->renderWithoutHeaderAndFooter('index/cron');
+	}
     
     
      public function save_it()

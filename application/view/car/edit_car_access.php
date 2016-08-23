@@ -1,3 +1,14 @@
+<?php if ($this->car) {
+include('car_data_prep.php'); 
+$this->public_access ? $public_access=true : $public_access=false;
+    ?>
+    <div class="container">
+    <?php $this->renderFeedbackMessages(); ?>
+    <div id="return" class="right bg-darken-4 center p2"><a href="<?= Config::get('URL') . 'car/index/' . $car_id; ?>" title="<?= _('RETURN'); ?>"><i class="icon-cancel white"> </i></a></div>
+    <h1><?= $car_name; ?></h1>
+<div class="box">
+<form method="post" action="<?php echo Config::get('URL');?>car/save_car_access">
+
    <h3><?php print _('PUBLIC_TAGS'); ?></h3>       
        <?php
        
@@ -32,3 +43,13 @@
        <p><a><?= $publiclink; ?></a></p>
        <p><a href="<?= $publiclink2; ?>" target="_blank"><?= $publiclink2; ?></a></p>
        <?php }; ?>
+			  <input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
+			 <input type="submit" class="btn btn-primary mb1 mt1 black bg-kcms right" value='<?php echo _("SAVE"); ?>' autocomplete="off" />
+
+</form> 
+			 
+			 
+</div>
+    </div>
+    <?php } ?>
+			 

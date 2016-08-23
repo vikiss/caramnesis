@@ -17,8 +17,12 @@
     <div class="p4 bg-kclite m1 rounded">
        <h2><?php echo _("LOGIN_HERE"); ?></h2>
   <form action="<?php echo Config::get('URL'); ?>login/login" method="post">
-                    <input type="text" name="user_name" placeholder="<?php echo _("LOGIN_USERNAME_OR_EMAIL"); ?>" class="block col-12 field mt1 " required />
-                    <input type="password" name="user_password" placeholder="<?php echo _("LOGIN_PASSWORD"); ?>" class="block col-12 field mt1 " required />
+								<div class="lblgrp"><label for="user_name"><?= _("LOGIN_USERNAME_OR_EMAIL"); ?></label>
+                    <input type="text" name="user_name" id="user_name" class="block col-12 field mt1 " required />
+								</div>
+								<div class="lblgrp"><label for="user_password"><?= _("LOGIN_PASSWORD"); ?></label>
+                    <input type="password" name="user_password" id="user_password" class="block col-12 field mt1 " required />
+								</div>
                     <label for="set_remember_me_cookie" class="block col-12 mt1">
                         <input type="checkbox" name="set_remember_me_cookie" />
                         <?php echo _("LOGIN_REMEMBER_ME"); ?>

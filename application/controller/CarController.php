@@ -72,33 +72,118 @@ class CarController extends Controller
     }
     
     
-    public function edit_car($car_id, $user_to_auth='') //user to auth - user who requested access to your car
+    
+    
+          public function edit_car($car_id, $user_to_auth='') //only used to add new authorised user upon receipt of request message
+    {
+        if ($auth_usr = UserModel::getUUidByUserName($user_to_auth))
+        {
+            if (CarModel::newAccessNode($car_id, 80, $auth_usr)) {
+        MessageModel::sendMessage( //from, to, message, subject
+        Session::get('user_uuid'),  
+        $auth_usr,
+        sprintf(_('USER_%s_HAS_GIVEN_ACCESS_TO_CAR_%s'),Session::get('user_name'),CarModel::getCarName($car_id)),
+        _('NEW_CAR_AVAILABLE_FOR_EDIT'),
+        false     ) ;                
+            }
+        }
+ Redirect::to('car/authorised_users/'.$car_id);
+    }
+    
+    
+    
+    
+        public function edit_car_id($car_id) 
     {
     
      IF (CarModel::checkAccessLevel($car_id,Session::get('user_uuid')) > 80) {
     
-      $this->View->render('car/edit_car', array(
+      $this->View->render('car/edit_car_id', array(
             'car' => CarModel::getCar($car_id),
             'public_access' => ViewModel::getCarAccessByCarId($car_id, 10),  //level 10 - car publically visible
             'units' => UserModel::getUserUnits(Session::get('user_uuid')),
             'makes' => CarModel::getCarMakeList('all'), // better not allow to change the make after creating a new car 
+        ));        
+    }  else
+            { Session::add('feedback_negative', _('INSUFFICIENT PERMISSION TO ACCESS OTHER USERS CAR'));
+            Redirect::to('index/index'); } 
+    
+    }
+    
+    
+        public function edit_attributes($car_id)
+    {
+    
+     IF (CarModel::checkAccessLevel($car_id,Session::get('user_uuid')) >= 80) {
+    
+      $this->View->render('car/edit_car_data_bit', array(
+            'car' => CarModel::getCar($car_id),
+            'units' => UserModel::getUserUnits(Session::get('user_uuid')),
             'car_data_bits' => Config::get('CAR_DATA_BITS'),
+        ));        
+    }  else
+            { Session::add('feedback_negative', _('INSUFFICIENT PERMISSION TO ACCESS OTHER USERS CAR'));
+            Redirect::to('index/index'); } 
+    
+    }
+    
+    
+            public function edit_car_access($car_id) 
+    {
+    
+     IF (CarModel::checkAccessLevel($car_id,Session::get('user_uuid')) > 80) {
+    
+      $this->View->render('car/edit_car_access', array(
+            'car' => CarModel::getCar($car_id),
+            'units' => UserModel::getUserUnits(Session::get('user_uuid')),
+            'public_access' => ViewModel::getCarAccessByCarId($car_id, 10),  //level 10 - car publically visible
+        ));        
+    }  else
+            { Session::add('feedback_negative', _('INSUFFICIENT PERMISSION TO ACCESS OTHER USERS CAR'));
+            Redirect::to('index/index'); } 
+    
+    }
+    
+    
+    
+    
+        public function authorised_users($car_id, $user_to_auth='') 
+    {
+    
+     IF (CarModel::checkAccessLevel($car_id,Session::get('user_uuid')) > 80) {
+    
+      $this->View->render('car/authorised_users', array(
+            'car' => CarModel::getCar($car_id),
+            'units' => UserModel::getUserUnits(Session::get('user_uuid')),
             'auth_users' => CarModel::getAuthUsrForCar($car_id, Session::get('user_uuid'), 50, 80),
             'user_to_auth' => $user_to_auth
         ));        
-    } elseif (CarModel::checkAccessLevel($car_id,Session::get('user_uuid')) == 80)  {
-         $this->View->render('car/edit_car_data_bit_limited', array(
+    }   else
+            { Session::add('feedback_negative', _('INSUFFICIENT PERMISSION TO ACCESS OTHER USERS CAR'));
+            Redirect::to('index/index'); } 
+    
+    }
+    
+        public function edit_car_pictures($car_id) 
+    {
+    
+     IF (CarModel::checkAccessLevel($car_id,Session::get('user_uuid')) >= 80) {
+    
+      $this->View->render('car/edit_car_pictures', array(
             'car' => CarModel::getCar($car_id),
-            'units' => UserModel::getUserUnits(CarModel::getCarOwner($car_id)),            
-            'car_data_bits' => Config::get('CAR_DATA_BITS')
-
-                                                            ));
-
+            'units' => UserModel::getUserUnits(Session::get('user_uuid')),
+        ));        
     }    else
             { Session::add('feedback_negative', _('INSUFFICIENT PERMISSION TO ACCESS OTHER USERS CAR'));
             Redirect::to('index/index'); } 
     
     }
+    
+    
+    
+    
+    
+    
         
         public function delete_car($car_id)
     {
@@ -115,7 +200,7 @@ class CarController extends Controller
     
     }
     
-    public function save_car()
+    public function save_car()  //unused!!!!
     {
         CarModel::editCar(array(
           'car_id' => Request::post('car_id'),
@@ -136,6 +221,53 @@ class CarController extends Controller
           ));
         Redirect::to('car/index/'.Request::post('car_id'));
     }
+    
+    public function save_car_id() 
+    {
+        CarModel::editCarId(array(
+          'car_id' => Request::post('car_id'),
+          'car_name' => Request::post('car_name'),
+          'car_make' => Request::post('car_make'),
+          'car_model' =>Request::post('car_model'),
+          'car_vin' => Request::post('car_vin'),
+          'car_plates' => Request::post('car_plates'),
+          'car_year' => Request::post('car_year'),
+          'car_make_id' => Request::post('car_make_id'),
+          'car_model_id' => Request::post('car_model_id'),
+          'car_variant_id' => Request::post('car_variant_id'),
+          'car_variant' => Request::post('car_variant'),
+          ));
+         Redirect::to('car/edit_car_id/'.Request::post('car_id'));
+    }
+    
+    
+     public function save_car_access()  
+    {
+        CarModel::editCarAccess(array(
+          'car_id' => Request::post('car_id'),
+          'disable_car_access' => Request::post('disable_car_access'),
+          'enable_car_access' => Request::post('enable_car_access'),
+          'public_tags' => Request::post('tag_access')
+          ));
+        Redirect::to('car/edit_car_access/'.Request::post('car_id'));
+    }
+    
+    
+    
+        public function save_car_picture()  
+    {
+        CarModel::editCarImages(array(
+          'car_id' => Request::post('car_id'),
+          'images' => Request::post('user_images'),
+          ));
+        Redirect::to('car/edit_car_pictures/'.Request::post('car_id'));
+    }
+    
+    
+    
+    
+    
+    
     
     
     
@@ -210,7 +342,9 @@ class CarController extends Controller
         'images' => Request::post('user_images'),
         'event_odo' => Request::post('event_odo'),
         'event_entered' => Request::post('event_entered'),
-        'oldversions'  => Request::post('oldversions')
+        'oldversions'  => Request::post('oldversions'),
+        'reminder_time' => Request::post('reminder_time'),
+        'reminder_content' => Request::post('reminder_content'),
         ));
         CarModel::deleteEvent(array('c' => Request::post('car_id'), 't' => Request::post('event_time'), 'm' => Request::post('event_microtime'), 'source' => 'edit' ));
         Redirect::to('car/index/'.Request::post('car_id'));

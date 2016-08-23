@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Caramnesis\n"
 "POT-Creation-Date: 2016-02-06 22:36+0200\n"
-"PO-Revision-Date: 2016-06-26 04:00+0200\n"
+"PO-Revision-Date: 2016-08-15 22:01+0200\n"
 "Last-Translator: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language-Team: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language: lt_LT\n"
@@ -1509,3 +1509,48 @@ msgid "USER_%s_HAS_REQUESTED_ACCESS_TO_THIS_CAR_HIT_ADD_IF_OK"
 msgstr ""
 "Vartotojas %s prašo prieigos prie šio automobilio. Jei sutinkate, spauskite "
 "PRIDĖTI."
+
+msgid "NEW_RECORD"
+msgstr "Naujas įrašas"
+
+msgid "FIND_CARS"
+msgstr "Rasti automobilius"
+
+msgid "VIEW"
+msgstr "Žiūrėti"
+
+msgid "FILTER"
+msgstr "Filtruoti"
+
+msgid "EVENT_TYPES"
+msgstr "Įvykių tipai"
+
+msgid "ALL"
+msgstr "Visi"
+
+msgid "DISTANCE_km"
+msgstr "kilometrai"
+
+msgid "CONSUMPTION_eu"
+msgstr "l/100km"
+
+msgid "FEEDBACK_LANGUAGE_CHANGE_SUCCESSFUL"
+msgstr "Kalba sėkmingai pakeista"
+
+msgid "EMAIL_VERIFICATION_FROM_NAME"
+msgstr "CARAMNESIS registracijos patvirtinimas"
+
+msgid "EMAIL_PASSWORD_RESET_CONTENT"
+msgstr "Slaptažodžio keitimo nuoroda: "
+
+msgid "EMAIL_PASSWORD_RESET_FROM_NAME"
+msgstr "CARAMNESIS registracija"
+
+msgid "EMAIL_PASSWORD_RESET_SUBJECT"
+msgstr "CARAMNESIS slaptažodžio keitimas"
+
+msgid "EMAIL_VERIFICATION_SUBJECT"
+msgstr "CARAMNESIS paskyros aktyvavimas"
+
+msgid "EMAIL_VERIFICATION_CONTENT"
+msgstr "Paskyros aktyvavimo nuoroda: "
