@@ -1,4 +1,7 @@
-<?php $profile_data = $this->profile_data; $languages = $this->languages; $currencies = $this->currencies; $cons_units = $this->cons_units; $distance_units = $this->distance_units; ?>
+<?php $profile_data = $this->profile_data; $languages = $this->languages; $currencies = $this->currencies; $cons_units = $this->cons_units; $distance_units = $this->distance_units;
+//CarModel::ExecuteTransfer('0cb71f32-b56a-49ae-8984-476eb5c0e3a9', '', 'c1d79520-8dfe-11e5-8145-001cc07ade33');
+?>
+<div id="responsebox" class="right p1"> </div>                
 <div class="container">
     <h1><?= _('YOUR_PROFILE'); ?></h1>
     <div class="box">
@@ -7,6 +10,14 @@
 <ul class="vlist list-reset">
         <li><label for="user_name"><?= _('USER_NAME'); ?></label><span id="user_name"><?= $profile_data->user_name; ?></span></li>
         <li><label for="user_email"><?= _('USER_EMAIL'); ?></label><span id="user_email"><?= $profile_data->user_email; ?></span></li>
+        <li><label for="email_checkbox"><?= _('ENABLE_EMAIL_NOTIFICATIONS'); ?></label><span id="email_checkbox_cont">
+        <input type="checkbox" class="cbrad" name="email_checkbox" id="email_checkbox" value="send_email" <?php if ($profile_data->send_email == 1) echo ' checked'; ?> /></span></li>
+        <li><label for="user_phone"><?= _('USER_PHONE'); ?></label><span id="user_phone"><?= $profile_data->user_phone; ?><i class="icon-cog pointer"></i></span></li>
+        <?php //sms in LT only for now
+        if (strtoupper($profile_data->country) == 'LT') { ?>
+        <li><label for="sms_checkbox"><?= _('ENABLE_SMS_NOTIFICATIONS'); ?></label><span id="sms_checkbox_cont">
+        <input type="checkbox" class="cbrad" name="sms_checkbox" id="sms_checkbox" value="send_sms" <?php if ($profile_data->send_sms == 1) echo ' checked'; ?> /></span></li>
+        <?php }; ?>
         <li><label for="user_creation_timestamp"><?= _('USER_CREATION_TIMESTAMP'); ?></label><span id="user_creation_timestamp"><?= strftime("%c",$profile_data->user_creation_timestamp); ?></span></li>
         <li><label for="user_last_login_timestamp"><?= _('USER_LAST_LOGIN_TIMESTAMP'); ?></label><span id="user_last_login_timestamp"><?= strftime("%c",$profile_data->user_last_login_timestamp); ?></span></li>
         <li><label for="user_lang"><?= _('USER_LANGUAGE'); ?></label><span id="user_lang"><?= $profile_data->user_lang; ?><i class="icon-cog pointer"></i></span></li>
@@ -43,6 +54,7 @@ print '<div class="left mb1 mr1 px1 black bg-kclite field"><a href="'.Config::ge
 <div id="hometowndialog" class="center" title="<?= _('PICK_YOUR_HOMETOWN'); ?>"><?= _('PICK_YOUR_COUNTRY_FIRST'); ?></div>
 <div id="statedialog" class="center" title="<?= _('PICK_YOUR_STATE'); ?>"><?= _('PICK_YOUR_COUNTRY_FIRST'); ?></div>
 <div id="countrydialog" class="center" title="<?= _('PICK_YOUR_COUNTRY'); ?>"></div>
+
 <a href="<?php echo Config::get('URL'); ?>login/logout" class="btn btn-primary mb1 mt1 black bg-kcms"><?php echo _("MENU_LOGOUT"); ?></a>
     </div>
 </div>

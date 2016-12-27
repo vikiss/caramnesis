@@ -35,13 +35,16 @@ class IndexController extends Controller
 					} 
           
           } else {
-    $this->View->render('index/welcome');
+    Redirect::to('login/index');
     }
 				
 
     }
-    
-    
+	
+	public function jenesaisquoi () //cron job
+    {
+    $this->View->renderWithoutHeaderAndFooter('index/cron');
+	}
     
     
      public function save_it()

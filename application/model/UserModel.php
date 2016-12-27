@@ -14,7 +14,7 @@ class UserModel
      * @see http://davidwalsh.name/php-shorthand-if-else-ternary-operators
      *
      * @return array The profiles of all users
-     */
+     
     public static function getPublicProfilesOfAllUsers()
     {
         $database = DatabaseFactory::getFactory()->getConnection();
@@ -43,6 +43,7 @@ class UserModel
 
         return $all_users_profiles;
     }
+    */
 
     /**
      * Gets a user's profile data, according to the given $user_id
@@ -83,7 +84,7 @@ class UserModel
      *
      * @return mixed
      */
-    public static function getUserDataByUserNameOrEmail($user_name_or_email)
+    public static function getUserDataByUserNameOrEmail($user_name_or_email) //gets single user
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
@@ -93,6 +94,22 @@ class UserModel
         $query->execute(array(':user_name_or_email' => $user_name_or_email, ':provider_type' => 'DEFAULT'));
 
         return $query->fetch();
+    }
+    
+    public static function getUserNamesByUserNameOrEmail($user_name_or_email) //finds uuids by typed fragments
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $query = $database->prepare("SELECT user_name FROM users
+                                     WHERE (user_name LIKE CONCAT(:user_name_or_email,'%') OR user_email LIKE CONCAT(:user_name_or_email,'%'))
+                                     AND user_active = 1 LIMIT 10");
+        $query->execute(array(':user_name_or_email' => $user_name_or_email));
+
+        $response =  $query->fetchAll();
+        $result = array();
+        foreach ($response as $row) {$result[] = $row->user_name; }
+    
+    return $result;
     } 
 
     /**
@@ -300,7 +317,7 @@ class UserModel
         $database = DatabaseFactory::getFactory()->getConnection();
 
         $sql = "SELECT user_id, user_name, user_email, user_password_hash, user_active,user_deleted, user_suspension_timestamp, user_account_type,
-                       user_failed_logins, user_last_failed_login, user_uuid, user_lang, user_currency, user_distance, user_cons, unread_messages
+                       user_failed_logins, user_last_failed_login, user_uuid, user_lang, user_currency, user_distance, user_cons, unread_messages, user_phone, send_sms
                   FROM users
                  WHERE (user_name = :user_name OR user_email = :user_name)
                        AND user_provider_type = :provider_type
@@ -329,7 +346,8 @@ class UserModel
 
         // get real token from database (and all other data)
         $query = $database->prepare("SELECT user_id, user_name, user_email, user_password_hash, user_active,
-                                          user_account_type,  user_has_avatar, user_failed_logins, user_last_failed_login, user_uuid, user_lang, user_currency, user_distance, user_cons, unread_messages
+                                          user_account_type,  user_has_avatar, user_failed_logins, user_last_failed_login, user_uuid,
+                                          user_lang, user_currency, user_distance, user_cons, unread_messages, user_phone, send_sms
                                      FROM users
                                      WHERE user_id = :user_id
                                        AND user_remember_me_token = :user_remember_me_token
@@ -375,6 +393,36 @@ class UserModel
         Session::add('feedback_negative', _('FEEDBACK_LANGUAGE_CHANGE_FAILED'));
         return false;
     }
+    
+            public static function getUserLanguageByUUid($uuid) {
+                
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT user_lang
+                                     FROM users
+                                     WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':user_uuid' => $uuid));
+        // return one row (we only have one result or nothing)
+        if ($result = $query->fetch()) {
+            return $result->user_lang;
+        } else {return false;}
+                
+            }
+            
+            
+        public static function getUserCountry($uuid) {
+                
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT country
+                                     FROM users
+                                     WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':user_uuid' => $uuid));
+        if ($result = $query->fetch()) {
+            return strtoupper($result->country);
+        } else {return false;}
+                
+            }
+            
+            
     
           public static function setCurrency($currency, $uuid)
     {
@@ -645,6 +693,19 @@ class UserModel
         } else {return false;}
     }
     
+    
+    public static function getEmailByUUid($uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT user_email FROM users
+                                     WHERE user_uuid = :uuid LIMIT 1");
+        $query->execute(array(':uuid' => $uuid));
+        $result = $query->fetch();
+        if ($result) {
+        return $result->user_email;
+        } else {return false;}
+    }
+    
     public static function getUUidByUserName($user_name)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
@@ -655,6 +716,22 @@ class UserModel
         if ($result) {
             return $result->user_uuid;
         } else {return false;}
+    }
+    
+    
+        public static function getUUidByEmail($email)
+    {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT user_uuid FROM users
+                                     WHERE user_email = :email LIMIT 1");
+        $query->execute(array(':email' => $email));
+        $result = $query->fetch();
+        if ($result) {
+            return $result->user_uuid;
+        }
+        }
+        return false;
     }
     
         public static function getUserUnits($uuid)
@@ -669,6 +746,66 @@ class UserModel
         Session::add('feedback_negative', _('CANNOT_GET_USER_UNITS'));
         return false;
     }
+    
+              public static function setLastSeen($uuid)
+    {
+        if ($uuid){
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("UPDATE users SET last_seen = :last_seen WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':last_seen' => time(), ':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            return true;
+        }} 
+        
+        return false;
+    }
+    
+    
+     public static function getLastSeen($uuid)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT last_seen FROM users WHERE user_uuid = :user_uuid LIMIT 1");
+                $query->execute(array(':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            $result = $query->fetch();
+            return $result->last_seen;
+        }
+                return false;
+    }
+    
+    
+    public static function setCbox($field, $state, $uuid) {
+        
+        $fields = array('send_sms', 'send_email');
+        $states = array('0', '1');
+        
+        if ((in_array($field, $fields)) && (in_array($state, $states)))
+        {            
+            
+            
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("UPDATE users SET ".$field." = :state WHERE user_uuid = :user_uuid LIMIT 1");
+        $query->execute(array(':state' => $state, ':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            return true;
+        }}
+        return false;
+    }
+    
+        public static function getUserEmailSetting($uuid) { //returns Q if email enabled, M otherwise
+                
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT user_name FROM users WHERE user_uuid = :user_uuid AND send_email = 1");
+        $query->execute(array(':user_uuid' => $uuid));
+        if ($result = $query->fetch()) {
+            return 'Q';
+        }
+        return 'M';
+                
+            }
 
     
     

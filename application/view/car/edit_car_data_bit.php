@@ -1,3 +1,13 @@
+<?php if ($this->car) {
+include('car_data_prep.php'); 
+
+    ?>
+    <div class="container">
+    <?php $this->renderFeedbackMessages(); ?>
+    <div id="return" class="right bg-darken-4 center p2"><a href="<?= Config::get('URL') . 'car/index/' . $car_id; ?>" title="<?= _('RETURN'); ?>"><i class="icon-cancel white"> </i></a></div>
+    <h1><?= $car_name; ?></h1>
+<div class="box">
+	 
 <div id="cardatadeletedlg" class="center" title="<?= _('ARE_YOU_REALLY_REALLY_SURE'); ?>">
             <h3><?= _('ARE_YOU_REALLY_REALLY_SURE'); ?></h3>
             <p><?= _('WARNING_NOT_UNDOABLE'); ?></p>
@@ -32,8 +42,15 @@
     </div>
     <div class="col col-6">    
 <input type="text" name="new_car_data_val" id="new_car_data_val" class="  field mt1 small-field " />
-
 <a href="#" id="add_new_car_data" class="btn-primary black bg-kcms" /><?= _("SAVE"); ?></a>
+<input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
+<input type="hidden" name="car_data" id="car_data" value = "<?= $car_data; ?>" />
     </div>
 </div>
 
+	 
+	 
+	 
+</div>
+    </div>
+    <?php } ?>

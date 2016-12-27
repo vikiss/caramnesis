@@ -13,15 +13,18 @@
                        $car_model_id = $row['car_model_id']; 
                        $car_variant_id = $row['car_variant_id'];
                        $car_variant = $row['car_variant'];
-                       $car_access = (array) $row['car_access'];
+                       $attr_images = $row['attr_images'];
+                       $car_access = (array) $row['car_access']; //deprecated
                        if ($car_access) $car_access = reset($car_access);
-                       $car_data = unserialize($row['car_data']);
                        $car_images = (array) $row['images'];
                        if (isset($car_images['values'])) {
                        $car_images = $car_images['values'];
                        $images_list = implode(',', $car_images);} else {
                        $car_images = false; }
+                       $image_ord = '';
                        $owner = (array) $row['owner'];
+                       $expiries = $row['car_expiries'];
+                       $outstanding = $row['car_outstanding'];
                                         }
                       $units = $this->units; $tags = Config::get('AVAILABLE_TAGS'); $no_sho_tags = Config::get('NO_SHO_TAGS');
                       ?>

@@ -4,11 +4,18 @@
                 <select name="event_type" class="btn btn-primary mb1 mt1 black bg-kcms ">
 <?php $event_type =''; 
       if ($event_types) {foreach ($event_types AS $type) {$event_type=$type;};}
- foreach ($tags as $key => $tag) { 
+      $taglist = array(); //initial content for reminder
+ foreach ($tags as $key => $tag) {
+   
     echo '<option value="'.$tag.'"';
-    if ($tag == $event_type) {echo ' selected';}
-    echo '>'._($tag).'</option>';    
- }; ?></select>
+    if ($tag == $event_type) {
+      echo ' selected';
+      $taglist[] = _($tag);
+      }
+    echo '>'._($tag).'</option>';
+ };
+   count($taglist) > 0 ? $taglist = implode(PHP_EOL, $taglist) : $taglist = _("REMINDER_CONTENT");
+ ?></select>
                 <input type="number" min="0" step="1" name="event_odo" class="field mt1 " <?php if($row['event_odo']) { ?>
 value="<?= $row['event_odo']; ?>"<?php } else { ?>
 placeholder="<?php echo _("EVENT_ODO");?>"<?php }; ?> />
@@ -23,8 +30,27 @@ placeholder="<?= _('CURRENCY_'.$units->user_currency); ?>"<?php }; ?> />
                 <div class="fileupl left mt1"><span class="fauxinput icon-camera"></span><input type="file" name="fileinput[]" id="fileinput" multiple="multiple" accept="image/*" capture="camera" /></div>
                 <div class="small"><?= _("DROP_IMAGES"); ?></div>
                 </div>
+                 
+      <div id="justanopener" class="btn mb1 mr1 px1 black bg-kclite pointer" /><?= _("SET_REMINDER"); ?></div>
+      <div id="justadialog" class="center" title="<?= _('SET_REMINDER'); ?>">
+         <div>
+                 <div id="reminder_time"></div>
+                 <textarea id="reminder_content_proxy" name="reminder_content_proxy" class="field mt1 mb1 col-12 " /><?= $taglist; ?></textarea>
+            <div>
+                 <div class="btn mb1 mr1 px1 black bg-kclite " ><a class="close_dialog clear_reminder" href="#"><?= _('CANCEL'); ?></a></div>
+                 <div class="btn mb1 mr1 px1 black bg-kclite " ><a class="close_dialog set_reminder" href="#"><?= _('SET_REMINDER'); ?></a></div>
+            </div>
+         </div>
+      </div>
+                   
+<input type="hidden" id="remindertoggle" name="remindertoggle" value="off" />
+<input type="hidden" id="timestampdate" name="timestampdate" value="<?php $nextWeek = time() + (7 * 24 * 60 * 60); echo $nextWeek; ?>000" />
+<input type="hidden" id="reminder_content" name="reminder_content" value="<?= $taglist; ?>" />
+                 
+                 
+                 
                 <input type="submit" id="start-upload" class="btn btn-primary mb1 mt1 black bg-kcms right" value='<?php echo _("SAVE"); ?>' autocomplete="off" />
-    <div id="filelist" class="list-reset">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+    <div id="filelist" class="list-reset">[...]</div>
     <div id="console"></div>
        <div class="col ">
      
@@ -41,7 +67,7 @@ placeholder="<?= _('CURRENCY_'.$units->user_currency); ?>"<?php }; ?> />
     
     
  <input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
-                <input type="hidden" name="user_images" id="user_images" value = "<?=  $images_list; ?>" />
+                <input type="hidden" name="user_images" id="user_images" value = "<?php if ($event_images) {print $images_list;} ?>" />
                 <input type="hidden" name="event_time" value = "<?= $event_time; ?>" />
                 <input type="hidden" name="event_microtime" value = "<?= $event_microtime; ?>" />
                 <input type="hidden" name="event_entered" value = "<?= $event_entered['seconds'].'-'.$event_entered['microseconds']; ?>" />

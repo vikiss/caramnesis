@@ -1,8 +1,85 @@
-iskelti is config siunciamu patvirtinimo laisku tekstus ir juos su-i18N-inti
+privatumas: reikia papildomos priemones kad anoniminiam vartotojui slepti privacias nuotr kai masina public (t.y. rodyti tik is public events ir masinos galvos, o nerodyti is private events ir atributu)
+tas gali truputi palaukti nes neturint nuotr URL nieko nesimatytu, jis anoniminiam vartotojui neeksponuojamas
+
+
+
+slėpti tecdoc įvedant kw
+vieotj oranzinio mirkinstis zalias su css
 
 
 
 
+VIN API:
+
+Laximo Web-services rusai kazkokie
+http://www.vindecoderz.com/EN/api nuo 300usd/men
+su klaidopm ir nedaug duomenu (c8 rodė 2001 m., picasiukas 2003 pagal juos), bet modeliai teisingai, o CX atveju net teisingas paveikslelis bet metai 2005 :)
+vinli yra persidengimas, meineke.com/revvy
+https://vindecoder.eu/ lyg neblugai, ima pinigus už užklausą, policijos db, kažkokie čekai
+
+
+
+
+
+Audrimanto masinos:
+SELECT * FROM `car_access` WHERE user = '471308ac-9e84-11e5-8bf7-001cc07ade33';
+Duoti visoms Audrimanto ma6inoms 98:
+UPDATE `car_access` SET level = 98 WHERE user = '471308ac-9e84-11e5-8bf7-001cc07ade33' AND level <> 99;
+
+
+
+nuotrauku galerija kaip prie masinos kiekviename atributu skyrelyje su galimybe padidinti lange
+nuotraukos prie atributų
+
+<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+
+tyre_type = padangos pavadinimas
+diametras, sidewall ir rim i viena eilute ir dropdown, kaip padangos123
+
+fomoms visoms priodeti verifikacija
+
+
+new user registration padaryti kad is pat pradziu uzpildytu latitude ir longitude bent jau pagal ip
+
+pdf preview vertikaliai ne centruotas, o iš viršaus
+
+
+
+lazy load images: http://dinbror.dk/blog/blazy/ arba http://luis-almeida.github.io/unveil/
+
+galerijos full screen pritaikyti swipe
+
+OCR!!! https://github.com/thiagoalessio/tesseract-ocr-for-php
+
+messages prideti xss filter
+
+nuotrauku meta: viesa/neviesa ir aprasymas
+image_meta yra cars ir events
+
+Prieiga = vieša prieiga / statusas (parduodu / nuomoju / parduodu dalis)
+
+kai siunti email notifikacija, gale gali nereiketi atsakymo i zinute nuorodos tuo atveju jei pacioje zinjuteje jau yra nuoroda, pvz duoti prisijungti.
+reikia funkcijoje ideti tokia opcija
+
+
+prie mašinos viešos nuotraukos ir privačios nuotraukos
+gal įvesti visų nuotraukų meta, kur privatumas, gal ateity koks aprašymas, eiliškumas ir t.t.
+
+prie remonto kategorijos stambesniu / didesniu investiciju sarasas
+
+pagal kategorija ivykio redagavime atsiranda laukeliai:
+ stambesniu investiciju fiksuotas sarasas (padangos, purkštukai, turbina, egr, sankaba, akumas, etc)
+
+pdf galerija
+
+mygtukas tiesiai žinutė savininkui kai ne prie savop mašinos prisijungęs
+
+perspektyvoje:
+nuotraukoje maskavimo įrankis
+pasikeitus savininkui reiketu pereiti per reminderius mysql ir pakeisti savininko id
+nenorim automatiskai nustatyti savininko pagal masina siuntimo momentu kad nereiketu kasandros crone
+
+/car/new_proxy paieska padaryti apribojimus veliau kad ne su LIKE ir ismesti tarpus is search string
 
   public static function getUserDataByUuid($uuid)
     {
@@ -19,3 +96,233 @@ iskelti is config siunciamu patvirtinimo laisku tekstus ir juos su-i18N-inti
         
         return $query->fetch();
     }
+    
+    
+    /*
+              balance:              stdClass Object(    [API Decode] => 20)
+              info: stdClass Object (    [decode] => Array
+        (
+            [0] => Make
+            [1] => Manufacturer
+            [2] => Plant Country
+            [3] => Product Type
+            [4] => Manufacturer Address
+            [5] => Check Digit
+            [6] => Model Year
+            [7] => Sequential Number
+            [8] => Model
+            [9] => Drive
+            [10] => Number of Seats
+            [11] => Number of Doors
+            [12] => Fuel Type - Primary
+            [13] => Engine Displacement (ccm)
+            [14] => Engine Power (kW)
+            [15] => Transmission
+            [16] => Number of Gears
+        ))
+        
+        crafteriukas:
+        stdClass Object
+(
+    [decode] => Array  
+        (
+            [0] => Make
+            [1] => Manufacturer
+            [2] => Plant Country
+            [3] => Manufacturer Address
+            [4] => Model
+            [5] => Check Digit
+            [6] => Model Year
+            [7] => Sequential Number
+        )
+
+)
+        
+        
+        
+        
+decode:
+
+stdClass Object
+(
+    [price] => 0
+    [price_currency] => USD
+    [balance] => stdClass Object
+        (
+            [API Decode] => 19
+        )
+
+    [decode] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [label] => Make
+                    [value] => Citroën
+                )
+
+            [1] => stdClass Object
+                (
+                    [label] => Manufacturer
+                    [value] => Automobiles Citroen
+                )
+
+            [2] => stdClass Object
+                (
+                    [label] => Plant Country
+                    [value] => France
+                )
+
+            [3] => stdClass Object
+                (
+                    [label] => Product Type
+                    [value] => Voitures Particulieres
+                )
+
+            [4] => stdClass Object
+                (
+                    [label] => Manufacturer Address
+                    [value] => 117-167 Quai Andre Citroen, 75747 Paris, France
+                )
+
+            [5] => stdClass Object
+                (
+                    [label] => Check Digit
+                    [value] => B
+                )
+
+            [6] => stdClass Object
+                (
+                    [label] => Model Year
+                    [value] => 2001
+                )
+
+            [7] => stdClass Object
+                (
+                    [label] => Sequential Number
+                    [value] => 239612
+                )
+
+            [8] => stdClass Object
+                (
+                    [label] => Model
+                    [value] => C8
+                )
+
+            [9] => stdClass Object
+                (
+                    [label] => Drive
+                    [value] => Front-wheel drive
+                )
+
+            [10] => stdClass Object
+                (
+                    [label] => Number of Seats
+                    [value] => 7
+                )
+
+            [11] => stdClass Object
+                (
+                    [label] => Number of Doors
+                    [value] => 5
+                )
+
+            [12] => stdClass Object
+                (
+                    [label] => Fuel Type - Primary
+                    [value] => Diesel
+                )
+
+            [13] => stdClass Object
+                (
+                    [label] => Engine Displacement (ccm)
+                    [value] => 2000
+                )
+
+            [14] => stdClass Object
+                (
+                    [label] => Engine Power (kW)
+                    [value] => 80
+                )
+
+            [15] => stdClass Object
+                (
+                    [label] => Transmission
+                    [value] => Manual/Standard
+                )
+
+            [16] => stdClass Object
+                (
+                    [label] => Number of Gears
+                    [value] => 5
+                )
+
+        )
+
+)
+
+crafteriukas:
+stdClass Object
+(
+    [price] => 0
+    [price_currency] => USD
+    [balance] => stdClass Object
+        (
+            [API Decode] => 18
+        )
+
+    [decode] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [label] => Make
+                    [value] => Volkswagen
+                )
+
+            [1] => stdClass Object
+                (
+                    [label] => Manufacturer
+                    [value] => Volkswagen AG
+                )
+
+            [2] => stdClass Object
+                (
+                    [label] => Plant Country
+                    [value] => Germany
+                )
+
+            [3] => stdClass Object
+                (
+                    [label] => Manufacturer Address
+                    [value] => Wolfsburg/Hannover, Germany
+                )
+
+            [4] => stdClass Object
+                (
+                    [label] => Model
+                    [value] => Crafter
+                )
+
+            [5] => stdClass Object
+                (
+                    [label] => Check Digit
+                    [value] => Z
+                )
+
+            [6] => stdClass Object
+                (
+                    [label] => Model Year
+                    [value] => 2007
+                )
+
+            [7] => stdClass Object
+                (
+                    [label] => Sequential Number
+                    [value] => 013011
+                )
+
+        )
+
+)
+
+
+              */

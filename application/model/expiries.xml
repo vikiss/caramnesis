@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<expiries>
+  <version>8</version>
+  <expiry name="INSURANCE">
+      <entry name="VALID_UNTIL" type="DATE">
+        <value></value>
+      </entry>
+      <entry name="PREVIOUS_VALID_UNTIL" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="DESCRIPTION" type="TEXT">
+        <value></value>
+      </entry>
+      <entry name="REMINDER" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="EARLY_REMINDER" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="POLICY_NO" type="TEXT">
+        <value></value>
+        <unit></unit>
+      </entry>
+      <entry name="SHOW" type="CHOICE">
+          <item>YES</item>
+          <item>NO</item>
+        <value>YES</value>
+      </entry>
+  </expiry>
+    <expiry name="INSPECTION">
+      <entry name="VALID_UNTIL" type="DATE">
+        <value></value>
+      </entry>
+      <entry name="PREVIOUS_VALID_UNTIL" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="DESCRIPTION" type="TEXT">
+        <value></value>
+      </entry>
+      <entry name="REMINDER" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="EARLY_REMINDER" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="SHOW" type="CHOICE">
+          <item>YES</item>
+          <item>NO</item>
+        <value>YES</value>
+      </entry>
+  </expiry>
+  <expiry name="TAXES">
+      <entry name="VALID_UNTIL" type="DATE">
+        <value></value>
+      </entry>
+      <entry name="PREVIOUS_VALID_UNTIL" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="DESCRIPTION" type="TEXT">
+        <value></value>
+      </entry>
+      <entry name="REMINDER" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="EARLY_REMINDER" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="SHOW" type="CHOICE">
+          <item>YES</item>
+          <item>NO</item>
+        <value>YES</value>
+      </entry>
+  </expiry>
+  <expiry name="OIL">
+      <entry name="VALID_UNTIL" type="DATE">
+        <value></value>
+      </entry>
+      <entry name="PREVIOUS_VALID_UNTIL" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="DESCRIPTION" type="TEXT">
+        <value></value>
+      </entry>
+      <entry name="ODOMETER" type="INT">
+        <value></value>
+      </entry>
+      <entry name="REMINDER" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="EARLY_REMINDER" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="SHOW" type="CHOICE">
+          <item>YES</item>
+          <item>NO</item>
+        <value>YES</value>
+      </entry>
+  </expiry>
+  <expiry name="TIMING_BELT">
+      <entry name="VALID_UNTIL" type="DATE">
+        <value></value>
+      </entry>
+      <entry name="PREVIOUS_VALID_UNTIL" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="DESCRIPTION" type="TEXT">
+        <value></value>
+      </entry>
+      <entry name="ODOMETER" type="INT">
+        <value></value>
+      </entry>
+      <entry name="OLD_ODOMETER" type="INT">
+        <value></value>
+      </entry>
+      <entry name="PREVIOUS_ODOMETER" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="REMINDER" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="EARLY_REMINDER" type="HIDDEN">
+        <value></value>
+      </entry>
+      <entry name="SHOW" type="CHOICE">
+          <item>YES</item>
+          <item>NO</item>
+        <value>YES</value>
+      </entry>
+  </expiry>
+</expiries>

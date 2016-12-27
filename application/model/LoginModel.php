@@ -62,7 +62,7 @@ class LoginModel
         // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
         self::setSuccessfulLoginIntoSession(
             $result->user_id, $result->user_name, $result->user_email, $result->user_account_type, $result->user_uuid, $result->user_lang,
-			$result->user_currency, $result->user_distance, $result->user_cons, $result->unread_messages
+			$result->user_currency, $result->user_distance, $result->user_cons, $result->unread_messages, $result->user_phone, $result->send_sms
         );
 
         // return true to make clear the login was successful
@@ -187,7 +187,7 @@ class LoginModel
         // if user with that id and exactly that cookie token exists in database
         if ($result) {
             // successfully logged in, so we write all necessary data into the session and set "user_logged_in" to true
- self::setSuccessfulLoginIntoSession($result->user_id, $result->user_name, $result->user_email, $result->user_account_type, $result->user_uuid, $result->user_lang, $result->user_currency, $result->user_distance, $result->user_cons, $result->unread_messages);
+ self::setSuccessfulLoginIntoSession($result->user_id, $result->user_name, $result->user_email, $result->user_account_type, $result->user_uuid, $result->user_lang, $result->user_currency, $result->user_distance, $result->user_cons, $result->unread_messages, $result->user_phone, $result->send_sms);
             // save timestamp of this login in the database line of that user
             self::saveTimestampOfLoginOfUser($result->user_name);
 
@@ -225,7 +225,7 @@ class LoginModel
      * @param $user_email
      * @param $user_account_type
      */
-    public static function setSuccessfulLoginIntoSession($user_id, $user_name, $user_email, $user_account_type, $user_uuid, $user_lang, $user_currency, $user_distance, $user_cons, $unread_messages = 0)
+    public static function setSuccessfulLoginIntoSession($user_id, $user_name, $user_email, $user_account_type, $user_uuid, $user_lang, $user_currency, $user_distance, $user_cons, $unread_messages = 0, $user_phone, $send_sms)
     {
         Session::init();
 
@@ -246,7 +246,9 @@ class LoginModel
 		Session::set('user_currency', $user_currency);
 		Session::set('user_distance', $user_distance);
 		Session::set('user_cons', $user_cons);
-		Session::set('unread_messages', $unread_messages);	
+		Session::set('unread_messages', $unread_messages);
+		Session::set('user_phone', $user_phone);
+		Session::set('send_sms', $send_sms);	
 
         // get and set avatars
         //Session::set('user_avatar_file', AvatarModel::getPublicUserAvatarFilePathByUserId($user_id));

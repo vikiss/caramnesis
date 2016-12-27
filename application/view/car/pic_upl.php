@@ -17,7 +17,7 @@ if (($owner_id = CarModel::getCarOwner($car_id))  && (CarModel::checkAccessLevel
 if (!preg_match('/^[A-Za-z0-9-]+$/',$car_id)) {
 exit_status('Error! Wrong car id!');
 }
-$upload_dir = '/var/www/usrimg/'.$owner_id.'/';
+$upload_dir = Config::get('CAR_IMAGE_PATH').$car_id.'/';
 $allowed_ext = array('jpg','jpeg','png','gif','pdf');
 $allowed_nonimage_ext = array('pdf','xls');
 
@@ -46,7 +46,7 @@ if(!in_array(CarModel::get_extension($pic['name']),$allowed_nonimage_ext)){
   
 $ext = pathinfo($pic['name'], PATHINFO_EXTENSION);
   
-  if(move_uploaded_file($pic['tmp_name'], $upload_dir.$car_id.'_'.$fnamend.'.'.$ext)){
+  if(move_uploaded_file($pic['tmp_name'], $upload_dir.$fnamend.'.'.$ext)){
 		exit_status('File was uploaded successfuly!', $fnamend.'.'.$ext);
     //exit_status('File was uploaded successfuly! user: '.Session::get('user_uuid').' car: '.$car_id);
 	}           

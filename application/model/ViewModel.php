@@ -70,7 +70,16 @@ public static function getCarAccessByCarId($car_id, $level) {
        $result = $result[0]; $result = (array) $result['car_access']; if (array_key_exists('values', $result)) $result = $result['values'];
        return($result);
     
-    } 
+    }
+    
+    public static function limit_teaser($text, $length = 300) {
+	$result = $text;
+	if (mb_strlen($text) > intval($length)) {
+		$result = mb_substr($text, 0, intval($length)).'[...]';
+	}
+	return $result;
+	
+    }
     
     
 }    

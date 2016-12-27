@@ -47,6 +47,14 @@ class MessageModel
     self::sendMessageOutbox($sent_id, $from, $to, $subject); //copy of the sent message with the same exact timeuuid for the users outbox
     self::IncrementUnreadMessages($to); //increment unread messages counter for the recipient
     if ($notify) {Session::add('feedback_positive', _('MESSAGE_SEND_SUCCESSFUL'));}
+    //send email notification if recipient is not currently online (last seen more than 4 min old)
+    $last_seen = UserModel::getLastSeen($to);
+    if ($last_seen < (time()+240)) {
+        $subject = sprintf(_('NEW_MESSAGE_NOTIFICATION_FROM_%s'), UserModel::getUserNameByUUid($from));
+        $body = $message.PHP_EOL._('NOTIFICATION_READ_AND_REPLY_LINK').' <a href="https://caramnesis.com/message">"https://caramnesis.com/message"</a>';
+        NotificationModel::queueNotification ($to, $subject, $body);
+    }
+    
        return true;
        } 
        }
@@ -157,6 +165,7 @@ class MessageModel
         $query->execute(array(':user_uuid' => $uuid));
         $count = $query->rowCount();
         if ($count == 1) {
+            Session::set('unread_messages', intval(Session::get('unread_messages')) + 1);
             return true;
         }
         return false;
@@ -179,6 +188,9 @@ class MessageModel
     
         public static function getUnreadMessages($uuid)  
     {
+   
+   //update last seen
+        UserModel::setLastSeen($uuid);
    
         $database = DatabaseFactory::getFactory()->getConnection();
         $query = $database->prepare("SELECT unread_messages FROM users WHERE user_uuid = :user_uuid LIMIT 1;");

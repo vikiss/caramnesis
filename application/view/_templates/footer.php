@@ -3,6 +3,10 @@
     </div><!-- #wrapper -->
     <script src="/js/jquery-1.12.1.min.js"></script>
     <script src="/js/jquery-ui.min.js"></script>
+    <?php if ($userlang = Session::get('user_lang')) { ?>
+    <script src="/js/i18n/datepicker-<?= strtolower($userlang); ?>.js"></script>
+    <?php }; ?>
+    <script>var lang='<?= strtolower(Session::get('user_lang')); ?>';</script>
     <script src="/js/bespoke.js"></script>
   
      
