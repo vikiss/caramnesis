@@ -1,4 +1,12 @@
 var stripPicWidth = 116;
+var mobile = false;
+
+// jQuery UI Touch Punch 0.2.3  Copyright 2011–2014, Dave Furfero
+!function(a){function f(a,b){if(!(a.originalEvent.touches.length>1)){a.preventDefault();var c=a.originalEvent.changedTouches[0],d=document.createEvent("MouseEvents");d.initMouseEvent(b,!0,!0,window,1,c.screenX,c.screenY,c.clientX,c.clientY,!1,!1,!1,!1,0,null),a.target.dispatchEvent(d)}}if(a.support.touch="ontouchend"in document,a.support.touch){var e,b=a.ui.mouse.prototype,c=b._mouseInit,d=b._mouseDestroy;b._touchStart=function(a){var b=this;!e&&b._mouseCapture(a.originalEvent.changedTouches[0])&&(e=!0,b._touchMoved=!1,f(a,"mouseover"),f(a,"mousemove"),f(a,"mousedown"))},b._touchMove=function(a){e&&(this._touchMoved=!0,f(a,"mousemove"))},b._touchEnd=function(a){e&&(f(a,"mouseup"),f(a,"mouseout"),this._touchMoved||f(a,"click"),e=!1)},b._mouseInit=function(){var b=this;b.element.bind({touchstart:a.proxy(b,"_touchStart"),touchmove:a.proxy(b,"_touchMove"),touchend:a.proxy(b,"_touchEnd")}),c.call(b)},b._mouseDestroy=function(){var b=this;b.element.unbind({touchstart:a.proxy(b,"_touchStart"),touchmove:a.proxy(b,"_touchMove"),touchend:a.proxy(b,"_touchEnd")}),d.call(b)}}}(jQuery);
+// jQuery Unveil  http://luis-almeida.github.com/unveil  Copyright 2013 Luís Almeida
+!function(t){t.fn.unveil=function(i,e){function n(){var i=a.filter(function(){var i=t(this);if(!i.is(":hidden")){var e=o.scrollTop(),n=e+o.height(),r=i.offset().top,s=r+i.height();return s>=e-u&&n+u>=r}});r=i.trigger("unveil"),a=a.not(r)}var r,o=t(window),u=i||0,s=window.devicePixelRatio>1,l=s?"data-src-retina":"data-src",a=this;return this.one("unveil",function(){var t=this.getAttribute(l);t=t||this.getAttribute("data-src"),t&&(this.setAttribute("src",t),"function"==typeof e&&e.call(this))}),o.on("scroll.unveil resize.unveil lookup.unveil",n),n(),this}}(window.jQuery||window.Zepto);
+
+
 
 $(window).click(function() {
     if ($(".closeonclick:visible").length) {
@@ -13,18 +21,48 @@ $('.jqtooltip').tooltip({
   }
 });
 
+
+
+
+
   $(function() {
-   
-    if($('#user_to_auth').val()) {
-    $( "#accordion" ).accordion({
-      active: 3
-      });
-    } else {
-      $( "#accordion" ).accordion();
-    }
-    var the_data_bit;
-    var the_data_bit_key;
+    
+//    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) { mobile = true;  }
+//    if (!mobile) {$('#dropbox').show(); } 
+
+        if (lang === '') { lang = 'en';}
+  $.datepicker.setDefaults( $.datepicker.regional[ lang ] );  
+    $( "#reminder_time" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      altField: "#timestampdate",
+      altFormat: "@",
+      minDate: 1
+    });
+    
+    $( "#sortimages").sortable({
+       handle: ".portlet-header",
+       placeholder: "mb1 mr1 p1 black bg-kclite left fauxfield square ",
+       cancel: ".meta",
+       update: function( event, ui ) {
+        var data = $(this).sortable('toArray');
+            $('#user_images').val(data);        
+       },
+    });
+    
+  //  $( "#event_type_select" ).selectmenu();
+  
+  
+    
+    if ($( "#accordion" ).length) {$( "#accordion" ).accordion({      heightStyle: "content",  collapsible: true,  active: false    }); }
+  
+    
+    
   });
+  
+  
+  
+    
   
 //message count updater
 
@@ -38,24 +76,61 @@ $.getJSON("/message/msgcount", function(json){
 }, 240000); //4min
 
 //event type dialog
-$( "#event_type_dialog" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.75), modal: true });
-$( "#event_type_dialog_opener" ).click(function() {  $( "#event_type_dialog" ).dialog( "open" ); });
 
-$( "#event_type_dialog .evtype" ).click(function(e) {
-    e.preventDefault();
-    var evtype_id = $(this).attr('href');
-    var evtype_name = $(this).text();
+$('#event_type_select').on('change', function () {
+    //var optionSelected = $("option:selected", this);
+    var evtype_id = this.value;
+    var evtype_name = $("#event_type_select option:selected").text();
+    if ($('#event_type').val().indexOf(evtype_id) == -1) {
+    
 $('#event_type').val(function(i, val) {
   return (val ? val + ',' : '') + evtype_id;      });
-$('#taglisting').append("<li><span>"+evtype_name+"</span></li>");
-
-
-$( "#event_type_dialog" ).dialog( "close" );   
+$('#taglisting').append('<li><a href="' + evtype_id + '"><i class="icon-cancel white brdrw"> </i></a> <span>'+evtype_name+'</span></li>');
+$('#event_type_select').val('');
+$('#reminder_content_proxy').val(evtype_name + ' ' + $('#reminder_content_proxy').val()); // feed the text into reminder textarea
+    }
 } );
+
+$(document).on("click","#taglisting > li > a",function(e){
+            e.preventDefault();
+    var tagtoremove = $(this).attr('href');
+    var current_tags = $('#event_type').val();
+    var tag_array = current_tags.split(',');
+    var index = tag_array.indexOf(tagtoremove);
+    if (index > -1) {
+    tag_array.splice(index, 1);
+    $('#event_type').val(tag_array.join());
+    $(this).parent().hide('slow');
+    }
+            });
+
 
 //new event dialog
 $( "#new_event_dialog" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.85), modal: true });
-$( "#new_event_dialog_opener" ).click(function() {  $( "#new_event_dialog" ).dialog( "open" ); });
+$( "#new_event_dialog_opener, .new_event_dialog_opener" ).click(function() {  $( "#new_event_dialog" ).dialog( "open" ); });
+$( "#new_event_dialog .close_dialog" ).click(function() {  $( "#new_event_dialog" ).dialog( "close" ); });
+$( ".new_event_todo_opener" ).click(function(e) {
+    e.preventDefault();
+    $("#todolist_checkbox").prop( "checked", true );
+    $( "#new_event_dialog" ).dialog( "open" );
+    });
+
+//odometer update dialog
+$( "#odo_dlg" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.45), modal: true });
+$( "#odo_dlg_opnr" ).click(function() {  $( "#odo_dlg" ).dialog( "open" ); });
+$( "#odo_dlg .close_dialog" ).click(function() {  $( "#odo_dlg" ).dialog( "close" ); });
+
+//reminder delete dialog
+$( "#deleteconfdlg" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.45), modal: true });
+$( ".deleteconfdlgopnr" ).click(function(e) {
+    e.preventDefault();
+    $( "#deleteconfdlg" ).dialog( "open" );
+    $("#dlg_car_id").val($(this).data('car_id'));
+    $("#dlg_time").val($(this).data('time'));
+    $("#dlg_microtime").val($(this).data('microtime'));
+    
+    });
+$( "#deleteconfdlg .close_dialog" ).click(function() {  $( "#deleteconfdlg" ).dialog( "close" ); });
   
  //car make picker
   $( "#nwcardialog" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.75), modal: true });
@@ -226,22 +301,51 @@ $( "#countrydialog" ).dialog( "open" );
 $( "#countrydialog" ).html('<div class="icon-spin3 spinner"> </div>');
 $( "#countrydialog" ).load( "/login/country_list/"+$("#country_id").val() ); });
 
+$( "#sms_checkbox").click(function() {
+    cbchecked = '0';
+    if(this.checked) { cbchecked = '1'; }
+    var spinner = $('<i class="icon-spin3 spinner"> </i>');
+    $( "#sms_checkbox_cont" ).append(spinner);
+    $( "#responsebox" ).load( "/login/cbox/send_sms/"+cbchecked );
+    spinner.remove();
+    });
+
+$( "#email_checkbox").click(function() {
+    cbchecked = '0';
+    if(this.checked) { cbchecked = '1'; }
+    var spinner = $('<i class="icon-spin3 spinner"> </i>');
+    $( "#email_checkbox_cont" ).append(spinner);
+    $( "#responsebox" ).load( "/login/cbox/send_email/"+cbchecked );
+    spinner.remove();
+    });
+
+
 
 //delete confirmation
 $( "#deletedialog" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.45), modal: true });
 $( "#deleteopener" ).click(function() {  $( "#deletedialog" ).dialog( "open" ); });
 $( "#deletedialog .close_dialog" ).click(function() {  $( "#deletedialog" ).dialog( "close" ); });
 
+//generic dialog, one per page
+$( "#justadialog" ).dialog({ autoOpen: false, width: 360, modal: true });
+$( "#justanopener" ).click(function() {  $( "#justadialog" ).dialog( "open" ); });
+$( "#justadialog .close_dialog" ).click(function() {  $( "#justadialog" ).dialog( "close" ); });
+
+//image delete confirmation
+$( "#imgdeldlg" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.45), modal: true });
+$( "#imgdeldlg .close_dialog" ).click(function() {  $( "#imgdeldlg" ).dialog( "close" ); });
+
+
 //add proxy car
 
 function findProxyCar() {
-  var car_owner = $("#car_owner_name").val();
+  var car_plates_or_vin = $("#car_plates_or_vin").val();
   var auth_car_list = $("#auth_car_list").val();
-  $('#cars_by_owner').load('/car/car_list', {"owner_name":car_owner, "auth_car_list":auth_car_list });
+  $('#cars_by_owner').load('/car/car_list', {"car_plates_or_vin":car_plates_or_vin, "auth_car_list":auth_car_list });
 }
 
 $( "#find_cars_submit" ).click(function() {  findProxyCar();        });
-$("#car_owner_name").on('keypress', function(e) {
+$("#car_plates_or_vin").on('keypress', function(e) {
   var keyCode = e.keyCode || e.which;
   if (keyCode === 13) {  e.preventDefault();       findProxyCar();  }
 });
@@ -276,10 +380,31 @@ $( "#authusrremovebtn" ).click(function(e) {
   $( "#authusrremovedlg" ).dialog( "close" ); 
                                });
 
-//request to be authorised user on someone elses car
-$('body').on('click', '.request_car_access', function() {
- $(this).closest('.requestparent').load('/car/request_auth', {"car_id":$(this).data('id') }); 
-  });
+
+//transfer car to another user
+//show users when typing
+$('#new_owner_name_or_email').on('keyup', function () {
+  if ($('#new_owner_name_or_email').val().length  > 2) {
+    $('#new_user_result').load('/car/find_usr', {"usr_name_or_email": $('#new_owner_name_or_email').val() });
+  }
+    });
+
+//fill search box with user name
+$('body').on('click', '.transferusrlink', function(e) {
+  e.preventDefault();
+  $('#new_owner_name_or_email, #service_provider_name').val($(this).attr('href'));
+});
+
+//same for adding authusers
+$('#service_provider_name').on('keyup', function () {
+  if ($('#service_provider_name').val().length  > 2) {
+    $('#auth_user_suggestion').load('/car/find_usr', {"usr_name_or_email": $('#service_provider_name').val() });
+  }
+    });
+
+
+
+
 
 //event gallery
 
@@ -328,7 +453,6 @@ function slidePicStrip(amount) {
 
 $('body').on('click', '#heroimg-link', function(e) {
   e.preventDefault();
-  
   /*$( "#event-view" ).dialog( "close" ); */
   $( "#previous-event-link" ).hide();
   $( "#next-event-link" ).hide();
@@ -337,7 +461,8 @@ $('body').on('click', '#heroimg-link', function(e) {
   }
   $('#fs').addClass('fs');
   $('#fs').removeClass('display-none');
-  $('#fsimg').children('img').attr("src", $(this).attr('href'));
+  $('#fsimg img').attr("src", $(this).attr('href'));
+  console.log($(this).attr('href'));
   var thisord = $('#picstrip .imgbutton.active').children('a').data('ord');
   var totalPics = $("#picstrip a").length;
   fsPicStripWidth = $("#fspicstrip").width();
@@ -504,9 +629,456 @@ $('body').on('click', '.evfltreset', function(e) {
 });
 
 /* context menu opener */
-$( ".context_menu_opener" ).click(function(e) {  
-                                  var element = $(this).data("element");
-                                  $("#"+element).toggle();
-                                   e.stopPropagation();
-                                  });
+$( ".context_menu_opener" ).click(function(e) {
+    var element = $(this).data("element");
+    if ($(".closeonclick:visible").length) {    $( ".closeonclick:not(#" + element + ")" ).hide("fast");  }
+    $("#"+element).toggle("fast");
+    e.stopPropagation();
+    });
 
+
+$( ".set_reminder" ).click(function() {
+    $("#remindertoggle").val('on');
+    $("#justanopener > .icon-bell-alt").addClass("red");
+    $("#reminder_content").val( $("#reminder_content_proxy").val()  );
+    $( "#justadialog" ).dialog( "close" );  });
+$( ".clear_reminder" ).click(function() {
+    $("#remindertoggle").val('off');
+    $("#justanopener > .icon-bell-alt").removeClass("red");
+    $( "#justadialog" ).dialog( "close" );    });
+
+$('#reminder_time_offset').on('change', function () {
+    var time_offset = this.value;
+    var time_offset_timestamp = $("#reminder_time_offset option:selected").data('timestamp');
+$('#reminder_time').val(time_offset);
+
+$('#timestampdate').val(time_offset_timestamp); 
+  console.log(time_offset_timestamp)  ;
+} );
+
+
+$( "#request_car_access_dlg" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.75), modal: true });
+$( "#request_car_access_dlg .close_dialog" ).click(function() {  $( "#request_car_access_dlg" ).dialog( "close" ); });
+$('body').on('click', '.request_car_access_dlgopnr', function() {
+    $("#owner_distance").html('');
+    $("#owner_distance").load('/car/owner_distance', {"owner_id":$(this).data('owner') });
+    $( "#request_car_access_dlg" ).dialog( "open" );
+    $( "#request_car_access_dlg #car_owner" ).val($(this).data('owner'));
+    $( "#request_car_access_dlg #car_id" ).val($(this).data('id'));
+    $( "#request_car_access_dlg .request_car_access" ).data('id', $(this).data('id'));
+    });
+
+//request to be authorised user on someone elses car
+$('body').on('click', '.request_car_access', function() {
+    $('.requestparent[data-car_id="' + $("#car_id").val() + '"]').load('/car/request_auth', {"car_id":$("#car_id").val() }); 
+  });
+
+
+$('body').on({
+  mouseenter: function() {
+    $('#fspicstrip').fadeIn();    
+  },
+  mouseleave: function() {
+    setTimeout(function () { $('#fspicstrip').fadeOut(); }, 1500);
+  }
+  }, '#fspscont'
+  );
+
+//car data xml edit
+
+$('.databittxt').click(function() { 
+    $(this).addClass( "field " );
+    });
+
+$('.databittxt').blur(function() { 
+    $(this).removeClass( "field " );
+    });
+
+function editXMLDataBits(key, val, chapter, chapterno, entry, unit, validate) {
+  var car_id = $("#car_id").val();
+      $('.response[data-key="' + key + '"]').html('<div class="icon-spin3 spinner"> </div>');
+      $( ".databittxt, .databitunit, .databitcustval, .databitcustname" ).prop( "disabled", true ); //disable all inputs while we get the response
+      $('.response[data-key="' + key + '"]').load(
+            '/car/edit_xml_car_data_bits',
+            {"key":key, "value":val, "car_id":car_id, "chapter":chapter, "chapterno":chapterno, "entry":entry, "unit":unit, "validate":validate  },
+            function() {
+                       var response = $('.response[data-key="' + key + '"]').html();
+                       if (response == 'false') {
+                       $('.response[data-key="' + key + '"]').html('<i class="icon-cancel red"> </i>');
+                       } else {
+                       $('.response[data-key="' + key + '"]').html('<i class="icon-ok green"> </i>');
+                       if (chapterno == 'NEW') { window.location.reload(); }
+                       $('#' + key + '.databittxt' ).val(response);
+                       }
+                       $( ".databittxt, .databitunit, .databitcustval, .databitcustname" ).prop( "disabled", false );
+     });
+}
+
+$(".databittxt").on('change', function() {
+    key = $(this).attr('id');
+    val = $(this).val();
+    chapter = $(this).data('chapter');
+    chapterno = $(this).data('chapterno');
+    entry = $(this).data('entry');
+    validate  = $(this).data('validate');
+    unit = '';
+    if ( $( '.databitunit[data-id="' + key + '"]' ).length ) {        unit = $( '.databitunit[data-id="' + key + '"]' ).val();    }
+    editXMLDataBits(key, val, chapter, chapterno, entry, unit, validate);
+    });
+
+$(".databitunit").on('change', function() {
+    unit = $(this).val();
+    key = $(this).data('id');
+    databittxt = $( '#' + key );
+    if (databittxt.length) {
+    val = databittxt.val();
+    chapter = databittxt.data('chapter');
+    chapterno = databittxt.data('chapterno');
+    entry = databittxt.data('entry');
+    validate  = databittxt.data('validate');
+    if ($( this ).hasClass( "unit-inches" )) {databittxt.val(convertLength(unit, val));  val = databittxt.val();}
+    if ($( this ).hasClass( "unit-millimeters" )) {databittxt.val(convertLength(unit, val));  val = databittxt.val();}
+    if ($( this ).hasClass( "unit-volume" )) {databittxt.val(convertVolume(unit, val));  val = databittxt.val();}
+    if ($( this ).hasClass( "unit-power" )) {databittxt.val(convertPower(unit, val));  val = databittxt.val();}
+    if ($( this ).hasClass( "unit-weight" )) {databittxt.val(convertWeight(unit, val));  val = databittxt.val();}
+    editXMLDataBits(key, val, chapter, chapterno, entry, unit, validate);
+        }
+    });
+
+$(".databitcustval").on('change', function() {
+        key = $(this).attr('id');
+    if ( $( '.databitcustname[data-id="' + key + '"]' ).val().length > 2 )
+    {
+        val = $(this).val();
+        chapter = $(this).data('chapter');
+        chapterno = $(this).data('chapterno');
+        entry = $( '.databitcustname[data-id="' + key + '"]' ).val();
+        validate  = $(this).data('validate');
+        unit = ''; //future use, maybe?
+        addXMLDataBits(key, val, chapter, chapterno, entry, unit, validate);
+    }
+});
+
+function addXMLDataBits(key, val, chapter, chapterno, entry, unit, validate) {
+  var car_id = $("#car_id").val();
+      $('.response[data-key="' + key + '"]').html('<div class="icon-spin3 spinner"> </div>');
+      $( ".databittxt, .databitunit, .databitcustval, .databitcustname" ).prop( "disabled", true ); //disble all inputs while we get the response
+      $('.response[data-key="' + key + '"]').load(
+            '/car/add_xml_car_data_bits',
+            {"key":key, "value":val, "car_id":car_id, "chapter":chapter, "chapterno":chapterno, "entry":entry, "unit":unit, "validate":validate  },
+            function() {
+                       var response = $('.response[data-key="' + key + '"]').html();
+                       if (response == 'false') {
+                       $('.response[data-key="' + key + '"]').html('<i class="icon-cancel red"> </i>');
+                       } else {
+                       $('.response[data-key="' + key + '"]').html('<i class="icon-ok green"> </i>');
+                       $('#' + key + '.databitcustval' ).val(response);
+                       }
+                       $( ".databittxt, .databitunit, .databitcustval, .databitcustname" ).prop( "disabled", false );
+                       window.location.reload();
+     });
+}
+
+
+function convertLength(convertTo, value) {
+    var response = 0;
+    var number = Number(value.replace(',', '.'));
+    if (convertTo == 'in') {        response = number / 25.4;    }
+    if (convertTo == 'mm') {        response = number * 25.4;    }
+    return response;
+}
+
+function convertVolume(convertTo, value) {
+    var response = 0;
+    var number = Number(value.replace(',', '.'));
+    if (convertTo == 'cm3') {        response = number * 16.3871;    }
+    if (convertTo == 'ci') {        response = number * 0.0610237;    }
+    response = +response.toFixed(2); return response;
+}
+
+function convertPower(convertTo, value) {
+    var response = 0;
+    var number = Number(value.replace(',', '.'));
+    if (convertTo == 'kW') {        response = number * 0.7457;    }
+    if (convertTo == 'HP') {        response = number * 1.34102;    }
+    response = +response.toFixed(2);
+        return response;
+}
+
+function convertWeight(convertTo, value) {
+    var response = 0;
+    var number = Number(value.replace(',', '.'));
+    if (convertTo == 'kg') {        response = number * 0.453592;    }
+    if (convertTo == 'lbs') {        response = number * 2.20462;    }
+    response = +response.toFixed(2); return response;
+}
+
+
+$( ".databit-date" ).datepicker({
+     dateFormat: 'yy-mm-dd',
+      changeMonth: true,
+      changeYear: true,
+      maxDate: 1
+    });
+
+$( ".expiry-date" ).datepicker({
+     dateFormat: 'yy-mm-dd',
+      changeMonth: true,
+      changeYear: true,
+      minDate: 1,
+      defaultDate: +365
+    });
+
+$( "#event_date_proxy" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      altField: "#event_date",
+      altFormat: "@",
+      yearRange: "c-20:c",
+      maxDate: 1
+    });
+
+
+$( ".deletedatabitdlg" ).click(function() {
+    key = $(this).closest('span').data('key');
+    databittxt = $( '#' + key );
+    value = databittxt.val();
+    chapter = databittxt.data('chapter');
+    chapterno = databittxt.data('chapterno');
+    entry = databittxt.data('entry');
+    validate  = databittxt.data('validate');
+    unit = '';
+    $('#key').val(key); 
+    $('#val').val(value);
+    $('#chapter').val(chapter);
+    $('#chapterno').val(chapterno);
+    $('#entry').val(entry);
+    $('#unit').val(unit);
+    $('#validate').val(validate);
+    
+  //  console.log(key+' '+unit+' '+chapter+' '+chapterno+' '+entry+' '+value+' '+validate);
+    
+    $( "#deletedialog" ).dialog( "open" );
+    });
+
+
+
+$('body').on('click', '.imgdel', function(e) {
+  e.preventDefault();
+  var img =  $(this).closest('.portlet').attr('id');
+  var no =  $(this).closest('.portlet').data('number');
+  
+    $( "#imgdeldlg" ).dialog( "open" );
+$('#image_id').val(img);
+  $('#image_no').val(no);
+
+});
+
+$('#imgdeldlg .delete').click(function() {
+    var img = $('#image_id').val();
+    var no = $('#image_no').val();
+    
+    var usrimg = $('#user_images').val();
+  var usrimg_array = usrimg.split(',');
+  var index = usrimg_array.indexOf(img);
+    if (index > -1) {
+    usrimg_array.splice(index, 1);
+    usrimg = usrimg_array.join();
+    $('#user_images').val(usrimg);
+    }
+  
+ $( '.portlet[data-number="'+no+'"]' ).load( '/car/imgedit', {
+    "task":"del",
+    "owner":$('#owner').val(),
+    "car_id":$('#car_id').val(),
+    "img":img,
+    "user_images":usrimg,
+    "event_time":$('#event_time').val(),
+    "event_microtime":$('#event_microtime').val(),
+    "wherefrom": $('#wherefrom').val()
+   }, function() {
+      var response = $( '.portlet[data-number="'+no+'"]' ).html();
+      if (response == 'false') {
+      $( '.portlet[data-number="'+no+'"]' ).html('<i class="icon-cancel red"> </i>');
+      } else {
+      $( '.portlet[data-number="'+no+'"]' ).hide('fast');
+      }
+    });
+    
+});
+
+
+$('body').on('click', '.imgrotate', function(e) {
+  e.preventDefault();
+  var img =  $(this).closest('.portlet').attr('id');
+  var no =  $(this).closest('.portlet').data('number');
+  var usrimg = $('#user_images').val();
+  var owner = $('#owner').val();
+  var car_id = $('#car_id').val();
+  var direction = 'cw';
+  if ($(this).hasClass( "imgccw" )) {direction = 'ccw';}
+    
+    $( '.portlet[data-number="'+no+'"] .portlet-content img ' ).attr("src", "/images/spinner.gif" );
+    $( '#response' ).load( '/car/imgedit', {
+    "task":direction,
+    "owner":owner,
+    "car_id":car_id,
+    "img":img,
+    "user_images":usrimg,
+     "event_time":$('#event_time').val(),
+    "event_microtime":$('#event_microtime').val(),
+    "wherefrom": $('#wherefrom').val()
+   }, function() {
+      var response = $( '#response' ).html();
+      if (response == 'false') {
+      $( '.portlet[data-number="'+no+'"] ' ).html('<i class="icon-cancel red"> </i>');
+      } else {
+        $( '.portlet[data-number="'+no+'"] ' ).attr('id', response);
+  var usrimg_array = usrimg.split(',');
+  var index = usrimg_array.indexOf(img);
+    if (index > -1) {
+    usrimg_array[index] = response;
+    usrimg = usrimg_array.join();
+    $('#user_images').val(usrimg);
+    }
+        
+        var imgurl = '/car/image/'+car_id+'/'+response+'/120';
+        $( '.portlet[data-number="'+no+'"] .portlet-content img ' ).attr("src", imgurl );
+      }
+    });
+    
+
+});
+
+$("#odo_warning_form").submit(function( e ) {
+console.log('klik');
+   if  ((parseInt($('#this_event_odo').val()) >= parseInt($('#this_car_odo').val() )) || ($('#odo_warning_checkbox').prop('checked'))) {
+    return;
+   }
+   $('#odo_warning_box').removeClass('hide');
+    e.preventDefault();   
+  
+});
+
+
+
+//after everythin else loads, inhabit the little boxes
+
+$(window).load(function() {
+    if ($('#carindex_my_car_list').length) {
+         $( '#carindex_my_car_list' ).load( '/car/my_car_list');
+          $( "#carindex_my_car_list" ).removeClass('hide');
+    }
+    
+    if ($('#carindex_expiry_list').length) {
+         $( '#carindex_expiry_list' ).load( '/car/expiry_list/'+$("#car_id").val());
+    }
+});
+
+$( ".nestedlink" ).click(function(e) {
+    e.preventDefault();
+window.location.href = $(this).data('href');
+} );
+
+//full size image display
+$('body').on('click', '.fsgalimg-link', function(e) {
+  e.preventDefault();
+  
+  if (parseInt($('#piccount').html()) > 1) {
+    $('#fsprev').show(); $('#fsnext').show();
+  }
+  $('#fs').addClass('fs');
+  $('#fs').removeClass('display-none');
+  $('#fsimg').children('img').attr("src", $(this).attr('href'));
+  var thisord = $('#picstrip .imgbutton.active').children('a').data('ord');
+  var totalPics = $("#picstrip a").length;
+  fsPicStripWidth = $("#fspicstrip").width();
+  $('#fsimg').data('ord', thisord );
+  $('#picstrip .imgbutton').removeClass('active');
+  $('#fspicstrip .imgbutton').find("[data-ord='" + thisord + "']").parent().addClass('active');
+  if ((totalPics * stripPicWidth) > fsPicStripWidth ) {
+  $('#fspsprev').show(); $('#fspsnext').show();
+}
+});
+
+// add new car by vin
+$( "#submit_vin" ).click(function() {
+    getVinData($('#new_vin').val());
+    });
+
+$('body').on('click', '#retest_vin', function(e) {
+       e.preventDefault();
+    getVinData($('#new_vin').val());
+    });
+
+$("#new_vin").on('keyup keypress', function(e) {
+  var keyCode = e.keyCode || e.which;
+  if (keyCode === 13) { 
+    e.preventDefault();
+ getVinData($('#new_vin').val());
+  }
+});
+
+function getVinData(vin) {
+    if (vin.length == 17) {
+        $( "#new_car_data_by_vin" ).html('<div class="icon-spin3 spinner"> </div>' +  $( "#new_car_data_by_vin" ).data('body'));
+        $( "#new_car_data_by_vin" ).load( '/car/new_vin_data/'+vin );
+        $( "#submit_vin_container" ).hide();
+        
+        }
+}
+
+$('body').on('click', '.visibility_setting_private', function(e) {
+    e.preventDefault();
+    var event = $(this).data('event');
+    $( '.visibility_setting_private[data-event="'+event+'"] a i' ).addClass('gray');
+    $.ajax({
+        url: '/car/make_event_public/'+event,
+        dataType: "text", 
+        success: function(data) { 
+        if (data == 'true') {
+            $( '.visibility_setting_private[data-event="'+event+'"] a i' ).removeClass('gray');
+            $( '.visibility_setting_private[data-event="'+event+'"]' ).addClass('hide');
+            $( '.visibility_setting_public[data-event="'+event+'"]' ).removeClass('hide');
+            $( '.event[data-event="'+event+'"]' ).addClass('public-event');
+        }
+        }
+    });
+    
+    });
+    
+$('body').on('click', '.visibility_setting_public', function(e) {
+    e.preventDefault();
+    var event = $(this).data('event');
+    $( '.visibility_setting_public[data-event="'+event+'"] a i' ).addClass('gray');
+    $.ajax({
+        url: '/car/make_event_private/'+event,
+        dataType: "text", 
+        success: function(data) { 
+        if (data == 'true') {
+            $( '.visibility_setting_public[data-event="'+event+'"] a i' ).removeClass('gray');
+            $( '.visibility_setting_public[data-event="'+event+'"]' ).addClass('hide');
+            $( '.visibility_setting_private[data-event="'+event+'"]' ).removeClass('hide');
+                        $( '.event[data-event="'+event+'"]' ).removeClass('public-event');
+            }
+        }
+        });
+     });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   

@@ -25,7 +25,7 @@ foreach ($this->car as $row) {
 <a href="<?= Config::get('URL') . 'car/index/' . $id['uuid']; ?>" title="<?= $row['car_name']; ?> (<?= $row['car_make']; ?> <?= $row['car_model']; ?> <?= $plates_or_vin; ?>)"><?= $row['car_name']; ?></a>
 <?php if ($car_images) { ?>
 <div><a href="<?= Config::get('URL') . 'car/index/' . $id['uuid']; ?>" title="<?= $row['car_name']; ?> (<?= $row['car_make']; ?> <?= $row['car_model']; ?> <?= $plates_or_vin; ?>)">
-<?php print '<img class="crop" src="/car/image/'.Session::get('user_uuid').'/'.$id['uuid'].'_'.$car_image.'/120" />'; ?>
+<?php print '<img class="crop" src="/car/image/'.$id['uuid'].'/'.$car_image.'/120" />'; ?>
 </a></div>
 <?php }; ?>
 </div>

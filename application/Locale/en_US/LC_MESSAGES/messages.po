@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Caramnesis\n"
 "POT-Creation-Date: 2016-02-06 22:36+0200\n"
-"PO-Revision-Date: 2016-08-15 22:01+0200\n"
+"PO-Revision-Date: 2016-12-15 01:26+0200\n"
 "Last-Translator: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language-Team: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language: en_US\n"
@@ -306,7 +306,7 @@ msgid "MENU_LOGOUT"
 msgstr "Logout"
 
 msgid "MENU_ABOUT_CARAMNESIS"
-msgstr "About CARAMNESIS"
+msgstr "About CarAmnesis"
 
 msgid "PWCHANGE_REQUEST"
 msgstr "Request a password reset"
@@ -1419,10 +1419,10 @@ msgid "MESSAGE_QUOTED"
 msgstr "-----Original Message-----"
 
 msgid "MAKE_CAR_PRIVATE"
-msgstr "Private: Hide your car from public view"
+msgstr "Make your car profile private"
 
 msgid "MAKE_CAR_PUBLIC"
-msgstr "Public: Enable others to see your car"
+msgstr "Make your car profile public"
 
 msgid "PUBLIC_TAGS"
 msgstr "Car privacy settings"
@@ -1433,7 +1433,9 @@ msgstr ""
 "explicitly enabled."
 
 msgid "PUBLIC_TAGS_INFO_PUBLIC"
-msgstr "Your car is now searchable and visible to the public."
+msgstr ""
+"Your car is now searchable and visible to the public. Events that are not "
+"marked public and car identification data are hidden."
 
 msgid "TAG_PUBLIC"
 msgstr "Public entry"
@@ -1538,19 +1540,492 @@ msgid "FEEDBACK_LANGUAGE_CHANGE_SUCCESSFUL"
 msgstr "Language succesfully changed"
 
 msgid "EMAIL_VERIFICATION_FROM_NAME"
-msgstr "CARAMNESIS registration confirmation"
+msgstr "CarAmnesis registration confirmation"
 
 msgid "EMAIL_PASSWORD_RESET_CONTENT"
 msgstr "Please click on this link to reset your password: "
 
 msgid "EMAIL_PASSWORD_RESET_FROM_NAME"
-msgstr "CARAMNESIS registration"
+msgstr "CarAmnesis registration"
 
 msgid "EMAIL_PASSWORD_RESET_SUBJECT"
-msgstr "Password reset for CARAMNESIS"
+msgstr "Password reset for CarAmnesis"
 
 msgid "EMAIL_VERIFICATION_SUBJECT"
-msgstr "CARAMNESIS account activation"
+msgstr "CarAmnesis account activation"
 
 msgid "EMAIL_VERIFICATION_CONTENT"
 msgstr "Please click on this link to activate your account: "
+
+msgid "PICK_A_MAKE_AND_YEAR_FIRST"
+msgstr "Please pick car make and year first"
+
+msgid "PICK_A_MAKE_AND_MODEL_FIRST"
+msgstr "Please pick car make and model first"
+
+msgid "NEW_MESSAGE_NOTIFICATION_FROM_%s"
+msgstr "New message from %s on CarAmnesis.com"
+
+msgid "NOTIFICATION_READ_AND_REPLY_LINK"
+msgstr ""
+"To read and reply to this message on CarAmnesis.com, follow this link: "
+
+msgid "CAR_PICTURES"
+msgstr "Car pictures"
+
+msgid "404 - Page not found"
+msgstr "Page not found (404)"
+
+msgid "This page does not exist."
+msgstr "This page does not exist"
+
+msgid "FEEDBACK_REMINDER_CREATION_FAILED"
+msgstr "Reminder creation failed"
+
+msgid "'REMINDER FOR %s SET'"
+msgstr "Reminder for %s set"
+
+msgid "%s_REMINDER_FOR_%s"
+msgstr "%s reminder for %s"
+
+msgid "REMINDERS"
+msgstr "Reminders"
+
+msgid "EMAIL_NOTIFICATION_FROM_NAME"
+msgstr "CarAmnesis.com notification"
+
+msgid "CAR_NAME"
+msgstr "Car name"
+
+msgid "REMINDER_TIME"
+msgstr "Reminder time"
+
+msgid "REMINDER_CONTENT"
+msgstr "Reminder content"
+
+msgid "ALL_REMINDERS"
+msgstr "All reminders"
+
+msgid "TODAY"
+msgstr "Today"
+
+msgid "TOMORROW"
+msgstr "Tomorrow"
+
+msgid "YESTERDAY"
+msgstr "Yesterday"
+
+msgid "DISMISS_REMINDER"
+msgstr "Dismiss reminder"
+
+msgid "POSTPONE_REMINDER"
+msgstr "Postpone reminder"
+
+msgid "REMINDER"
+msgstr "Reminder"
+
+msgid "DELETE_EVENT"
+msgstr "Delete event"
+
+msgid "SET_REMINDER"
+msgstr "Set reminder"
+
+msgid "CAR_PLATES_OR_VIN"
+msgstr "License plate or VIN"
+
+msgid "REQUEST_ACCESS_FROM_CAR_OWNER"
+msgstr "Request access from car owner"
+
+msgid "SEND_REQUEST_TO_OWNER_?"
+msgstr "OK to send request to owner?"
+
+msgid "OWNER_IS_LOCATED_%s_%s_AWAY"
+msgstr "Owner is located approximately %s %s away"
+
+msgid "MOVE_PICTURE_TO_SORT"
+msgstr "Move to sort"
+
+msgid "TODO_LIST_HEADER"
+msgstr "To-do list"
+
+msgid "ADD_NEW_TODO_LIST_ITEM"
+msgstr "Add a to-do list item"
+
+msgid "MARK_THIS_AS_DONE"
+msgstr "This to-do item is done"
+
+msgid "PUT_THIS_ON_TODO_LIST"
+msgstr "Add to the to-do list"
+
+msgid "ENTER_CURRENT_ODO"
+msgstr "Enter current odometer reading"
+
+msgid "%s_EXPIRES_ON_%s"
+msgstr "%s expires on %s"
+
+msgid "DELETE_REMINDER"
+msgstr "Delete reminder"
+
+msgid "REMINDER_DELETED"
+msgstr "Reminder deleted"
+
+msgid "REMINDER_DELETE_FAILED"
+msgstr "Reminder delete failed"
+
+msgid "SEND"
+msgstr "Send"
+
+msgid "NEW"
+msgstr "New"
+
+msgid "ADD_NEW_%s"
+msgstr "Add new %s"
+
+msgid "NEW_ENTRY_VALUE"
+msgstr "New entry content"
+
+msgid "NEW_ENTRY_NAME"
+msgstr "New entry name"
+
+msgid "NEW_RECORD_BLURB"
+msgstr ""
+"Enter picture(s), service record(s), reference info, to-do list item or any "
+"other event related to your car"
+
+msgid "UPLOAD_IMAGES_OR_TAKE_A_PICTURE"
+msgstr "Upload images or take a picture"
+
+msgid "ADD_EVENT_TYPES"
+msgstr "Add another tag for this event"
+
+msgid "IN_A_WEEK"
+msgstr "In a week"
+
+msgid "IN_A_MONTH"
+msgstr "In a month"
+
+msgid "IN_A_YEAR"
+msgstr "In a year"
+
+msgid "SMS_NOTIFICATION_FROM_NAME"
+msgstr "SMS message from"
+
+msgid "FEEDBACK_EXPIRY_EDIT_FAILED"
+msgstr "Expiry term setting edit failed"
+
+msgid "FEEDBACK_EXPIRY_EDIT_SUCCESSFUL"
+msgstr "Expiry term setting edit succesful"
+
+msgid "INSURANCE"
+msgstr "Insurance"
+
+msgid "INSPECTION"
+msgstr "Inspection"
+
+msgid "TAXES"
+msgstr "Taxes"
+
+msgid "OIL_CHANGE"
+msgstr "Oil change"
+
+msgid "TIMING_BELT"
+msgstr "Timing belt"
+
+msgid "VALID_UNTIL"
+msgstr "Valid through"
+
+msgid "DESCRIPTION"
+msgstr "Description, notes"
+
+msgid "POLICY_NO"
+msgstr "Policy No."
+
+msgid "SHOW"
+msgstr "Show"
+
+msgid "YES"
+msgstr "Yes"
+
+msgid "NO"
+msgstr "No"
+
+msgid "ODOMETER"
+msgstr "Odometer"
+
+msgid "USER_PHONE"
+msgstr "Phone"
+
+msgid "REGISTRATION_DATA"
+msgstr "Registration data"
+
+msgid "TECHNICAL_DATA"
+msgstr "Technical data"
+
+msgid "BODYWORK_DATA"
+msgstr "Bodywork data"
+
+msgid "MISC_DATA"
+msgstr "Misc data"
+
+msgid "CUSTOM_DATA"
+msgstr "Custom data"
+
+msgid "TYRE_DATA"
+msgstr "Tyre data"
+
+msgid "WHEEL_RIM_DATA"
+msgstr "Rim data"
+
+msgid "FIRST_REG_DATE"
+msgstr "First registration date"
+
+msgid "FIRST_REG_THIS_COUNTRY_DATE"
+msgstr "First registration in this country date"
+
+msgid "REG_DATE_THIS_OWNER"
+msgstr "Registration date for the current owner"
+
+msgid "REG_DOC_NUMBER"
+msgstr "Registration document No."
+
+msgid "UNLADEN_WEIGHT"
+msgstr "Unladen weight"
+
+msgid "GROSS_WEIGHT"
+msgstr "Gross weight"
+
+msgid "COMBINED_WEIGHT"
+msgstr "Combined weight"
+
+msgid "SEATED_PLACES"
+msgstr "Seated places"
+
+msgid "ENGINE_POWER"
+msgstr "Engine power"
+
+msgid "ENGINE_DISPLACEMENT"
+msgstr "Engine displacement"
+
+msgid "ENGINE_CODE"
+msgstr "Engine code"
+
+msgid "FUEL_TYPE"
+msgstr "Fuel type"
+
+msgid "TRANSMISSION_TYPE"
+msgstr "Transmission type"
+
+msgid "TRANSMISSION_NUMBER_GEARS"
+msgstr "Number of forward gears"
+
+msgid "GAS"
+msgstr "Gasoline / petrol"
+
+msgid "DIESEL"
+msgstr "Diesel"
+
+msgid "HYBRID_GAS"
+msgstr "Gasoline / petrol electric hybrid"
+
+msgid "HYBRID_DIESEL"
+msgstr "Diesel electric hybrid"
+
+msgid "ELECTRIC"
+msgstr "Elektric"
+
+msgid "LPG"
+msgstr "LPG"
+
+msgid "CNG"
+msgstr "CNG"
+
+msgid "LPG_GAS"
+msgstr "Gasoline / petrol and LPG"
+
+msgid "OTHER"
+msgstr "Other"
+
+msgid "MANUAL_TRANSMISSION"
+msgstr "Manual transmission"
+
+msgid "TORQUE_CONVERTER_AUTO"
+msgstr "Torque converter automatic transmission"
+
+msgid "ROBOTIZED_AUTO"
+msgstr "Robotized automatic transmission"
+
+msgid "SEMI_AUTO"
+msgstr "Semiautomatic transmission"
+
+msgid "SUMMER"
+msgstr "Summer"
+
+msgid "WINTER"
+msgstr "Winter"
+
+msgid "ALL_SEASON"
+msgstr "All season"
+
+msgid "ENTER_REMINDER_TEXT"
+msgstr "Reminder text"
+
+msgid "BODY_COLOR_NAME"
+msgstr "Body color name"
+
+msgid "BODY_COLOR_CODE"
+msgstr "Body color code"
+
+msgid "TRIM_COLOR_NAME"
+msgstr "Trim color name"
+
+msgid "TRIM_COLOR_CODE"
+msgstr "Trim color code"
+
+msgid "DOOR_COUNT"
+msgstr "Door count"
+
+msgid "WINDSHIELD_WIPERS"
+msgstr "Windshield wipers"
+
+msgid "RIM_DIAMETER"
+msgstr "Rim diameter"
+
+msgid "RIM_WIDTH"
+msgstr "Rim width (J)"
+
+msgid "RIM_OFFSET"
+msgstr "Rim offset (ET)"
+
+msgid "RIM_CENTRE_BORE"
+msgstr "Rem center bore"
+
+msgid "RIM_BOLT_NO"
+msgstr "Rim bolt/nut count"
+
+msgid "RIM_BOLT_CIRCLE"
+msgstr "Pitch circle diameter (PCD)"
+
+msgid "TYRE_TYPE"
+msgstr "Tyre type / model"
+
+msgid "TYRE_SEASON"
+msgstr "Season"
+
+msgid "SECTION_WIDTH"
+msgstr "Section width"
+
+msgid "SIDEWALL_RATIO"
+msgstr "Sidewall ratio"
+
+msgid "RADIO_CODE"
+msgstr "Radio code"
+
+msgid "ENABLE_SMS_NOTIFICATIONS"
+msgstr "Enable SMS notifications"
+
+msgid "ENABLE_EMAIL_NOTIFICATIONS"
+msgstr "Enable email notifications"
+
+msgid "TRANSFER_YOUR_CAR_TO_USER"
+msgstr "Transfer your car to user"
+
+msgid "TRANSFER"
+msgstr "Transfer"
+
+msgid "TRANSFER_YOUR_CAR_TO_USER_WARNING"
+msgstr ""
+"If the recipient accepts, you will no longer be able to access this car "
+"profile, unless the new owner gives you permission."
+
+msgid "NEW_OWNER_NAME_OR_EMAIL username or email"
+msgstr "Username or email of the new owner"
+
+msgid "TRANSFER_YOUR_CAR_TO_USERNAME_%"
+msgstr "Transferring your car to user %s"
+
+msgid "TRANSFER_YOUR_CAR_TO_USER_FINAL_WARNING"
+msgstr ""
+"If the recipient accepts, you will lose ownership and access to this car "
+"profile."
+
+msgid "OIL"
+msgstr "Oil"
+
+msgid "FEEDBACK_CAR_TRANSFER_FAILED"
+msgstr "Car transfer failed"
+
+msgid "FEEDBACK_CAR_TRANSFER_SUCCESS"
+msgstr "Car successfully transferred"
+
+msgid "CAR_TRANSFER_REQUEST_SEND_FAILED"
+msgstr "Car transfer request failed to send"
+
+msgid "CAR_TRANSFER_ACCEPT_REQUEST"
+msgstr "Accept or decline new car transfer"
+
+msgid "IF_YOU_ACCEPT_CAR_%s_FROM_USER_%s_FOLLOW_%s"
+msgstr ""
+"%s car profile form user %s is now available for transfer to you. Click this "
+"link to accept or decline: %s"
+
+msgid "NO_CAR_TRANSFERS_RECEIVED"
+msgstr "No car transfers received"
+
+msgid "RECEIVED_CAR_TRANSFERS"
+msgstr "Received car transfers"
+
+msgid "TRANSFER_DATE:"
+msgstr "Transferred on:"
+
+msgid "ACCEPT"
+msgstr "Accept"
+
+msgid "DECLINE"
+msgstr "Decline"
+
+msgid "TRANSFER_YOUR_CAR_TO_ANOTHER_USER"
+msgstr "Transfer your car to another user"
+
+msgid "CAR_NOT_PUBLIC"
+msgstr "This car profile is hidden"
+
+msgid "JOIN_CARAMNESIS"
+msgstr "Join CarAmnesis!"
+
+msgid "CARAMNESIS_CAR_PROFILE"
+msgstr "CarAmnesis car profile"
+
+msgid "CARAMNESIS_CAR_EVENT"
+msgstr "CarAmnesis post"
+
+msgid "SHARE"
+msgstr "Share"
+
+msgid "VIN_NOT_FOUND"
+msgstr "VIN not found"
+
+msgid "ENTER_CAR_DATA_MANUALLY"
+msgstr "Enter car data"
+
+msgid "VIN_NOT_FOUND_ENTER_CAR_DATA_MANUALLY"
+msgstr "VIN not found, please enter car data manually"
+
+msgid "CHECKING_VIN_DATA"
+msgstr "Checking IVN data"
+
+msgid "RETEST_VIN"
+msgstr "Recheck VIN"
+
+msgid "PREVIOUS_ODOMETER"
+msgstr "Previous odometer reading"
+
+msgid "ODOMETER_ROLL_BACK_WARNING"
+msgstr ""
+"The value you entered is lower than the last recorder value. Are you sure "
+"this is correct?"
+
+msgid "MAKE_EVENT_PRIVATE"
+msgstr "Make this event private"
+
+msgid "MAKE_EVENT_PUBLIC"
+msgstr "Make this event public"

@@ -1,107 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapters>
-  <chapter>
-    <name>REGISTRATION_DATA</name>
-      <entry>
-        <title>FIRST_REG_DATE</title>
-        <units></units>
-        <valuetype>TIMESTAMP</valuetype>
+  <version>1</version>
+  <chapter name="REGISTRATION_DATA">
+      <entry name="FIRST_REG_DATE" type="DATE">
         <value></value>
-        <display></display>
       </entry>
-      <entry>
-        <title>FIRST_REG_THIS_COUNTRY_DATE</title>
-        <units></units>
-        <valuetype>TIMESTAMP</valuetype>
+      <entry name="FIRST_REG_THIS_COUNTRY_DATE" type="DATE">
         <value></value>
-        <display></display>
       </entry>
-      <entry>
-        <title>REG_DATE_THIS_OWNER</title>
-        <units></units>
-        <valuetype>TIMESTAMP</valuetype>
+      <entry name="REG_DATE_THIS_OWNER"  type="DATE">
         <value></value>
-        <display></display>
       </entry>
-      <entry>
-        <title>REG_DOC_NUMBER</title>
-        <units></units>
-        <valuetype>TEXT</valuetype>
+      <entry name="REG_DOC_NUMBER" type="TEXT">
         <value></value>
-        <display></display>
       </entry>
-      <entry>
-        <title>UNLADEN_WEIGHT</title>
-        <units>
-          <unit>kg</unit>
-          <unit>lbs</unit>
-        </units>
-        <valuetype>INT</valuetype>
+      <entry name="UNLADEN_WEIGHT" type="WEIGHT">
         <value></value>
-        <display></display>
+        <unit></unit>
       </entry>
-      <entry>
-        <title>GROSS_WEIGHT</title>
-        <units>
-          <unit>kg</unit>
-          <unit>lbs</unit>
-        </units>
-        <valuetype>INT</valuetype>
+      <entry name="GROSS_WEIGHT" type="WEIGHT">
         <value></value>
-        <display></display>
+        <unit></unit>
       </entry>
-      <entry>
-        <title>COMBINED_WEIGHT</title>
-        <units>
-          <unit>kg</unit>
-          <unit>lbs</unit>
-        </units>
-        <valuetype>INT</valuetype>
+      <entry name="COMBINED_WEIGHT" type="WEIGHT">
         <value></value>
-        <display></display>
+        <unit></unit>
       </entry>
-      <entry>
-        <title>SEATED_PLACES</title>
-        <units>
-        </units>
-        <valuetype>INT</valuetype>
+      <entry name="SEATED_PLACES" type="INT">
         <value></value>
-        <display></display>
+      </entry>
+      <entry name="PICTURES" type="HIDDEN">
+        <value></value>
       </entry>
   </chapter>
-  <chapter>
-    <name>TECHNICAL_DATA</name>
-    <entry>
-        <title>ENGINE_POWER</title>
-        <units>
-          <unit>HP</unit>
-          <unit>kW</unit>
-        </units>
-        <valuetype>INT</valuetype>
+  <chapter name = "TECHNICAL_DATA">
+    <entry name="ENGINE_POWER" type="POWER">
         <value></value>
-        <display>if this unit HP this.value.= ((HP * 0.7457) kw) else this.value.= ((kW * 1.34102) HP)</display>
+        <unit></unit>
       </entry>
-      <entry>
-        <title>ENGINE_DISPLACEMENT</title>
-        <units>
-          <unit>cm3</unit>
-          <unit>cu</unit>
-        </units>
-        <valuetype>INT</valuetype>
+      <entry name="ENGINE_DISPLACEMENT" type="VOLUME">
+        <unit></unit>
         <value></value>
-        <display></display>
       </entry>
-      <entry>
-        <title>ENGINE_CODE</title>
-        <units></units>
-        <valuetype>TEXT</valuetype>
+      <entry name="ENGINE_CODE" type="TEXT">
         <value></value>
-        <display></display>
       </entry>
-      <entry>
-        <title>FUEL_TYPE</title>
-        <units></units>
-        <valuetype>CHOICE</valuetype>
+      <entry name="FUEL_TYPE" type="CHOICE">
           <item>GAS</item>
           <item>DIESEL</item>
           <item>HYBRID_GAS</item>
@@ -112,174 +56,114 @@
           <item>LPG_GAS</item>
           <item>OTHER</item>
         <value></value>
-        <display></display>
       </entry>
-      <entry>
-        <title>TRANSMISSION_TYPE</title>
-        <units></units>
-        <valuetype>CHOICE</valuetype>
+      <entry name="TRANSMISSION_TYPE" type="CHOICE">
           <item>MANUAL_TRANSMISSION</item>
           <item>TORQUE_CONVERTER_AUTO</item>
           <item>ROBOTIZED_AUTO</item>
           <item>SEMI_AUTO</item>
           <item>OTHER</item>
         <value></value>
-        <display></display>
       </entry>
-      <entry>
-        <title>TRANSMISSION_NUMBER_GEARS</title>
-        <units>
-        </units>
-        <valuetype>INT</valuetype>
+      <entry name="TRANSMISSION_NUMBER_GEARS" type="INT">
         <value></value>
-        <display></display>
+      </entry>
+      <entry name="PICTURES" type="HIDDEN">
+        <value></value>
       </entry>
   </chapter>
-  <chapter>
-    <name>BODYWORK_DATA</name>
-    <entry>
-      <title>BODY_COLOR_NAME</title>
-      <valuetype>TEXT</valuetype>
+  <chapter name="BODYWORK_DATA">
+    <entry name="BODY_COLOR_NAME" type="TEXT">
       <value></value>
     </entry>
-    <entry>
-      <title>BODY_COLOR_CODE</title>
-      <valuetype>TEXT</valuetype>
+    <entry name="BODY_COLOR_CODE" type="TEXT">
       <value></value>
     </entry>
-    <entry>
-      <title>TRIM_COLOR_NAME</title>
-      <valuetype>TEXT</valuetype>
+    <entry name="TRIM_COLOR_NAME" type="TEXT">
       <value></value>
     </entry>
-    <entry>
-      <title>TRIM_COLOR_CODE</title>
-      <valuetype>TEXT</valuetype>
+    <entry name="TRIM_COLOR_CODE" type="TEXT">
       <value></value>
     </entry>
-    <entry>
-        <title>DOOR_COUNT</title>
-        <units>
-        </units>
-        <valuetype>INT</valuetype>
+    <entry name="DOOR_COUNT" type="INT">
         <value></value>
-        <display></display>
     </entry>
-    <entry>
-        <title>WINDSHIELD_WIPERS</title>
-        <units>
-        </units>
-        <valuetype>TEXT</valuetype>
+    <entry name="WINDSHIELD_WIPERS" type="TEXT">
+    </entry>
+    <entry name="PICTURES" type="HIDDEN">
         <value></value>
-        <display></display>
-    </entry>
+      </entry>
   </chapter>
-  <chapter>
-    <name>WHEEL_RIM_DATA</name>
-    <multiple>yes</multiple>
-    <entry>
-        <title>RIM_DIAMETER</title>
-        <units>
-          <unit>in</unit>
-          <unit>mm</unit>
-        </units>
-        <valuetype>INT</valuetype>
+  <chapter name="WHEEL_RIM_DATA" type="MULTIPLE">
+    <number>1</number>
+    <entry name="RIM_DIAMETER" type="INCHES">
+        <unit>in</unit>
         <value></value>
-        <display></display>
     </entry>
-    <entry>
-        <title>RIM_WIDTH</title>
-        <units>
-        </units>
-        <valuetype>FLOAT</valuetype>
+    <entry name="RIM_WIDTH" type="INCHES">
+        <unit>in</unit>
         <value></value>
-        <display></display>
     </entry>
-        <entry>
-        <title>RIM_OFFSET</title>
-        <units>
-          <unit>mm</unit>
-        </units>
-        <valuetype>FLOAT</valuetype>
+    <entry name="RIM_OFFSET" type="MILLIMETERS">
+        <unit>mm</unit>
         <value></value>
-        <display></display>
     </entry>
-    <entry>
-        <title>RIM_CENTRE_BORE</title>
-        <units>
-          <unit>mm</unit>
-        </units>
-        <valuetype>FLOAT</valuetype>
+    <entry name="RIM_CENTRE_BORE" type="MILLIMETERS">
+        <unit>mm</unit>
         <value></value>
-        <display></display>
     </entry>
-    <entry>
-        <title>RIM_BOLT_NO</title>
-        <units>
-        </units>
-        <valuetype>INT</valuetype>
+    <entry name="RIM_BOLT_NO" type="INT">
         <value></value>
-        <display></display>
     </entry>
-    <entry>
-        <title>RIM_BOLT_CIRCLE</title>
-        <units>
-          <unit>mm</unit>
-        </units>
-        <valuetype>FLOAT</valuetype>
+    <entry name="RIM_BOLT_CIRCLE" type="MILLIMETERS">
+        <unit>mm</unit>
         <value></value>
-        <display></display>
     </entry>
+    <entry name="PICTURES" type="HIDDEN">
+        <value></value>
+      </entry>
   </chapter>
-  <chapter>
-    <name>TYRE_DATA</name>
-    <multiple>yes</multiple>
-    <entry>
-        <title>TYRE_TYPE</title>
-        <units>
-        </units>
-        <valuetype>TEXT</valuetype>
+  <chapter name="TYRE_DATA" type="MULTIPLE">
+    <number>1</number>
+    <entry name="TYRE_TYPE" type="TEXT">
         <value></value>
-        <display></display>
     </entry>
-    <entry>
-        <title>TYRE_SEASON</title>
-        <units>
-        </units>
-        <valuetype>CHOICE</valuetype>
+    <entry name="TYRE_SEASON" type="CHOICE">
           <item>SUMMER</item>
           <item>WINTER</item>
           <item>ALL_SEASON</item>
           <item>OTHER</item>
         <value></value>
-        <display></display>
     </entry>
-    <entry>
-        <title>RIM_DIAMETER</title>
-        <units>
-          <unit>in</unit>
-          <unit>mm</unit>
-        </units>
-        <valuetype>INT</valuetype>
+     <entry name="RIM_DIAMETER" type="INCHES">
+        <unit>in</unit>
         <value></value>
-        <display></display>
     </entry>
-        <entry>
-        <title>TYRE_WIDTH</title>
-        <units>
-          <unit>mm</unit>
-        </units>
-        <valuetype>INT</valuetype>
+    <entry name="SECTION_WIDTH" type="MILLIMETERS">
+        <unit>mm</unit>
         <value></value>
-        <display></display>
     </entry>
-    <entry>
-        <title>TYRE_HEIGHT</title>
-        <units>
-        </units>
-        <valuetype>INT</valuetype>
+    <entry name="SIDEWALL_RATIO" type="INT">
         <value></value>
-        <display></display>
     </entry>
+    <entry name="PICTURES" type="HIDDEN">
+        <value></value>
+      </entry>
+  </chapter>
+  <chapter name="MISC_DATA">
+    <entry name="RADIO_CODE" type="TEXT">
+        <value></value>
+    </entry>
+    <entry name="PICTURES" type="HIDDEN">
+        <value></value>
+      </entry>
+  </chapter>
+  <chapter name="CUSTOM_DATA">
+    <entry name="NEW_ENTRY" type="TEXT">
+        <value></value>
+    </entry>
+    <entry name="PICTURES" type="HIDDEN">
+        <value></value>
+      </entry>
   </chapter>
 </chapters>

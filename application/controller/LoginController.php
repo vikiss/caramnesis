@@ -25,7 +25,11 @@ class LoginController extends Controller
         if (LoginModel::isUserLoggedIn()) {
             Redirect::home();
         } else {
-            $data = array('redirect' => Request::get('redirect') ? Request::get('redirect') : NULL);
+            $data = array('redirect' => Request::get('redirect') ? Request::get('redirect') : NULL,
+                          'languages' => Config::get('AVAILABLE_LOCALES'),
+                'current_language' => UserModel::getCurrentLanguage(),
+                'language_names' => Config::get('LANGUAGE_NAMES')
+                          );
             $this->View->render('login/index', $data);
         }
     }
@@ -432,4 +436,11 @@ class LoginController extends Controller
     {
         CaptchaModel::generateAndShowCaptcha();
     }
+    
+    public function cbox($field, $state) //send_sms cbchecked 0 1
+    {
+         $response = UserModel::setCbox($field, $state, Session::get('user_uuid'));
+       $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('response' => $response, 'type' => 'truefalseicon'));
+    }
+    
 }

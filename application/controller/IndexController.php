@@ -35,7 +35,7 @@ class IndexController extends Controller
 					} 
           
           } else {
-    $this->View->render('index/welcome');
+    Redirect::to('login/index');
     }
 				
 

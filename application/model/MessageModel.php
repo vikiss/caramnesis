@@ -50,7 +50,7 @@ class MessageModel
     //send email notification if recipient is not currently online (last seen more than 4 min old)
     $last_seen = UserModel::getLastSeen($to);
     if ($last_seen < (time()+240)) {
-        $subject = _('NEW_MESSAGE_NOTIFICATION_FROM').' '.UserModel::getUserNameByUUid($from);
+        $subject = sprintf(_('NEW_MESSAGE_NOTIFICATION_FROM_%s'), UserModel::getUserNameByUUid($from));
         $body = $message.PHP_EOL._('NOTIFICATION_READ_AND_REPLY_LINK').' <a href="https://caramnesis.com/message">"https://caramnesis.com/message"</a>';
         NotificationModel::queueNotification ($to, $subject, $body);
     }
@@ -165,6 +165,7 @@ class MessageModel
         $query->execute(array(':user_uuid' => $uuid));
         $count = $query->rowCount();
         if ($count == 1) {
+            Session::set('unread_messages', intval(Session::get('unread_messages')) + 1);
             return true;
         }
         return false;

@@ -19,7 +19,7 @@ body { margin: 0; padding: 0 }
 img { max-width: 100% }
 svg { max-height: 100% }
 
-body {    width: calc(100vw - 16px); } /* avoids shifting the page horizontally when vertical scrollbar appears (buvo 34px)*/
+body {    width: calc(100vw - 32px); } /* avoids shifting the page horizontally when vertical scrollbar appears (buvo 34px)*/
 
 input,
 select,
@@ -54,6 +54,12 @@ input[type=week],
   padding: 1.25rem 0.5rem 0.5rem 0.5rem;
   vertical-align: middle;
   -webkit-appearance: none;
+}
+
+input[type=checkbox]{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
 }
 
 select {
@@ -116,7 +122,7 @@ dl, ol, ul {
   margin-bottom: 1rem;
 }
 
-pre, code, samp {
+pre, code, samp, .mono {
   font-family: 'Source Code Pro', Consolas, monospace;
   font-size: inherit;
 }
@@ -140,13 +146,13 @@ body {
 }
 
 a {
-  color: #3b5998;
+  color: #111;
   text-decoration: none;
 }
 
-a:hover {
+/*a:hover {
   text-decoration: underline;
-}
+}*/
 
 pre, code {
   background-color: transparent;
@@ -160,8 +166,8 @@ hr {
   border-bottom-color: rgba(0,0,0,.125);
 }
 
-.small {font-size: .62rem; line-height: .62rem; }
-.smallish {font-size: .72rem; line-height: .72rem; }
+.small {font-size: .62rem; line-height: .82rem; }
+.smallish {font-size: .72rem; line-height: .88rem; }
 
 .small-field {
 	height: auto !important;
@@ -174,6 +180,8 @@ hr {
   border-color: rgba(0,0,0,.125);
   border-radius: 3px;
 }
+
+.stealthfield {border: 1px solid transparent; background-color: #efefef;}
 
 .field:focus,
 .field.is-focused {
@@ -687,6 +695,8 @@ hr {
   .md-col-12 {
     width: 100%;
   }
+  
+  .carcol {    padding-right: 2em;}
 
 }
 @media (min-width: 64em) {
@@ -895,14 +905,14 @@ hr {
 
 
 
-#container #filelist li{
+ #filelist li{
 	display: inline-block;
 	position:relative;
   width: 120px;
-  margin-right: 20px;
+  margin: 10px;
 }
 
-#container .progressHolder{
+ .progressHolder{
 	position: absolute;
 	background-color:#CC9;
 	height: 8px;
@@ -911,7 +921,7 @@ hr {
 	bottom: 0;
 }
 
-#container .progress{
+.progress{
 	background-color:#A0A06B;
 	position: absolute;
 	height:100%;
@@ -948,6 +958,13 @@ hr {
 	Event type tags
 --------------------------*/
 
+.tags li {
+	font-size: .72rem; line-height: .72rem; float:left; margin-right: 1rem; background:#CC9;
+	color:#fff; padding: .15rem
+	}
+  .brdrw {border-right: 1px solid #fff;}
+  .tags li span {padding: .5rem}
+/*
 .tags li, .tags a, .tags span {
 	float:left;
 	height:24px;
@@ -997,46 +1014,12 @@ hr {
 	background:#fff;
 	}
   
-/*-------------------------
-	modal---not in use, delete eventually
---------------------------*/
+*/
 
-/* the overlayed element */
-.apple_overlay {
+
+
  
-    /* initially overlay is hidden */
-    display:none;
- 
-    /* growing background image */
-  /*  background-image:url(/img/overlay/white.png); */
- 
-    /*
-      width after the growing animation finishes
-      height is automatically calculated
-      */
-    width:640px;
- 
-    /* some padding to layout nested elements nicely  */
-    padding:35px;
- 
-    /* a little styling */
-    font-size:11px;
-}
- 
-/* default close button positioned on upper right corner */
-.apple_overlay .close {
-    background-image:url(/img/overlay/close.png);
-    position:absolute; right:0px; top:0px;
-    cursor:pointer;
-    height:35px;
-    width:35px;
-}  
-  
-    #overlay {
-    background-image:url(/img/empty.gif);
-    color:#efefef;
-    height:450px;
-  }
+
   
  /*
  misc
@@ -1049,8 +1032,9 @@ hr {
   
   div.contentWrap img {}
   
-  #dropbox {position: relative; width: 120px; height: 80px; border: #CC9 dashed 3px;  }
+  /*#dropbox {position: relative; width: 120px; height: 80px; border: #CC9 dashed 3px; display: none;  }*/
   .square {width: 120px; height: 120px; }
+  .midsquare {margin-top: 50px;}
   
   .striped tr:nth-child(even) { background-color: rgba(204, 204, 153, 0.37) }
   .striped tr:nth-child(odd) { background-color: rgba(204, 204, 153, 0.17) }
@@ -1074,10 +1058,11 @@ hr {
 .vlist li label {text-align: right;}
 
 .pointer { cursor: pointer;}
+.move-cursor {cursor: move;}
 .hilite  { background-color: #CC9 !important; }
 
-#msgcount div {padding: 0 4px; border: 1px solid #fff; }
-#msgcount a {padding-right: .75rem;}
+#msgcount div, #reminderCount div {padding: 0 4px; border: 1px solid #fff; }
+#msgcount a, #reminderCount a {padding-right: .75rem;}
 
 .msgstatus-Q td {font-weight: bold;}
 .crop { object-fit: cover; }
@@ -1087,6 +1072,7 @@ hr {
 .textfield  {min-height: 50vh;}
 .pic120width {width: 120px; min-height: 120px; background-size: cover; background-repeat: no-repeat; background-position: center;}
 .pic120height {height: 120px;}
+.pic480width {max-width: 480px; min-height: 240px; background-size: cover; background-repeat: no-repeat; background-position: center;}
 .red-triangle {width: 0;
 height: 0;
 border-style: solid;
@@ -1110,18 +1096,36 @@ border-color: transparent rgba(255, 64, 54, 0.67) transparent transparent;
 .abscenter {top: 48%; left: 48%;}
 .fs {width: 100%; height: 100%; position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
 #fsimg {text-align: center;}
-#fsimg img {max-height: 100%;}
+#fsimg img {max-height: 100vh;}
 #fsclose {width: 8vw; border-bottom-left-radius: 15px;}
 #fspsnext, #fspsprev {bottom: 25%;}
 #fsnext, #fsprev {top: 40%;}
 .right-arrow {border-top-left-radius: 15px; border-bottom-left-radius: 15px;}
 .left-arrow {border-top-right-radius: 15px; border-bottom-right-radius: 15px;}
-#fspicstrip {height: 94px; overflow: hidden;}
+#fspicstrip {height: 94px; overflow: hidden; display: none;}
+#fspscont {height: 94px;}
 .top-48 {top: 48%;}
 .ui-tooltip {
     background-color: #CC9 !important;
     font-size: .78rem !important; 
   }
+.ui-widget {font-size: inherit;}
 .pic120margin {margin-left: 140px;}
 .lblgrp {position: relative;}
 .lblgrp label {position:absolute; color: #82825c; padding: .5rem; font-size: .72rem; line-height: .72rem;}
+.ui-widget-content {
+    border: 1px solid #CC9;
+    background-color: rgba(204, 204, 153, 0.17);
+ }
+ .ui-datepicker .ui-datepicker-title select {
+    font-size: 0.81em !important;
+}
+
+.mw480 {max-width: 480px;}
+.h96 {height: 7rem;}
+.no-border, .no-border:focus {border: none; outline: none;}
+.w90 {    width: 90%;}
+.ui-accordion-content {background-color: transparent !important; }
+.odo {padding: 1px; margin: 1px;}
+.fheight {height: 3em}
+.event.public-event {border-left: 6px solid #cddc39; background-color: rgba(205, 220, 57, 0.36); margin-left: -5px; }

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Caramnesis\n"
 "POT-Creation-Date: 2016-02-06 22:36+0200\n"
-"PO-Revision-Date: 2016-08-15 22:01+0200\n"
+"PO-Revision-Date: 2016-12-15 01:26+0200\n"
 "Last-Translator: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language-Team: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language: lt_LT\n"
@@ -306,7 +306,7 @@ msgid "MENU_LOGOUT"
 msgstr "Išeiti"
 
 msgid "MENU_ABOUT_CARAMNESIS"
-msgstr "Apie CARAMNESIS"
+msgstr "Apie CarAmnesis"
 
 msgid "PWCHANGE_REQUEST"
 msgstr "Slaptažodžio atnaujinimas"
@@ -580,7 +580,7 @@ msgid "USER_CREATION_TIMESTAMP"
 msgstr "Prisiregistravimo data"
 
 msgid "USER_LAST_LOGIN_TIMESTAMP"
-msgstr "paskutinis prisijungimas"
+msgstr "Paskutinis prisijungimas"
 
 msgid "USER_LANGUAGE"
 msgstr "Kalba"
@@ -1420,19 +1420,23 @@ msgid "MESSAGE_QUOTED"
 msgstr "-----Gautas pranešimas-----"
 
 msgid "MAKE_CAR_PRIVATE"
-msgstr "Privatus: Automobilis viešai nematomas"
+msgstr "Padaryti automobilį nematomu viešai"
 
 msgid "MAKE_CAR_PUBLIC"
-msgstr "Viešas: Automobilis viešai matomas"
+msgstr "Padaryti automobilį viešai matomu"
 
 msgid "PUBLIC_TAGS"
 msgstr "Automobilio privatumo nuostatos"
 
 msgid "PUBLIC_TAGS_INFO_PRIVATE"
-msgstr "Automobilis matomas tik jums ir tiems, kam patys suteikėte prieigą."
+msgstr ""
+"Automobilis gali būti matomas tik jums ir tiems, kam patys suteikėte prieigą."
 
 msgid "PUBLIC_TAGS_INFO_PUBLIC"
-msgstr "Automobilis gali būti viešai randamas ir matomas."
+msgstr ""
+"Automobilio profilis gali būti viešai matomas ir randamas. Įvykiai, kurie "
+"nėra pažymėti viešais, ir automobilio identifikaciniai duomenys, nėra viešai "
+"matomi."
 
 msgid "TAG_PUBLIC"
 msgstr "Viešas įrašas"
@@ -1538,19 +1542,492 @@ msgid "FEEDBACK_LANGUAGE_CHANGE_SUCCESSFUL"
 msgstr "Kalba sėkmingai pakeista"
 
 msgid "EMAIL_VERIFICATION_FROM_NAME"
-msgstr "CARAMNESIS registracijos patvirtinimas"
+msgstr "CarAmnesis registracijos patvirtinimas"
 
 msgid "EMAIL_PASSWORD_RESET_CONTENT"
 msgstr "Slaptažodžio keitimo nuoroda: "
 
 msgid "EMAIL_PASSWORD_RESET_FROM_NAME"
-msgstr "CARAMNESIS registracija"
+msgstr "CarAmnesis registracija"
 
 msgid "EMAIL_PASSWORD_RESET_SUBJECT"
-msgstr "CARAMNESIS slaptažodžio keitimas"
+msgstr "CarAmnesis slaptažodžio keitimas"
 
 msgid "EMAIL_VERIFICATION_SUBJECT"
-msgstr "CARAMNESIS paskyros aktyvavimas"
+msgstr "CarAmnesis paskyros aktyvavimas"
 
 msgid "EMAIL_VERIFICATION_CONTENT"
 msgstr "Paskyros aktyvavimo nuoroda: "
+
+msgid "PICK_A_MAKE_AND_YEAR_FIRST"
+msgstr "Pasirinkite gamintoją ir metus"
+
+msgid "PICK_A_MAKE_AND_MODEL_FIRST"
+msgstr "Pasirinkite gamintoją ir modelį"
+
+msgid "NEW_MESSAGE_NOTIFICATION_FROM_%s"
+msgstr "CarAmnesis.com gautas naujas pranešimas nuo %s"
+
+msgid "NOTIFICATION_READ_AND_REPLY_LINK"
+msgstr "Atsakyti į šią žinutę per CarAmnesis.com: "
+
+msgid "CAR_PICTURES"
+msgstr "Automobilio nuotraukos"
+
+msgid "404 - Page not found"
+msgstr "Puslapis nerastas (404)"
+
+msgid "This page does not exist."
+msgstr "Tokio puslapio nėra"
+
+msgid "FEEDBACK_REMINDER_CREATION_FAILED"
+msgstr "Nepavyko sukurti priminimo"
+
+msgid "'REMINDER FOR %s SET'"
+msgstr "Nustatytas priminimas automobiliui %s"
+
+msgid "%s_REMINDER_FOR_%s"
+msgstr "%s priminimas automobiliui %s"
+
+msgid "REMINDERS"
+msgstr "Priminimai"
+
+msgid "EMAIL_NOTIFICATION_FROM_NAME"
+msgstr "CarAmnesis.com pranešimas"
+
+msgid "CAR_NAME"
+msgstr "Automobilio vardas"
+
+msgid "REMINDER_TIME"
+msgstr "Priminimo laikas"
+
+msgid "REMINDER_CONTENT"
+msgstr "Priminimo turinys"
+
+msgid "ALL_REMINDERS"
+msgstr "Visi priminimai"
+
+msgid "TODAY"
+msgstr "Šiandien"
+
+msgid "TOMORROW"
+msgstr "Rytoj"
+
+msgid "YESTERDAY"
+msgstr "Vakar"
+
+msgid "DISMISS_REMINDER"
+msgstr "Išjungti priminimą"
+
+msgid "POSTPONE_REMINDER"
+msgstr "Atidėti priminimą"
+
+msgid "REMINDER"
+msgstr "Priminimas"
+
+msgid "DELETE_EVENT"
+msgstr "Ištrinti įrašą"
+
+msgid "SET_REMINDER"
+msgstr "Nustatyti priminimą"
+
+msgid "CAR_PLATES_OR_VIN"
+msgstr "Valstybinis numeris arba kėbulo numeris (VIN)"
+
+msgid "REQUEST_ACCESS_FROM_CAR_OWNER"
+msgstr "Klausti automobilio savininko patvirtinimo"
+
+msgid "SEND_REQUEST_TO_OWNER_?"
+msgstr "Siųsti užklausą automobilio savininkui?"
+
+msgid "OWNER_IS_LOCATED_%s_%s_AWAY"
+msgstr "Savininkas gal būti maždaug už %s%s"
+
+msgid "MOVE_PICTURE_TO_SORT"
+msgstr "Keisti eilės tvarką tempiant"
+
+msgid "TODO_LIST_HEADER"
+msgstr "Darytini dalykai"
+
+msgid "ADD_NEW_TODO_LIST_ITEM"
+msgstr "Pridėti darytiną dalyką"
+
+msgid "MARK_THIS_AS_DONE"
+msgstr "Ši dalykas padarytas"
+
+msgid "PUT_THIS_ON_TODO_LIST"
+msgstr "Pridėti prie darytinų dalykų"
+
+msgid "ENTER_CURRENT_ODO"
+msgstr "Įrašyti dabartinius odometro parodymus"
+
+msgid "%s_EXPIRES_ON_%s"
+msgstr "%s baigiasi %s"
+
+msgid "DELETE_REMINDER"
+msgstr "Ištrinti priminimą"
+
+msgid "REMINDER_DELETED"
+msgstr "Priminimas ištrintas"
+
+msgid "REMINDER_DELETE_FAILED"
+msgstr "Priminimo trynimas nepavyko"
+
+msgid "SEND"
+msgstr "Siųsti"
+
+msgid "NEW"
+msgstr "Naujas"
+
+msgid "ADD_NEW_%s"
+msgstr "Pridėti naują %s"
+
+msgid "NEW_ENTRY_VALUE"
+msgstr "Naujo įrašo turinys"
+
+msgid "NEW_ENTRY_NAME"
+msgstr "Naujo įrašo pavadinimas"
+
+msgid "NEW_RECORD_BLURB"
+msgstr ""
+"Nuotraukos, serviso įrašai, pastabos, darytini dalykai ar bet koks įvykis, "
+"susijęs su automobiliu"
+
+msgid "UPLOAD_IMAGES_OR_TAKE_A_PICTURE"
+msgstr "Įkelti nuotraukas ar nufotografuoti"
+
+msgid "ADD_EVENT_TYPES"
+msgstr "Pridėti įrašo žymą"
+
+msgid "IN_A_WEEK"
+msgstr "Po savaitės"
+
+msgid "IN_A_MONTH"
+msgstr "Po mėnesio"
+
+msgid "IN_A_YEAR"
+msgstr "Po metų"
+
+msgid "SMS_NOTIFICATION_FROM_NAME"
+msgstr "SMS žinutė nuo"
+
+msgid "FEEDBACK_EXPIRY_EDIT_FAILED"
+msgstr "Galiojimo termino redagavimas nepavyko"
+
+msgid "FEEDBACK_EXPIRY_EDIT_SUCCESSFUL"
+msgstr "Galiojimo terminai atnaujinti"
+
+msgid "INSURANCE"
+msgstr "Draudimas"
+
+msgid "INSPECTION"
+msgstr "Apžiūra"
+
+msgid "TAXES"
+msgstr "Mokesčiai"
+
+msgid "OIL_CHANGE"
+msgstr "Tepalų keitimas"
+
+msgid "TIMING_BELT"
+msgstr "Paskirstymo dirželis"
+
+msgid "VALID_UNTIL"
+msgstr "Galioja iki"
+
+msgid "DESCRIPTION"
+msgstr "Aprašymas, pastabos"
+
+msgid "POLICY_NO"
+msgstr "Poliso Nr."
+
+msgid "SHOW"
+msgstr "Rodyti"
+
+msgid "YES"
+msgstr "Taip"
+
+msgid "NO"
+msgstr "Ne"
+
+msgid "ODOMETER"
+msgstr "Kilometražas"
+
+msgid "USER_PHONE"
+msgstr "Telefonas"
+
+msgid "REGISTRATION_DATA"
+msgstr "Registracijos duomenys"
+
+msgid "TECHNICAL_DATA"
+msgstr "Techniniai duomenys"
+
+msgid "BODYWORK_DATA"
+msgstr "Kėbulo duomenys"
+
+msgid "MISC_DATA"
+msgstr "Įvairūs duomenys"
+
+msgid "CUSTOM_DATA"
+msgstr "Savo duomenys"
+
+msgid "TYRE_DATA"
+msgstr "Padangų duomenys"
+
+msgid "WHEEL_RIM_DATA"
+msgstr "Ratų duomenys"
+
+msgid "FIRST_REG_DATE"
+msgstr "Pirmosios registracijos data"
+
+msgid "FIRST_REG_THIS_COUNTRY_DATE"
+msgstr "Pirmosios registracijos dabartinėje šalyje data"
+
+msgid "REG_DATE_THIS_OWNER"
+msgstr "Registracijos šiam savininkui data"
+
+msgid "REG_DOC_NUMBER"
+msgstr "Registracijos dokumento Nr"
+
+msgid "UNLADEN_WEIGHT"
+msgstr "Masė be krovinio"
+
+msgid "GROSS_WEIGHT"
+msgstr "Leidžiama maksimali masė"
+
+msgid "COMBINED_WEIGHT"
+msgstr "Leidžiama maksimali masė su priekaba"
+
+msgid "SEATED_PLACES"
+msgstr "Sėdimos vietos"
+
+msgid "ENGINE_POWER"
+msgstr "Variklio galia"
+
+msgid "ENGINE_DISPLACEMENT"
+msgstr "Variklio darbinis tūris"
+
+msgid "ENGINE_CODE"
+msgstr "Variklio kodas"
+
+msgid "FUEL_TYPE"
+msgstr "Kuro rūšis"
+
+msgid "TRANSMISSION_TYPE"
+msgstr "Transmisijos rūšis"
+
+msgid "TRANSMISSION_NUMBER_GEARS"
+msgstr "Pavarų skaičius"
+
+msgid "GAS"
+msgstr "Benzinas"
+
+msgid "DIESEL"
+msgstr "Dyzelis"
+
+msgid "HYBRID_GAS"
+msgstr "Benzininis hibridas"
+
+msgid "HYBRID_DIESEL"
+msgstr "Dyzelinis hibridas"
+
+msgid "ELECTRIC"
+msgstr "Elektra"
+
+msgid "LPG"
+msgstr "LPG dujos"
+
+msgid "CNG"
+msgstr "CNG dujos"
+
+msgid "LPG_GAS"
+msgstr "Benzinas ir LPG dujos"
+
+msgid "OTHER"
+msgstr "Kita"
+
+msgid "MANUAL_TRANSMISSION"
+msgstr "Mechaninė transmisija"
+
+msgid "TORQUE_CONVERTER_AUTO"
+msgstr "Klasikinė automatinė transmisija"
+
+msgid "ROBOTIZED_AUTO"
+msgstr "Robotizuota automatinė transmisija"
+
+msgid "SEMI_AUTO"
+msgstr "Pusiau automatinė transmisija"
+
+msgid "SUMMER"
+msgstr "Vasarinės"
+
+msgid "WINTER"
+msgstr "Žieminės"
+
+msgid "ALL_SEASON"
+msgstr "Universalios"
+
+msgid "ENTER_REMINDER_TEXT"
+msgstr "Priminimo tekstas"
+
+msgid "BODY_COLOR_NAME"
+msgstr "Kėbulo spalvos pavadinimas"
+
+msgid "BODY_COLOR_CODE"
+msgstr "Kėbulo spalvos kodas"
+
+msgid "TRIM_COLOR_NAME"
+msgstr "Apdailos spalvos pavadinimas"
+
+msgid "TRIM_COLOR_CODE"
+msgstr "Apdailos spalvos kodas"
+
+msgid "DOOR_COUNT"
+msgstr "Durų skaičius"
+
+msgid "WINDSHIELD_WIPERS"
+msgstr "Valytuvai"
+
+msgid "RIM_DIAMETER"
+msgstr "Ratlankio skersmuo"
+
+msgid "RIM_WIDTH"
+msgstr "Ratlankio plotis (J)"
+
+msgid "RIM_OFFSET"
+msgstr "Ratlankio tvirtinimo plokštumos atstumas (ET)"
+
+msgid "RIM_CENTRE_BORE"
+msgstr "Centrinės skylės skersmuo"
+
+msgid "RIM_BOLT_NO"
+msgstr "Tvirtinimo varžtų/veržlių skaičius"
+
+msgid "RIM_BOLT_CIRCLE"
+msgstr "Tvirtinimo taškų apskritimo skersmuo (PCD)"
+
+msgid "TYRE_TYPE"
+msgstr "Padangos tipas, modelis"
+
+msgid "TYRE_SEASON"
+msgstr "Sezonas"
+
+msgid "SECTION_WIDTH"
+msgstr "Plotis"
+
+msgid "SIDEWALL_RATIO"
+msgstr "Aukščio santykis"
+
+msgid "RADIO_CODE"
+msgstr "Radijo kodas"
+
+msgid "ENABLE_SMS_NOTIFICATIONS"
+msgstr "Gauti SMS pranešimus"
+
+msgid "ENABLE_EMAIL_NOTIFICATIONS"
+msgstr "Gauti pranešimus el. paštu"
+
+msgid "TRANSFER_YOUR_CAR_TO_USER"
+msgstr "Perduoti automobilį vartotojui"
+
+msgid "TRANSFER"
+msgstr "Perduoti"
+
+msgid ""
+"TRANSFER_YOUR_CAR_TO_USER_WARNING : Once recipient accepts, you will not be "
+"able to undo this"
+msgstr ""
+"Jei gavėjas sutiks priimti, šio automobilio profilis bus nebepasiekiamas, "
+"nebent gavėjas suteiktų leidimą."
+
+msgid "NEW_OWNER_NAME_OR_EMAIL username or email"
+msgstr "Naujojo savininko vartotojo vardas ar el. pašto adresas"
+
+msgid "TRANSFER_YOUR_CAR_TO_USERNAME_%"
+msgstr "Jūsų automobilis perduodamas vartotojui %s"
+
+msgid "TRANSFER_YOUR_CAR_TO_USER_FINAL_WARNING"
+msgstr ""
+"Jei vartotojas sutiks priimti, prarasite šio automobilio profilį ir prieigą "
+"prie jo."
+
+msgid "OIL"
+msgstr "Tepalai"
+
+msgid "FEEDBACK_CAR_TRANSFER_FAILED"
+msgstr "Automobilio perdavimas nepavyko"
+
+msgid "FEEDBACK_CAR_TRANSFER_SUCCESS"
+msgstr "Automobilis sėkmingai perduotas"
+
+msgid "CAR_TRANSFER_REQUEST_SEND_FAILED"
+msgstr "Nepavyko išsiųsti automobilio perdavimo užklausos"
+
+msgid "CAR_TRANSFER_ACCEPT_REQUEST"
+msgstr "Priimkite ar atmeskite naujo automobilio perdavimą"
+
+msgid "IF_YOU_ACCEPT_CAR_%s_FROM_USER_%s_FOLLOW_%s"
+msgstr ""
+"Jums perduotas automobilis %s iš vartotojo %s. Priimkite ar atsisakykite: %s"
+
+msgid "NO_CAR_TRANSFERS_RECEIVED"
+msgstr "Nėra perduotų automobilių"
+
+msgid "RECEIVED_CAR_TRANSFERS"
+msgstr "Gauti automobilių perdavimai"
+
+msgid "TRANSFER_DATE:"
+msgstr "Perdavimo data:"
+
+msgid "ACCEPT"
+msgstr "Priimti"
+
+msgid "DECLINE"
+msgstr "Atsisakyti"
+
+msgid "TRANSFER_YOUR_CAR_TO_ANOTHER_USER"
+msgstr "Perduoti automobilį kitam vartotojui"
+
+msgid "CAR_NOT_PUBLIC"
+msgstr "Automobilis nėra viešai matomas"
+
+msgid "JOIN_CARAMNESIS"
+msgstr "Prisijunkite prie CarAmnesis!"
+
+msgid "CARAMNESIS_CAR_PROFILE"
+msgstr "CarAmnesis automobilio profilis"
+
+msgid "CARAMNESIS_CAR_EVENT"
+msgstr "CarAmnesis automobilio įrašas"
+
+msgid "SHARE"
+msgstr "Dalintis"
+
+msgid "VIN_NOT_FOUND"
+msgstr "VIN nerastas"
+
+msgid "ENTER_CAR_DATA_MANUALLY"
+msgstr "Įrašykite automobilio duomenis"
+
+msgid "VIN_NOT_FOUND_ENTER_CAR_DATA_MANUALLY"
+msgstr "VIN nerastas, įrašykite automobilio duomenis ranka"
+
+msgid "CHECKING_VIN_DATA"
+msgstr "Tikrinami VIN duomenys"
+
+msgid "RETEST_VIN"
+msgstr "Patikrinti VIN dar kartą"
+
+msgid "PREVIOUS_ODOMETER"
+msgstr "Ankstesni ridos skaitiklio parodymai"
+
+msgid "ODOMETER_ROLL_BACK_WARNING"
+msgstr ""
+"Ridos skaičius mažesnis už anksčiau įrašytą. Ar tikrai norite atsukti ridą "
+"atgal?"
+
+msgid "MAKE_EVENT_PRIVATE"
+msgstr "Padaryti šį įrašą privačiu"
+
+msgid "MAKE_EVENT_PUBLIC"
+msgstr "Padaryti šį įrašą viešai matomu"

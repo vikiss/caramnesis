@@ -12,12 +12,24 @@ include('car_data_prep.php');
 	<div id="auth_user_result"><?php	include('authorised_users_table.php'); ?></div>
 </div>
 	
-    <div class="clearfix mt2">
-	<p><?= _("ADD_AUTHORISED_USER_TO_YOUR_CAR"); ?></p>
-                <input type="text" name="service_provider_name" id="service_provider_name" placeholder="<?= _("PROVIDER_USER_NAME"); ?>" class="col-12 field mt1 " value="<?= $this->user_to_auth; ?>"  />
-                <input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
-				<input type="submit" value='<?= _("ADD"); ?>' id="add_auth_user_submit" class="btn btn-primary mb1 mt1 black bg-kcms block right" autocomplete="off" />
+
+	    <div class="p4 bg-kclite rounded mt2">
+    <h2><?= _("ADD_AUTHORISED_USER_TO_YOUR_CAR"); ?></h2>
+    <div class="clearfix">
+                <div class="lblgrp"><label for="service_provider_name"><?= _("PROVIDER_USER_NAME"); ?></label>
+                <input type="text" name="service_provider_name" id="service_provider_name" class="block col-12 field mt1" value="<?= $this->user_to_auth; ?>"  />
+				<input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
+                <input type="submit" value='<?= _("ADD"); ?>' id="add_auth_user_submit" class="btn btn-primary mb1 mt1 black bg-kcms block right" autocomplete="off" />
     </div>
+     </div>
+	<div id="auth_user_suggestion" class="clearfix mt2 mb2 fheight"></div>
+		</div>
+	
+	
+	
+	
+	
+	
 	<div id="authusrremovedlg" class="center" title="<?= _('DISABLE_ACCESS_FOR_THIS_USER'); ?>">
             <h3><?= _('DISABLE_ACCESS_FOR_THIS_USER'); ?></h3>
             <p id="authusrtoremove"></p>

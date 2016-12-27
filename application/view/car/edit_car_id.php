@@ -51,6 +51,7 @@
         if (CarModel::checkAccessLevel($car_id, Session::get('user_uuid')) > 98) {
             ?>
             <div id="deleteopener" class="small mb1 mt1 pointer" /><?= _("DELETE_CAR"); ?></div>
+            <div class="small mb1 mt1 pointer" /><a href="<?= Config::get('URL'); ?>car/car_transfer/<?= $car_id; ?>" title="<?= _("TRANSFER_YOUR_CAR_TO_ANOTHER_USER"); ?>"><?= _("TRANSFER_YOUR_CAR_TO_ANOTHER_USER"); ?></a></div>
             <div id="deletedialog" class="center" title="<?= _('ARE_YOU_REALLY_REALLY_SURE'); ?>"><h3><?= _('ARE_YOU_REALLY_REALLY_SURE'); ?></h3><p><?= _('WARNING_NOT_UNDOABLE'); ?></p>
             <div class="btn mb1 mr1 px1 black bg-kclite " ><a class="close_dialog" href="#"><?= _('CANCEL'); ?></a></div>
             <div class="btn mb1 mr1 px1 black bg-kclite " ><a href="<?= Config::get('URL'); ?>car/delete_car/<?= $car_id; ?>"><?= _('DELETE_CAR'); ?></a></div>
@@ -59,20 +60,8 @@
                         <input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
                         <input type="hidden" name="car_data" id="car_data" value = "<?= $car_data; ?>" />
              
-        
-        
-        
-        
-        
+<input type="submit" class="btn btn-primary mb1 mt1 black bg-kcms right" value='<?php echo _("SAVE"); ?>' autocomplete="off" />        
 </div>       <!-- fauxfield -->
-    </div> <!-- container -->
-
-
-
-
-
-
-<input type="submit" class="btn btn-primary mb1 mt1 black bg-kcms right" value='<?php echo _("SAVE"); ?>' autocomplete="off" />
 </form>         
 
 <?php } else { ?>
