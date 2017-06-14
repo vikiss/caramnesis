@@ -12,9 +12,9 @@ $table_data = array();
 
 if ($reminders = $this->reminders){
     foreach ($reminders AS $reminder) {
-                $time = (array) $reminder['time'];
-                $microtime = $time['microseconds'];
-                $time = $time['seconds'];
+                $time = $reminder->time;
+                $microtime = $reminder->microtime;
+                if (!$microtime) $microtime = 0; 
                 $msgstatus = 'R'; //bold events, Q for future, R for past to use message classes
                 $icon = '<i class ="icon-bell"> </i>';
                 if ($time >= time()) {
@@ -27,7 +27,7 @@ if ($reminders = $this->reminders){
                     'icon' => $icon,
                     'msgstatus' => $msgstatus,
                     'reminder_time' => ReminderModel::formatDate($time),
-                    'reminder_content' => $reminder['content'],
+                    'reminder_content' => $reminder->content,
                     'reminder_link' => Config::get('URL').'message/reminder/'.$car_id.'/'.$time.'/'.$microtime.'/'.$msgstatus, //if reminder is active (msgstatus = Q), we know we have to decrement active reminders count in single reminder page
                 );
             }

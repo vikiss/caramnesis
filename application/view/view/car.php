@@ -46,7 +46,7 @@ document.getElementById('shareBtn').onclick = function() {
         
 
         foreach ($this->events as $event) {
-              if ($event['visibility'] == 'pub') {
+              if ($event->visibility == 'pub') {
         displayEventTerse($event, $car_id, $owner, $units);
               };
         
@@ -78,12 +78,12 @@ document.getElementById('shareBtn').onclick = function() {
  $event_types_present = array();
 
         
-        //print '<pre>'; print_r($event); print '</pre>';
-     $serialized_event_time = (array) $event['event_time'];
+     
+    $serialized_event_time =  CarModel::parsetimestamp($event->event_time);
      $event_time = $serialized_event_time['seconds'];
      $event_microtime = $serialized_event_time['microseconds'];
-        
-     $serialized_entry_time = (array) $event['event_entered'];
+
+     $serialized_entry_time =  CarModel::parsetimestamp($event->event_entered);
      $entry_time =  $serialized_entry_time['seconds'];
      $entry_microtime = $serialized_entry_time['microseconds'];
      
@@ -91,12 +91,11 @@ document.getElementById('shareBtn').onclick = function() {
     $event_id = urlencode(serialize(array('c' => $car_id, 't' => $event_time, 'm' => $event_microtime)));
                                          //car           //time               /microtime
         
-     $entry_data = unserialize($event['event_data']);
+     $entry_data = unserialize($event->event_data);
           
-     $images = (array)$event['images']; $image_out=''; $image_meta='';
+       $images = unserialize($event->images); $image_out=''; $image_meta='';
      if ($images)
        { //we only show the first one and count
-     $images = $images['values'];
                              if (CarModel::get_extension($images[0]) == 'pdf')
                         {
                                 $image_meta.= '<div class="red-triangle absolute top-0 right-0"> </div> ';
@@ -121,8 +120,10 @@ document.getElementById('shareBtn').onclick = function() {
   <div class="clearfix relative">
    <div class="">
         <div class="inline smallish bold"><?= strftime('%x', $event_time); if ($entrytime or $oldversions) { ?> <a href="#" class="jqtooltip" title="<?= $entrytime.$oldversions; ?>"><i class="icon-history"> </i></a> <?php }; ?></div>
-        <?php if($event['event_odo']) { ?><div class="inline small"><?= $event['event_odo'].' '.$units->user_distance; ?></div><?php }; ?>
-       <?php if(($entry_data['amount']) && ($entry_data['amount'] > 0)) { ?><div class="inline small"><?= $entry_data['amount'].' '._('CURRENCY_'.$units->user_currency); ?></div><?php }; ?>
+        <?php if($event->event_odo) { ?><div class="inline small"><?= $event->event_odo.' '.$units->user_distance; ?></div><?php }; ?>
+       <?php if(($entry_data['amount']) && ($entry_data['amount'] > 0)) { ?>
+       <div class="inline small"><?= $entry_data['amount'].' '._('CURRENCY_'.$units->user_currency); ?></div>
+       <?php }; ?>
    </div>
    <a href="<?= $event_link; ?>" title="<?= _("VIEW"); ?>">
    <div class="relative">
@@ -130,7 +131,7 @@ document.getElementById('shareBtn').onclick = function() {
         if ($image_out) { ?>
         <div class="relative pic480width"  style="background-image: url(<?= $image_out; ?>)"><?= $image_meta; ?></div>
         <?php }; ?>
-        <div class="mt1 smallish"><?= $event['event_content']; ?></div>
+        <div class="mt1 smallish"><?= $event->event_content; ?></div>
    </div>
    </a>
   </div>

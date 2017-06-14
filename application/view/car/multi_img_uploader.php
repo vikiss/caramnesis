@@ -2,6 +2,22 @@
 
 <script type="text/javascript">
 
+function postAjax(url, data, success) {
+	    var params = typeof data == 'string' ? data : Object.keys(data).map(
+	            function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) }
+	        ).join('&');
+	
+	    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+	    xhr.open('POST', url);
+	    xhr.onreadystatechange = function() {
+	        if (xhr.readyState>3 && xhr.status==200) { success(xhr.responseText); }
+	    };
+	    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+	    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	    xhr.send(params);
+	    return xhr;
+	}
+
 var uploader = new plupload.Uploader({
 	runtimes : 'html5,flash,silverlight,html4',
 	browse_button : 'fileinput', // you can pass an id...
@@ -28,36 +44,18 @@ var uploader = new plupload.Uploader({
 	init: {
 		PostInit: function() {
 			document.getElementById('filelist').innerHTML = '';
-
-			/*document.getElementById('start-upload').onclick = function() {
-				uploader.start();
-				return false;
-			};*/
-		},
-
-		/*FilesAdded: function(up, files) {
-			plupload.each(files, function(file) {
-				document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
-        uploader.start();
-			});
-		}, */
+    },
+   
     
     
-    
-    
-    			FilesAdded: function(up, files) {
-                    
+		FilesAdded: function(up, files) {
 				plupload.each(files, function(file) {
-
-        if (file.type.indexOf("image") > -1) 
-        
+          if (file.type.indexOf("image") > -1) 
               {
 					var img = new o.Image();
-                    
                     img.onload = function() {
                         // create a thumb placeholder
                         var li = document.createElement('li');
-                        document.getElementById("start-upload").style.visibility = "hidden";
                         li.id = file.id;
                         document.getElementById('filelist').appendChild(li);
                         
@@ -98,14 +96,18 @@ var uploader = new plupload.Uploader({
     
     
    FileUploaded: function(upldr, file, object) {
-    console.log(object.response);
+    //console.log(object.response);
     var t = JSON.parse(object.response);
     var val = document.getElementById('user_images').value;
     val = (val ? val + ',' : '') + t.name;
    //console.log(val);   
     document.getElementById('user_images').value=val;
+//save imagelist to database  
+postAjax('/car/write_attr', {"key":'attritem-1', "value":val, "car_id":'<?= $car_id; ?>', "chapter":'<?= $entry->chapter; ?>', "entry":'PICTURES', "unit":'', "validate":'text'  }, function(data){ console.log(data); });
+
+    //save imagelist to database
     document.getElementById(file.id).getElementsByClassName('progressHolder')[0].getElementsByClassName('progress')[0].style.backgroundColor  = '#2ECC40';
-    document.getElementById("start-upload").style.visibility = "visible";
+    
 },
 
 		UploadProgress: function(up, file) {

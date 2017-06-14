@@ -2,32 +2,37 @@
        $units = $this->units;
        $tags = Config::get('AVAILABLE_TAGS');
      
-         foreach ($this->car as $row) { //this runs only once
-                       $car_name = $row['car_name'];
-                       $car_make = $row['car_make'];
-                       $car_model = $row['car_model'];
-                       $car_variant = $row['car_variant'];
-                       $car_vin = $row['car_vin']; 
-                       $car_id = (array) $row['id']; 
-                       $car_id = $car_id['uuid'];
-                       $car_plates = (array) $row['car_plates'];}
+                      $row = $this->car[0];
+                       $car_name = $row->car_name;
+                       $car_make = $row->car_make;
+                       $car_model = $row->car_model;
+                       $car_variant = $row->car_variant;
+                       $car_vin = $row->car_vin;
+                       $car_id = $row->id;
+                       $car_plates = unserialize($row->car_plates);
                        $car_plates = reset($car_plates);  //get 1st element
-                       $owner = (array) $row['owner'];
-                       $owner['uuid'] !== Session::get('user_uuid') ? $thisowner=UserModel::getUserNameByUUid($owner['uuid']).': ' : $thisowner='';
-                       $outstanding = unserialize((string)$row['car_outstanding']);
+                       $owner = $row->owner;
+                       $owner !== Session::get('user_uuid') ? $thisowner=UserModel::getUserNameByUUid($owner).': ' : $thisowner='';
+                       $outstanding = unserialize($row->car_outstanding);
                        if (!is_array($outstanding)) { $outstanding = false;  }
                        $odometer = '';
-                       $odo = (string)$row['car_odo'];
+                       $odo = $row->car_odo;
                        for ($k=0; $k<strlen($odo); $k++) {
                             $odometer.='<span class="bg-black white odo">'.$odo[$k].'</span>';
                        }
 
+                       
+                       
+                       
+                       
+                       
+                       
+
                       
-      $images = (array)$row['images']; $image_out=''; $image_meta=''; $picstrip_out = ''; $i=1; $initial_img = '#';
+      $images = unserialize($row->images); $image_out=''; $image_meta=''; $picstrip_out = ''; $i=1; $initial_img = '#';
        $image_info =  false;
      if ($images)
        { //we only show the first one and count
-     $images = $images['values'];
                              if (CarModel::get_extension($images[0]) == 'pdf')
                         {
                                 $image_meta.= '<div class="red-triangle absolute top-0 right-0"> </div> ';

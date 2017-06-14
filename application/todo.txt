@@ -1,3 +1,12 @@
+prie vartotojo nustatymu issaugoti GMT+3 ar pan. laiko juosta, nes dabar db issaugo viska GMT laiku
+
+
+
+
+message istrynimas, placiau parasyta messagemodel.php
+
+
+
 privatumas: reikia papildomos priemones kad anoniminiam vartotojui slepti privacias nuotr kai masina public (t.y. rodyti tik is public events ir masinos galvos, o nerodyti is private events ir atributu)
 tas gali truputi palaukti nes neturint nuotr URL nieko nesimatytu, jis anoniminiam vartotojui neeksponuojamas
 

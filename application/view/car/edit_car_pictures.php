@@ -72,7 +72,7 @@ print '<a href="'.$imgurl.'" class="fsgalimg-link"><img src="'.$imgurl.'/120'.'"
                           </div>
                         <div id="piccount" class="hide"><?= count($car_images); ?></div>
                         
-                        <input type="hidden" name="owner" id="owner" value = "<?= $owner['uuid']; ?>" />
+                        <input type="hidden" name="owner" id="owner" value = "<?= $owner; ?>" />
                         <input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
                         <input type="hidden" name="user_images" id="user_images" value = "<?=  $images_list; ?>" />
                         <div id="response" class="hide"></div>

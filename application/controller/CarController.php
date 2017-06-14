@@ -1,4 +1,4 @@
-<?php
+<?php               //AUTH_CAR_LIST PADARYSTI SU JSON_ENCODE O NE SU SERIALIZE
 
 class CarController extends Controller
 {
@@ -35,12 +35,12 @@ class CarController extends Controller
     }
     
     
-      /*public function new_car()
+      public function new_car_manual()
     {
         $this->View->render('car/new_car', array(
             'makes' => CarModel::getCarMakeList('all')
         ));
-    }*/
+    }
     
     
         public function new_car()
@@ -144,11 +144,6 @@ class CarController extends Controller
         
         
         
-            if ($car_id == '0cb71f32-b56a-49ae-8984-476eb5c0e3a9') {
-        
-        print '~~~~';
-     } else {
-        
     
      IF (CarModel::checkAccessLevel($car_id,Session::get('user_uuid')) >= 80) {
         
@@ -168,8 +163,40 @@ class CarController extends Controller
     }  else { Session::add('feedback_negative', _('INSUFFICIENT PERMISSION TO ACCESS OTHER USERS CAR'));
             Redirect::to('index/index');
             } 
-     } //sita nutrinkim
     }
+    
+    
+               public function attribute_overview($car_id)
+    {
+     if (CarModel::checkAccessLevel($car_id,Session::get('user_uuid')) >= 80) {
+      $this->View->render('car/attribute_overview', array(
+            'chapters' => CarModel::getAttributeChapters(),
+            //'car_id' => $car_id,
+            'car' => CarModel::getCar($car_id),
+        ));        
+    }  else { Session::add('feedback_negative', _('INSUFFICIENT PERMISSION TO ACCESS OTHER USERS CAR'));
+            Redirect::to('index/index');
+            } 
+    }
+    
+                   public function attribute_chapter($car_id, $chapter)
+    {
+     if (CarModel::checkAccessLevel($car_id,Session::get('user_uuid')) >= 80) {
+      $this->View->render('car/attribute_chapter', array(
+            'structural_items' => CarModel::getAttributeChapterItems($chapter),
+            'car_items' => CarModel::readAttributes($car_id, $chapter),
+            //'car_id' => $car_id,
+            'car' => CarModel::getCar($car_id),
+            'chapter' => $chapter,
+          //  'owner' => CarModel::getCarOwner($car_id),
+            'chapters' => CarModel::getAttributeChapters(),
+        ));        
+    }  else { Session::add('feedback_negative', _('INSUFFICIENT PERMISSION TO ACCESS OTHER USERS CAR'));
+            Redirect::to('index/index');
+            } 
+    }
+    
+    
     
     public function add_attributes_xml_chapter($car_id, $chapter)
     {
@@ -433,6 +460,20 @@ class CarController extends Controller
        $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('response' => $response, 'type' => 'passthrough'));
     }
     
+          public function write_attr()  //loaded via ajax
+    {
+    $response = CarModel::commitAttribute(array(
+       'key'   => Request::post('key'),
+       'value'   => Request::post('value'),
+       'car_id' => Request::post('car_id'),
+       'chapter' => Request::post('chapter'),
+       'entry' => Request::post('entry'),
+       'unit' => Request::post('unit'),
+       'validate' => Request::post('validate'),
+       ));
+       $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('response' => $response, 'type' => 'passthrough'));
+    }
+    
     
       public function add_xml_car_data_bits()  //loaded via ajax
     {
@@ -535,7 +576,7 @@ class CarController extends Controller
         CarModel::deleteEvent(array('c' => Request::post('car_id'), 't' => Request::post('event_time'), 'm' => Request::post('event_microtime'), 'source' => 'edit' ));
         if (Request::post('todolist_checkbox')) {CarModel::addTodoItem($edited_event, Request::post('car_id'), Request::post('event_content')); }
         if (Request::post('tododone_checkbox')) {CarModel::removeTodoItem( Request::post('event_time').':'.Request::post('event_microtime'), Request::post('car_id')); }
-        Redirect::to('car/index/'.Request::post('car_id'));
+        Redirect::to('car/index/'.Request::post('car_id')); 
     }
     
      public function eventDelete()
@@ -721,6 +762,7 @@ class CarController extends Controller
             $response = CarModel::delImage(array(
           'owner' => Request::post('owner'),
           'car_id' => Request::post('car_id'),
+          'chapter' => Request::post('chapter'),
           'img' => Request::post('img'),
           'user_images' => Request::post('user_images'),
           'event_time' => Request::post('event_time'),
@@ -733,6 +775,7 @@ class CarController extends Controller
             $response = CarModel::rotateImage(array(
           'owner' => Request::post('owner'),
           'car_id' => Request::post('car_id'),
+          'chapter' => Request::post('chapter'),
           'img' => Request::post('img'),
           'user_images' => Request::post('user_images'),
           'event_time' => Request::post('event_time'),
@@ -746,6 +789,7 @@ class CarController extends Controller
             $response = CarModel::rotateImage(array(
           'owner' => Request::post('owner'),
           'car_id' => Request::post('car_id'),
+          'chapter' => Request::post('chapter'),
           'img' => Request::post('img'),
           'user_images' => Request::post('user_images'),
           'event_time' => Request::post('event_time'),
@@ -783,7 +827,7 @@ class CarController extends Controller
     
     
     
-        public function expiries($car_id = '')
+        public function expiries_old($car_id = '')
     {
     
     
@@ -949,6 +993,47 @@ class CarController extends Controller
       $this->View->render('car/omnipotentis');        
     }  
     
+    }
+    
+    
+        public function expiries($car_id = '')
+    {
+    
+    
+    
+    if ($car_id)  {
+        IF (CarModel::checkAccessLevel($car_id, Session::get('user_uuid')) >= 80) {
+            
+   $car_row = CarModel::getCar($car_id);  
+      $this->View->render('car/expiriesToo', array(
+            'car' => $car_row,
+            'units' => UserModel::getUserUnits(Session::get('user_uuid')),
+            'expiries' => ExpiriesModel::readAllExpiries($car_id),
+            'structure' => ExpiriesModel::structure(),
+        ));  
+        
+        
+            }
+
+            else
+            { Session::add('feedback_negative', _('INSUFFICIENT PERMISSION TO ACCESS OTHER USERS CAR'));
+            Redirect::to('index/index'); }
+              } else Redirect::to('index/index'); 
+    }
+    
+    
+    public function write_expiry()  //loaded via ajax
+    {
+    $response = ExpiriesModel::writeExpiry(array(
+       'key'   => Request::post('key'),
+       'value'   => Request::post('value'),
+       'car_id' => Request::post('car_id'),
+       'chapter' => Request::post('chapter'),
+       'entry' => Request::post('entry'),
+       'validate' => Request::post('validate'),
+       'siblings' => Request::post('siblings'),
+       ));
+       $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('response' => $response, 'type' => 'passthrough'));
     }
     
         

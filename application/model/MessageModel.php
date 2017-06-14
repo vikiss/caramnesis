@@ -28,23 +28,27 @@ class MessageModel
     public static function sendMessage($from, $to, $message, $subject, $notify=true)
     {
         if ($to) {
-    $sent_id = ''; 
-    $casscluster   = Cassandra::cluster()  ->build();
-    $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-    $statement = $casssession->prepare('INSERT INTO messages (recipient, sender, time, message, status, subject) VALUES (?,?,now(),?,?,?);');
-    $insertstuff = array
-        (
-       'recipient' => $to,
-       'sender' => $from,
-       'message' => nl2br($message),
-       'status' => 'Q',
-       'subject' => $subject
-        );
-    $options = new Cassandra\ExecutionOptions(array('arguments' => $insertstuff));
-    if ($result = $casssession->execute($statement, $options) )
+    $message = nl2br($message);
+    $timestamp = time();
+    $timeofday   = gettimeofday();
+    $microtime   = $timeofday['usec'];
+    $timeuuid = $timestamp.'.'.$microtime; 
+    $database = DatabaseFactory::getFactory()->getConnection();
+ 		$query = $database->prepare("INSERT INTO messages 
+        (recipient, sender, time, timestamp, message, status, subject) VALUES 
+        (:recipient, :sender, :time, :timestamp, :message, :status, :subject);");
+        if	($query->execute(array(
+                ':recipient' => $to,
+                ':sender' => $from, 
+                ':time' => $timeuuid,
+                ':timestamp' => $timestamp, 
+                ':message' => $message,
+                ':status' => 'Q',
+                ':subject' => $subject,
+						  ))) 
        {
-        if ($sent_id = self::getLastMessageID($to)) { 
-    self::sendMessageOutbox($sent_id, $from, $to, $subject); //copy of the sent message with the same exact timeuuid for the users outbox
+        
+    self::sendMessageOutbox($timeuuid, $timestamp, $message, $from, $to, $subject); //copy of the sent message with the same exact timeuuid for the users outbox
     self::IncrementUnreadMessages($to); //increment unread messages counter for the recipient
     if ($notify) {Session::add('feedback_positive', _('MESSAGE_SEND_SUCCESSFUL'));}
     //send email notification if recipient is not currently online (last seen more than 4 min old)
@@ -56,7 +60,7 @@ class MessageModel
     }
     
        return true;
-       } 
+        
        }
     if ($notify) {Session::add('feedback_negative', _('MESSAGE_SEND_FAILED'));}
     return false;
@@ -67,93 +71,84 @@ class MessageModel
     }
     
     
-    public static function checkMessages($to)  //set limit somehow, eventually
+    public static function checkMessages($to, $limit = '')  
     {
-    
-    $casscluster   = Cassandra::cluster()  ->build();
-    $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-    $statement = $casssession->prepare('SELECT  sender, dateOf(time), time, message, status, subject FROM messages WHERE recipient = ?;');
-    $selectstuff = array
-    (
-        'recipient' => $to,
-    );
-    $options = new Cassandra\ExecutionOptions(array('arguments' => $selectstuff));
-    $result = $casssession->execute($statement, $options); 
-    if ($result->count() == 0)
-        return false;
-    else
-        return $result;
+     $limiter = '';
+      if (is_array($limit)) { $limiter = 'LIMIT '.intval($limit['offset']).','.intval($limit['records']); }
+     $database = DatabaseFactory::getFactory()->getConnection();
+    $query    = $database->prepare("SELECT SQL_CALC_FOUND_ROWS time, message, sender, status, subject FROM messages WHERE recipient = :recipient ORDER BY timestamp DESC {$limiter}");
+        $query->execute(array(
+            ':recipient' => $to,
+        ));
+        if ($data = $query->fetchAll()) {
+              $thing = $database->prepare("SELECT FOUND_ROWS()");
+              $thing->execute();
+              $total = $thing->fetch();
+              $data['pagination'] = $total; 
+            return $data;
+        } else
+            return false;
+ 
     }
+    
+    
     
 
     public static function getMessage($uuid, $timeuuid, $recipient)  //get single message. if recipient is specified, this is the sender looking
     {
-    $intermediate_result = '';
     $message_recipient = ($recipient ? $recipient : $uuid); //if this is the sender looking we still need to get the message by recipient, his outbox copy does not contain the message body
-    $casscluster   = Cassandra::cluster()  ->build();
-    $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-    $statement = $casssession->prepare('SELECT  sender, recipient, dateOf(time), time, message, status, subject FROM messages WHERE recipient = ? and time = ? LIMIT 1;');
-    $selectstuff = array
-    (
-        'recipient' => $message_recipient,
-        'time' => new Cassandra\Uuid($timeuuid)
-    );
-    $options = new Cassandra\ExecutionOptions(array('arguments' => $selectstuff));
-    $result = $casssession->execute($statement, $options); 
-    if ($result->count() == 0)
-        return false;
-    else {
-        if (!$recipient) { //if this is the recipient checking, we set the message status to read in all relevant tables
-        $intermediate_result = $result[0];
-        if ($intermediate_result['status'] == 'Q') { //if the message was unread, of course
-        self::setMessageStatus($uuid, $timeuuid, 'R');
-        self::DecrementUnreadMessages($uuid);
-        self::setOutboxMessageStatus($intermediate_result['sender'], $timeuuid, 'R');
-        };
+
+    $database = DatabaseFactory::getFactory()->getConnection();
+    $query    = $database->prepare("SELECT  sender, recipient, time, message, status, subject FROM messages WHERE recipient = :recipient and time = :time LIMIT 1;");
+    $query->execute(array(
+            ':recipient' => $message_recipient,
+            ':time' => $timeuuid,
+        ));
+        if ($data = $query->fetch())
+        {
+        if (!$recipient)  //if this is the recipient checking, we set the message status to read in all relevant tables
+          { 
+          if ($data->status == 'Q')  //if the message was unread, of course 
+            { 
+            self::setMessageStatus($uuid, $timeuuid, 'R');
+            self::DecrementUnreadMessages($uuid);
+            self::setOutboxMessageStatus($data->sender, $timeuuid, 'R');
+            };
+          }
+        return $data;
         }
-        return $result;
-        }
+      return false;
     }
     
     public static function setMessageStatus($uuid, $timeuuid, $status)  //mark message with Read, Replied, etc.
     {
-    if (!$status)
-    {
-        return false;
-    } else { 
-        $casscluster   = Cassandra::cluster()  ->build();
-        $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement = $casssession->prepare('UPDATE messages SET status = ? WHERE recipient = ? and time = ?;');
-        $selectstuff = array
-        (
-            'status' => $status,
-            'recipient' => $uuid,
-            'time' => new Cassandra\Uuid($timeuuid)
-        );
-        $options = new Cassandra\ExecutionOptions(array('arguments' => $selectstuff));
-        if ($casssession->execute($statement, $options)) return true; else return false;
-    }
+    if ($status)
+      {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("UPDATE messages SET status = :status WHERE recipient = :recipient AND time = :time");
+        if ($query->execute(array(
+            ':status' => $status,
+            ':recipient' => $uuid,
+            ':time' => $timeuuid,
+        ))) { return true; }
+      }
+    return false;
     }
     
     
     public static function setOutboxMessageStatus($uuid, $timeuuid, $status)  //mark message with Read, Replied, etc.
     {
-    if (!$status)
+    if ($status)
     {
-        return false;
-    } else { 
-        $casscluster   = Cassandra::cluster()  ->build();
-        $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement = $casssession->prepare('UPDATE sent_messages SET status = ? WHERE sender = ? and time = ?;');
-        $selectstuff = array
-        (
-            'status' => $status,
-            'sender' => $uuid,
-            'time' => new Cassandra\Uuid($timeuuid)
-        );
-        $options = new Cassandra\ExecutionOptions(array('arguments' => $selectstuff));
-        if ($casssession->execute($statement, $options)) return true; else return false;
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("UPDATE sent_messages SET status = :status WHERE sender = :sender AND time = :time");
+        if ($query->execute(array(
+            ':status' => $status,
+            ':sender' => $uuid,
+            ':time' => $timeuuid,
+        ))) { return true; }
     }
+    return false;
     }
     
     
@@ -203,25 +198,33 @@ class MessageModel
     }
     
     
-     public static function checkSentMessages($from)  
+   
+        public static function checkSentMessages($from, $limit = '')  
     {
-    
-    $casscluster   = Cassandra::cluster()  ->build();
-    $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-    $statement = $casssession->prepare('SELECT  recipient, dateOf(time), time, subject, status FROM sent_messages WHERE sender = ?;');
-    $selectstuff = array
-    (
-        'sender' => $from,
-    );
-    $options = new Cassandra\ExecutionOptions(array('arguments' => $selectstuff));
-    $result = $casssession->execute($statement, $options); 
-    if ($result->count() == 0)
-        return false;
-    else
-        return $result;
+     $limiter = '';
+      if (is_array($limit)) { $limiter = 'LIMIT '.intval($limit['offset']).','.intval($limit['records']); }
+     $database = DatabaseFactory::getFactory()->getConnection();
+    $query  = $database->prepare("SELECT SQL_CALC_FOUND_ROWS time, recipient, status, subject FROM sent_messages WHERE sender = :sender ORDER BY timestamp DESC {$limiter}");
+        $query->execute(array(
+            ':sender' => $from,
+        ));
+        if ($data = $query->fetchAll()) {
+        $thing = $database->prepare("SELECT FOUND_ROWS()");
+        $thing->execute();
+        $total = $thing->fetch();
+        $data['pagination'] = $total; 
+            return $data;
+        } else
+            return false;
+ 
     }
     
-    public static function getLastMessageID($to)
+    
+    
+    
+    
+    /*
+    public static function getLastMessageID($to)  //6ito neberiekia dabar manau
     {
     $casscluster   = Cassandra::cluster()  ->build();
     $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
@@ -237,23 +240,26 @@ class MessageModel
     else
         $result = $result[0]; $result = (array) $result['time']; $result = $result['uuid'];
         return $result ;
-    }
+    } */
     
-    public static function sendMessageOutbox($sent_id, $from, $to, $subject)
+    public static function sendMessageOutbox($timeuuid, $timestamp, $message, $from, $to, $subject)
     {
-    $casscluster   = Cassandra::cluster()  ->build();
-    $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-    $statement = $casssession->prepare('INSERT INTO sent_messages (sender, recipient, time, subject, status) VALUES (?,?,?,?,?);');
-    $insertstuff = array
-        (
-       'sender' => $from,
-       'recipient' => $to,
-       'time' => new Cassandra\Uuid($sent_id),
-       'subject' => $subject,
-       'status' => 'Q'
-        );
-    $options = new Cassandra\ExecutionOptions(array('arguments' => $insertstuff));
-    if ($result = $casssession->execute($statement, $options) ) return true; else return false;    
+    
+    $database = DatabaseFactory::getFactory()->getConnection();
+ 		$query = $database->prepare("INSERT INTO sent_messages 
+        (sender, time, timestamp, message, recipient, status, subject) VALUES 
+        (:sender, :time, :timestamp, :message, :recipient, :status, :subject);");
+        if	($query->execute(array(
+                ':sender' => $from, 
+                ':time' => $timeuuid,
+                ':timestamp' => $timestamp,
+                ':message' => $message,
+                ':recipient' => $to, 
+                ':status' => 'Q',
+                ':subject' => $subject,
+						  ))) 
+       { return true; }
+    return false;
     }
     
     public static function formatDate($date) {
@@ -265,6 +271,16 @@ class MessageModel
             return strftime("%x",$date);
         }
     }
+    
+    /*
+    
+    
+    yra dvi kopijos: messages ir sent_messages, jas turetu butio glaimsa istrinti nepriklausomai
+    anksciau buvo message body tik pas gaveja
+    reikia su omnipotenčiu nukopijuoti message bodzius senoms zinutems prie6 visdk1
+    ir pakeisti sent messages single perziura, kad neimtu info is recipiento kopijos
+    ir va tada galima idiegti zinuciu istrynima
+    
     
     
         public static function deleteMessage($uuid, $timeuuid)  //delete single message from receivers inbox
@@ -282,7 +298,7 @@ class MessageModel
     return $result;
     
     }
-    
+      */
 
 
 }      

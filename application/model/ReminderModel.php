@@ -12,38 +12,27 @@ mysql:
 class ReminderModel
 {
     public static function setReminder($car_id, $timestamp, $microtime, $content, $status) { //sets reminder, used in edit event form
-        
-       $casscluster   = Cassandra::cluster()  ->build();
-       $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-       $statement = $casssession->prepare('INSERT INTO reminders (car_id, time, content, status) VALUES (?,?,?,?)');
-
-       $insertstuff = array(
-       'car_id' => new Cassandra\Uuid($car_id),
-       'time' => new Cassandra\Timestamp($timestamp , $microtime ),
-       'content' => $content,
-       'status' => $status,
-       );
-       $options = new Cassandra\ExecutionOptions(array('arguments' => $insertstuff));
-    //    if (($casssession->execute($statement, $options) ) && (self::queueReminder($car_id, $timestamp, $microtime, $content, $status))){  
-
-if ($casssession->execute($statement, $options) ){
-			self::queueReminder($car_id, $timestamp, $microtime, $content, $status);
-          Session::add('feedback_positive', sprintf(_('REMINDER FOR %s SET'), CarModel::getCarName($car_id)));
-          
-          
-             
-       return true; }
-
+    
+    
+    
+      $database = DatabaseFactory::getFactory()->getConnection();
+    		$query = $database->prepare("INSERT INTO reminderset  
+        (car_id, time, content, status) VALUES 
+        (:car_id, :time, :content, :status);");
+        if	($query->execute(array(
+                ':car_id' => $car_id,
+                ':time' => $timestamp.'.'.$microtime, 
+                ':content' => $content,
+                ':status' => $status,
+						  )))
+              {
+              self::queueReminder($car_id, $timestamp, $microtime, $content, $status);
+              Session::add('feedback_positive', sprintf(_('REMINDER FOR %s SET'), CarModel::getCarName($car_id))); 
+              return true; 
+              }
         Session::add('feedback_negative', _('FEEDBACK_REMINDER_CREATION_FAILED'));
-		
 		        return false;
-        
-        
-        
-        
-		
-	
-	}
+  }
     
     
     private static function queueReminder($car_id, $timestamp, $microtime, $content, $status) { // the same set reminder, only for mysql
@@ -51,7 +40,7 @@ if ($casssession->execute($statement, $options) ){
         $database = DatabaseFactory::getFactory()->getConnection();
 
 		$sql = "INSERT INTO reminders (car_id, car_name, owner_id, time, microtime, content, status)
-                    VALUES (:car_id, :car_name, :owner_id, :time, :microtime  :content,  :status)";
+                    VALUES (:car_id, :car_name, :owner_id, :time, :microtime,  :content,  :status)";
 		$query = $database->prepare($sql);
 		$query->execute(array(':car_id' => $car_id,
 							  ':car_name' => CarModel::getCarName($car_id),
@@ -178,20 +167,16 @@ if ($casssession->execute($statement, $options) ){
             return false;
         }
 		
-		
-		$casscluster   = Cassandra::cluster()  ->build();
-        $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-		$statement = $casssession->prepare("UPDATE reminders SET status  = ?  WHERE car_id = ? and time = ? ");
-		$updatestuff = array(
-			'status' => $status,
-			'car_id' => new Cassandra\Uuid($car_id),
-			'time' => new Cassandra\Timestamp($time),
-       );
-		$options = new Cassandra\ExecutionOptions(array('arguments' => $updatestuff));
-       if ($casssession->execute($statement, $options)   ) {      
-       return true; }
-  
-
+    
+    
+    $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("UPDATE reminderset SET status = :status WHERE car_id = :car_id AND time = :time");
+        if ($query->execute(array(
+            ':status' => $status,
+            ':car_id' => $car_id,
+            ':time' => $time,
+        ))) { return true; }
+    
         return false;
     }
 	
@@ -230,37 +215,42 @@ if ($casssession->execute($statement, $options) ){
 			}
 			
 		}
+    
+    
+    
+    $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("SELECT * FROM reminders WHERE car_id = :car_id and convert(`time`, decimal) $gtorlt :time ORDER BY convert(`time`, decimal) asc");
+        //SLOW QUERY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! need to sort
+        $query->execute(array(
+            ':car_id' => $car_id,
+            ':time' => $timestamp,
+        ));
+        if ($data = $query->fetchAll()) {
+        
+            return $data;
+        } else
+            return false;
+    
 		
 	
-		$casscluster   = Cassandra::cluster()  ->build();
-       $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-       $statement = $casssession->prepare('SELECT * FROM reminders WHERE car_id = ? and time '.$gtorlt.' ? ORDER BY time asc');
-       $selectstuff = array(
-							'car_id' => new Cassandra\Uuid($car_id),
-							'time' => new Cassandra\Timestamp($timestamp),
-							);
-       $options = new Cassandra\ExecutionOptions(array('arguments' => $selectstuff));
-       $result = $casssession->execute($statement, $options); 
-       if ($result->count() == 0) return false; else return($result);
+		
 		
 		return false;
 	}
 	
 	
 	public static function getReminder($car_id, $time, $microtime) { //cassandra
-		
-	   $casscluster   = Cassandra::cluster()  ->build();
-       $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-       $statement = $casssession->prepare('SELECT * FROM reminders WHERE car_id = ? and time = ?');
-       $selectstuff = array(
-							'car_id' => new Cassandra\Uuid($car_id),
-							'time' => new Cassandra\Timestamp($time, $microtime),
-							);
-       $options = new Cassandra\ExecutionOptions(array('arguments' => $selectstuff));
-       $result = $casssession->execute($statement, $options); 
-       //if ($result->count() == 0) return false; else
-	   return($result);
-		
+  
+  
+    $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("SELECT * FROM reminderset WHERE car_id = :car_id AND time = :time");
+        $query->execute(array(
+            ':car_id' => $car_id,
+            ':time' => $time.'.'.$microtime,
+        ));
+        if ($data = $query->fetch()) {
+            return $data;
+        }
 		return false;
 	}
 	
@@ -273,22 +263,18 @@ if ($casssession->execute($statement, $options) ){
             Session::add('feedback_negative', _('ACCESS_RESTRICTION'));
             return false;
         }
-		
-	   $casscluster   = Cassandra::cluster()  ->build();
-       $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-       $statement = $casssession->prepare('DELETE FROM reminders WHERE car_id = ? and time = ?');
-       $selectstuff = array(
-							'car_id' => new Cassandra\Uuid($car_id),
-							'time' => new Cassandra\Timestamp($time, $microtime),
-							);
-       $options = new Cassandra\ExecutionOptions(array('arguments' => $selectstuff));
-       if ($casssession->execute($statement, $options)) {
+        
+        
+      $database = DatabaseFactory::getFactory()->getConnection();
+      $query    = $database->prepare("DELETE FROM reminderset WHERE car_id = :car_id and time = :time");
+            if ($query->execute(array(
+            ':car_id' => $car_id,
+            ':time' => $time.'.'.$microtime,
+                ))) {
 		self::deleteReminderByCarTime($car_id, $time); //delete mysql copy if present
 		return true;
 		}
-
 	   return false;
-
 	}
 	
 	public static function MoveReminder($car_id, $old_reminder, $new_reminder, $content, $offset) {

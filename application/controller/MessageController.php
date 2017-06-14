@@ -8,15 +8,21 @@ class MessageController extends Controller
         Auth::checkAuthentication();
     }
     
-     public function index() //list of received messages for current user
+     public function index($page = 0) //list of received messages for current user
     {
-    $messages = MessageModel::checkMessages(Session::get('user_uuid'));
+    $offset = 0;
+    $records = Config::get('MESSAGE_PAGING');
+    if (intval($page) > 1) {$offset = ($page-1) * $records;}
+    $messages = MessageModel::checkMessages(Session::get('user_uuid'), array('records' => $records, 'offset' => $offset));
         $this->View->render('message/index', array('messages' => $messages));
     }
     
-     public function sent() //list of sent messages for current user
+     public function sent($page = 0) //list of sent messages for current user
     {
-    $messages = MessageModel::checkSentMessages(Session::get('user_uuid'));
+    $offset = 0;
+    $records = Config::get('MESSAGE_PAGING');
+    if (intval($page) > 1) {$offset = ($page-1) * $records;}
+    $messages = MessageModel::checkSentMessages(Session::get('user_uuid'), array('records' => $records, 'offset' => $offset));
         $this->View->render('message/sent', array('messages' => $messages));
     }
     

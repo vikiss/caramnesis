@@ -19,7 +19,7 @@ class ViewController extends Controller
             'events' => CarModel::getEvents($car_id),
             'car_data_bits' => Config::get('CAR_DATA_BITS'),
             'car_data' => CarModel::getCarXmlData($car_id),
-            'public_events' => ViewModel::get_public_event_types($car_id),
+            //'public_events' => ViewModel::get_public_event_types($car_id),
             'tags' => Config::get('AVAILABLE_TAGS'),
             'units' => UserModel::getUserUnits(CarModel::getCarOwner($car_id)),
             'owner' => CarModel::getCarOwner($car_id)

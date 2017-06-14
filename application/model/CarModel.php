@@ -12,20 +12,17 @@ class CarModel
     
     public static function getCars($owner)
     {
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('SELECT * FROM cars WHERE owner = ?');
-        $selectstuff = array(
-            'owner' => new Cassandra\Uuid($owner)
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $selectstuff
+    
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("SELECT * FROM cars WHERE owner = :owner");
+        $query->execute(array(
+            ':owner' => $owner,
         ));
-        $result      = $casssession->execute($statement, $options);
-        if ($result->count() == 0)
+        if ($data = $query->fetchAll()) {
+            return $data;
+        } else
             return false;
-        else
-            return ($result);
+        
     }
     
     
@@ -74,21 +71,17 @@ class CarModel
     public static function checkForDuplicateCarName($car_name)
     {
         //returns true if there is already a car with the same name under current user
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('SELECT * FROM cars WHERE owner = ? AND car_name = ? ALLOW FILTERING');
-        $selectstuff = array(
-            'owner' => new Cassandra\Uuid(Session::get('user_uuid')),
-            'car_name' => $car_name
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $selectstuff
-        ));
-        $result      = $casssession->execute($statement, $options);
-        if ($result->count() == 0)
-            return false;
-        else
-            return true;
+        $database = DatabaseFactory::getFactory()->getConnection();
+    		$query = $database->prepare("SELECT * FROM cars WHERE owner = :owner AND car_name = :car_name ;");
+        if	($query->execute(array(
+							  ':owner' => Session::get('user_uuid'),
+							  ':car_name' => $car_name,
+						  )))
+		{
+      $count =  $query->rowCount();
+			if ($count > 0) {return true;} else {return false;} 
+      }
+        return false;
     }
     
     
@@ -107,39 +100,34 @@ class CarModel
             return false;
         }
         
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('INSERT INTO cars (id, car_make, car_model, car_name, car_plates, car_vin, owner, car_year, car_make_id, car_model_id, car_variant, car_variant_id) VALUES (uuid(),?,?,?,?,?,?,?,?,?,?,?)');
-        $plateslist  = new Cassandra\Collection(Cassandra::TYPE_TEXT);
-        $plateslist->add($car_plates);
+        $plateslist  = array();
+        $plateslist[] = $car_plates;
+
+        
+        $database = DatabaseFactory::getFactory()->getConnection();
+    		$query = $database->prepare("INSERT INTO cars 
+         (id, car_make, car_model, car_name, car_plates, car_vin, owner, car_year, car_make_id, car_model_id, car_variant, car_variant_id) VALUES 
+        (uuid(), :car_make, :car_model, :car_name, :car_plates, :car_vin, :owner, :car_year, :car_make_id, :car_model_id, :car_variant, :car_variant_id);");
+        if	($query->execute(array(
+                ':car_make' => $car_make,
+                ':car_model' => $car_model, 
+                ':car_name' => $car_name,
+                ':car_plates' => serialize($plateslist),
+                ':car_vin' => strtoupper($car_vin),
+                ':owner' => Session::get('user_uuid'),
+                ':car_year' => $car_year,
+                ':car_make_id' => $car_make_id,
+                ':car_model_id' => $car_model_id,
+                ':car_variant' => $car_variant,
+                ':car_variant_id' => $car_variant_id,
+						  ))) { return true; }
+        
         
         //cia pridedam jei dar ka gauname is modelio/varianto duomenu, greiciu dezes tipa, kuro tipa ir pan
         //$cardata = array();
         //$cardata[] = array('car_variant' => $car_variant );
         //$cardata = serialize($cardata);
         //$cardata = '';
-        
-        
-        $insertstuff = array(
-            'car_name' => $car_name,
-            'car_make' => $car_make,
-            'car_model' => $car_model,
-            'car_vin' => strtoupper($car_vin),
-            'car_plates' => $plateslist,
-            'owner' => new Cassandra\Uuid(Session::get('user_uuid')),
-            'car_year' => $car_year,
-            'car_make_id' => $car_make_id,
-            'car_model_id' => $car_model_id,
-            'car_variant' => $car_variant,
-            'car_variant_id' => $car_variant_id,
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $insertstuff
-        ));
-        if ($casssession->execute($statement, $options)) {
-            
-            return true;
-        }
         
         // default return
         Session::add('feedback_negative', _('FEEDBACK_CAR_CREATION_FAILED'));
@@ -148,106 +136,76 @@ class CarModel
     
     public static function getCar($car_id)
     {
-        
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('SELECT * FROM cars WHERE id = ?');
-        $selectstuff = array(
-            'id' => new Cassandra\Uuid($car_id)
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $selectstuff
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("SELECT * FROM cars WHERE id = :id");
+        $query->execute(array(
+            ':id' => $car_id,
         ));
-        $result      = $casssession->execute($statement, $options);
-        if ($result->count() == 0)
+        if ($data = $query->fetchAll()) {
+            return $data;
+        } else
             return false;
-        else
-            return ($result);
     }
     
     public static function getCarVin($car_id) 
     {
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('SELECT car_vin FROM cars WHERE id = ?');
-        $selectstuff = array(
-            'id' => new Cassandra\Uuid($car_id)
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $selectstuff
+    
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("SELECT car_vin FROM cars WHERE id = :id");
+        $query->execute(array(
+            ':id' => $car_id,
         ));
-        $result      = $casssession->execute($statement, $options);
-        if ($result->count() == 0)
+        if ($data = $query->fetch()) {
+            return $data->car_vin;
+        } else
             return false;
-        else {
-            $vin = '';
-            foreach ($result as $row) {
-                $vin = $row;
-            }
-            $vin = $vin['car_vin'];
-            return ($vin);
-        }
-        ;
+    
     }
 	
 	    public static function getCarImage($car_id) 
     {
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('SELECT images FROM cars WHERE id = ?');
-        $selectstuff = array(
-            'id' => new Cassandra\Uuid($car_id)
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $selectstuff
+    
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("SELECT images FROM cars WHERE id = :id");
+        $query->execute(array(
+            ':id' => $car_id,
         ));
-        $result      = $casssession->execute($statement, $options);
-        if ($result->count() == 0)
-            return false;
-        else {
-            $images = '';
-            foreach ($result as $row) {
-                  $car_images = (array) $row['images'];
-            }
+        if ($data = $query->fetch()) {
+            $images =  unserialize($data->images);
+            $image = reset($images);
+            return $image;
             
-                         if (isset($car_images['values'])) {
-                         $car_images = $car_images['values'];
-                         $image =  reset($car_images);} else {
-                         $image = false;}
-			
-			
-            return ($image);
+            
         }
-        ;
+         
+           return false;
+    
+        
     }
     
     
     public static function deleteCar($car_id, $delete_events = true)
     {
-        //todo: remove access nodes associated with this car!!!!!!!!
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
+        
+        $database = DatabaseFactory::getFactory()->getConnection();
+        
         if ($delete_events) {
-            $statement   = $casssession->prepare('DELETE FROM events WHERE car = ?');
-            $deletestuff = array(
-                'car' => new Cassandra\Uuid($car_id)
-            );
-            $options     = new Cassandra\ExecutionOptions(array(
-                'arguments' => $deletestuff
-            ));
-            if (!$casssession->execute($statement, $options)) {
+        
+            $query    = $database->prepare("DELETE FROM events WHERE car = :car");
+            if (!$query->execute(array(
+            ':car' => $car_id,
+                ))) {
                 Session::add('feedback_negative', _('FEEDBACK_CAR_DELETION_FAILED'));
                 return false;
-            }
+                }
         }
-        $statement   = $casssession->prepare('DELETE FROM cars WHERE id = ?');
-        $deletestuff = array(
-            'id' => new Cassandra\Uuid($car_id)
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $deletestuff
-        ));
-        if ($casssession->execute($statement, $options)) {
+        
+        
+        
+        $query    = $database->prepare("DELETE FROM cars WHERE id = :car");
+            if ($query->execute(array(
+            ':car' => $car_id,
+                ))) {
 			
 			self::deleteCarAccessNodes($car_id); //delete all entries of other users who could look at this car
             Session::add('feedback_positive', _('FEEDBACK_CAR_DELETION_SUCCESS'));
@@ -312,32 +270,18 @@ class CarModel
     
     public static function getCarPlates($car_id)
     {
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('SELECT car_plates FROM cars WHERE id = ?');
-        $selectstuff = array(
-            'id' => new Cassandra\Uuid($car_id)
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $selectstuff
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("SELECT car_plates FROM cars WHERE id = :id");
+        $query->execute(array(
+            ':id' => $car_id,
         ));
-        $result      = $casssession->execute($statement, $options);
-        if ($result->count() == 0)
-            return false;
-        else {
-            $plates = '';
-            foreach ($result as $row) {
-                $plates = $row;
-            }
-            $result = $plates['car_plates'];
-            $plates = array();
-            if (count($result) > 0) {
-            foreach ($result as $row) {
-                $plates[] = $row;
-            }}
-            return ($plates);
+        if ($data = $query->fetch()) {
+            $plates=unserialize($data->car_plates);            
+            return $plates;
         }
-        ;
+         
+           return false;
+
     }
     
     public static function getCarName($car_id)
@@ -345,44 +289,33 @@ class CarModel
         if (!$car_id) {
             return false;
         }
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('SELECT car_name FROM cars WHERE id = ?');
-        $selectstuff = array(
-            'id' => new Cassandra\Uuid($car_id)
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $selectstuff
+        
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("SELECT car_name FROM cars WHERE id = :id");
+        $query->execute(array(
+            ':id' => $car_id,
         ));
-        $result      = $casssession->execute($statement, $options);
-        if ($result->count() == 0)
+        if ($data = $query->fetch()) {
+        
+            return $data->car_name;
+        } else
             return false;
-        else {
-            $result = $result[0];
-            return (string) $result['car_name'];
-        }
-        ;
+        
     }
     
     public static function getCarOwner($car_id)
     {
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('SELECT owner FROM cars WHERE id = ?');
-        $selectstuff = array(
-            'id' => new Cassandra\Uuid($car_id)
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $selectstuff
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("SELECT owner FROM cars WHERE id = :id");
+        $query->execute(array(
+            ':id' => $car_id,
         ));
-        $result      = $casssession->execute($statement, $options);
-        if ($result->count() == 0)
+        if ($data = $query->fetch()) {
+        
+            return $data->owner;
+        } else
             return false;
-        else {
-            $result = $result[0];
-            return (string) $result['owner'];
-        }
-        ;
+    
     }
     
     
@@ -457,7 +390,7 @@ class CarModel
     
     
     
-    public static function getCarData($car_id)
+/*    public static function getCarData($car_id)  //6itas turbut nebenaudojamas, iskomentuoju
     {
         if ($car_id) {
             $casscluster = Cassandra::cluster()->build();
@@ -484,35 +417,30 @@ class CarModel
             }
             ;
         }
-    }
+    } */
 	
 	public static function getCarXmlData($car_id)
     {
         if ($car_id) {
-            $casscluster = Cassandra::cluster()->build();
-            $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-            $statement   = $casssession->prepare('SELECT car_data_xml FROM cars WHERE id = ?');
-            $selectstuff = array(
-                'id' => new Cassandra\Uuid($car_id)
-            );
-            $options     = new Cassandra\ExecutionOptions(array(
-                'arguments' => $selectstuff
-            ));
-            $result      = $casssession->execute($statement, $options);
-            if ($result->count() == 0)
-                return false;
-            else {
-                foreach ($result as $entry) { //only once
-                    $entry = $entry['car_data_xml'];
-                }
-                return ($entry);
-            }
-            ;
+        
+            $database = DatabaseFactory::getFactory()->getConnection();
+            $query = $database->prepare("SELECT car_data_xml FROM cars WHERE id = :car_id");
+            if ($query->execute(array(':car_id' => $car_id))) {
+                if ($data = $query->fetch()) {
+                return $data->car_data_xml;
+                }            
+            }            
         }
+        return false;
     }
     
     
+
     
+    
+    
+    
+  /*  
     public static function editCar($car_data) //no longer used
     {
         
@@ -607,7 +535,7 @@ class CarModel
         
         
         
-    }
+    }      */
     
     
     
@@ -630,57 +558,53 @@ class CarModel
         
         array_walk_recursive($car_data, 'Filter::XSSFilter');
         
-        
+        $plates = array();
         $existing_plates = self::getCarPlates($car_data['car_id']);
+        $current_plate =  reset($existing_plates);
+        if ($current_plate !== $car_data['car_plates']) {
+          $plates[] = $car_data['car_plates'];
+          foreach ($existing_plates AS $existing_plate)
+          {
+            if ($existing_plate !== $car_data['car_plates'])
+              {
+                $plates[] = $existing_plate;
+              }
+          } 
+        } else {
         
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare("UPDATE cars
-										  SET 
-										  car_make = ?, car_model = ?, car_name = ?, car_plates = ?,
-										  car_vin = ?, car_year = ?, car_make_id = ?, car_model_id = ?,
-										  car_variant = ?, car_variant_id = ? WHERE id = ?");
-        
-        $plateslist = new Cassandra\Collection(Cassandra::TYPE_TEXT);
-        $flatplates = $car_data['car_plates'];
-        $plateslist->add($car_data['car_plates']);
-        foreach ($existing_plates AS $existing_plate) {
-            if ($existing_plate !== $car_data['car_plates']) {
-                $plateslist->add($existing_plate);
-                $flatplates.=','.$existing_plate;
-            }
+        $plates = $existing_plates; 
         }
         
-        $updatestuff = array(
-            'car_make' => $car_data['car_make'],
-            'car_model' => $car_data['car_model'],
-            'car_name' => $car_data['car_name'],
-            'car_plates' => $plateslist,
-            'car_vin' => $car_data['car_vin'],
-            'car_year' => $car_data['car_year'],
-            'car_make_id' => $car_data['car_make_id'],
-            'car_model_id' => $car_data['car_model_id'],
-            'car_variant' => $car_data['car_variant'],
-            'car_variant_id' => $car_data['car_variant_id'],
-            'id' => new Cassandra\Uuid($car_data['car_id'])
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $updatestuff
-        ));
-        if ($result = $casssession->execute($statement, $options)) {
-            self::updateCarLookupEntry($car_data['car_id'], $flatplates, $car_data['car_vin'], self::getCarOwner($car_data['car_id']), $car_data['car_name']);
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("UPDATE cars
+										  SET 
+										  car_make = :car_make, car_model = :car_model, car_name = :car_name, car_plates = :car_plates,
+										  car_vin = :car_vin, car_year = :car_year, car_make_id = :car_make_id, car_model_id = :car_model_id,
+										  car_variant = :car_variant, car_variant_id = :car_variant_id WHERE id = :id");
+                      
+    if ($query->execute(array(
+            ':car_make' => $car_data['car_make'],
+            ':car_model' => $car_data['car_model'],
+            ':car_name' => $car_data['car_name'],
+            ':car_plates' => serialize($plates),
+            ':car_vin' => $car_data['car_vin'],
+            ':car_year' => $car_data['car_year'],
+            ':car_make_id' => $car_data['car_make_id'],
+            ':car_model_id' => $car_data['car_model_id'],
+            ':car_variant' => $car_data['car_variant'],
+            ':car_variant_id' => $car_data['car_variant_id'],
+            ':id' => $car_data['car_id'],
+        ))) { 
+        
+           self::updateCarLookupEntry($car_data['car_id'], implode(',', $plates), $car_data['car_vin'], self::getCarOwner($car_data['car_id']), $car_data['car_name']);
 			self::updateCarAccessName($car_data['car_id'], $car_data['car_name']);
             Session::add('feedback_positive', _('FEEDBACK_CAR_EDIT_SUCCESS'));
-            return true;
+        return true; 
         } else {
             Session::add('feedback_negative', _('FEEDBACK_CAR_EDIT_FAILED'));
             return false;
-        }
-        ;
-        
-        
-        
-    }
+        };
+   }
     
     
     
@@ -701,49 +625,19 @@ class CarModel
         
         if ($car_data['enable_car_access'] == $car_data['car_id']) {
             if (self::newAccessNode($car_data['car_id'], 10, Session::get('user_uuid'))) {
-                Session::add('feedback_positive', _('FEEDBACK_CAR_ACCESS_EDIT_SUCCESS'));
+                Session::add('feedback_positive', _('FEEDBACK_CAR_ACCESS_EDIT_SUCCESS')); return true;
             } else {
-                Session::add('feedback_negative', _('FEEDBACK_CAR_ACCESS_EDIT_FAILED'));
+                Session::add('feedback_negative', _('FEEDBACK_CAR_ACCESS_EDIT_FAILED')); return false;
             }
         }
         
         if ($car_data['disable_car_access'] == $car_data['car_id']) {
             if (self::removeAccessNode($car_data['car_id'], 10, Session::get('user_uuid'))) {
-                Session::add('feedback_positive', _('FEEDBACK_CAR_ACCESS_EDIT_SUCCESS'));
+                Session::add('feedback_positive', _('FEEDBACK_CAR_ACCESS_EDIT_SUCCESS')); return true;
             } else {
-                Session::add('feedback_negative', _('FEEDBACK_CAR_ACCESS_EDIT_FAILED'));
+                Session::add('feedback_negative', _('FEEDBACK_CAR_ACCESS_EDIT_FAILED')); return false;
             }
         }
-        
-        
-        
-        
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare("UPDATE cars SET car_access = ? WHERE id = ?");
-        
-        $accesslist = new Cassandra\Set(Cassandra::TYPE_TEXT);
-        if ($access_tags = $car_data['public_tags']) {
-            foreach ($access_tags as $access_tag) {
-                $accesslist->add($access_tag);
-            }
-        }
-        ;
-        $updatestuff = array(
-            'car_access' => $accesslist,
-            'id' => new Cassandra\Uuid($car_data['car_id'])
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $updatestuff
-        ));
-        if ($result = $casssession->execute($statement, $options)) {
-            Session::add('feedback_positive', _('FEEDBACK_CAR_EDIT_SUCCESS'));
-            return true;
-        } else {
-            Session::add('feedback_negative', _('FEEDBACK_CAR_EDIT_FAILED'));
-            return false;
-        }
-        ;
         
         
         
@@ -765,32 +659,23 @@ class CarModel
             Session::add('feedback_negative', _('ACCESS_RESTRICTION'));
             return false;
         }
-        
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare("UPDATE cars SET images  = ?, image_meta = ? WHERE id = ?");
-        $imagelist   = new Cassandra\Collection(Cassandra::TYPE_TEXT);
+ 
+        $imagelist   = array();
         if ($car_data['images']) {
-            $uplimages = explode(',', $car_data['images']);
-            foreach ($uplimages as $uplimage) {
-                $imagelist->add($uplimage);
-            }
-        }
-        $updatestuff = array(
-            'images' => $imagelist,
-			'image_meta' => '',
-            'id' => new Cassandra\Uuid($car_data['car_id'])
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $updatestuff
-        ));
-        if ($result = $casssession->execute($statement, $options)) {
-            return true;
-        } else {
+            $imagelist  = explode(',', $car_data['images']);
+        }       
+        
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("UPDATE cars SET images = :images, image_meta = :image_meta WHERE id = :id");
+        if ($query->execute(array(
+            ':images' => serialize($imagelist),
+            ':image_meta' => '',
+            ':id' => $car_data['car_id'],
+        ))) { return true; }
+         else {
             Session::add('feedback_negative', _('FEEDBACK_CAR_EDIT_FAILED'));
             return false;
-        }
-        ;
+        };
         
     }
     
@@ -818,7 +703,7 @@ class CarModel
         return true;
     }
     
-    
+    /*
     public static function getNeighboringEvents($car_id, $event_id)
     {
         $casscluster = Cassandra::cluster()->build();
@@ -860,6 +745,7 @@ class CarModel
             ));
         }
     }
+    */
     
     
     
@@ -870,20 +756,16 @@ class CarModel
     
     public static function getEvents($car_id)
     {
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('SELECT * FROM events WHERE car = ?');
-        $selectstuff = array(
-            'car' => new Cassandra\Uuid($car_id)
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $selectstuff
+    
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("SELECT * FROM events WHERE car = :car ORDER BY event_datetime DESC");
+        $query->execute(array(
+            ':car' => $car_id,
         ));
-        $result      = $casssession->execute($statement, $options);
-        if ($result->count() == 0)
-            return false;
-        else
-            return ($result);
+        if ($data = $query->fetchAll()) {
+            return $data;
+        } else
+            return false;    
     }
     
     public static function createEvent($event_data, $setReminders = true) // we don't want to set a double reminder when this is called from editEvent
@@ -900,79 +782,76 @@ class CarModel
             
         }
         
-        
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('INSERT INTO events (car, event_author, event_content, event_data, event_time, event_type, event_entered, event_odo, images) VALUES (?,?,?,?,?,?,?,?,?)');
-        $timeofday   = gettimeofday();
-        $microtime   = $timeofday['usec'];
-		$macrotime   = substr($event_data['event_date'], 0, strlen($event_data['event_date']) - 3);
-		$event_time  = new Cassandra\Timestamp($macrotime, $microtime);
-        $imagelist   = new Cassandra\Collection(Cassandra::TYPE_TEXT);
-        $eventtype   = new Cassandra\Collection(Cassandra::TYPE_TEXT);
+      $timeofday   = gettimeofday();
+      $microtime   = $timeofday['usec'];
+	    $macrotime   = substr($event_data['event_date'], 0, strlen($event_data['event_date']) - 3);
+		  $event_time  = $macrotime.'.'.$microtime;
+      
+      $imagelist   = '';
+      if ($event_data['images']) {
+            $uplimages = explode(',', $event_data['images']);
+            $imagelist = serialize($uplimages);
+      }
+      
+      $eventtype   = '';
         if ($event_data['event_type']) {
             $all_event_types = explode(',', $event_data['event_type']);
-            foreach ($all_event_types AS $one_event_type) {
-                $eventtype->add($one_event_type);
-            }
+            $eventtype = serialize($all_event_types);
         } else { //if event type has not been entered we give it default type
             $tags = Config::get('AVAILABLE_TAGS');
-            $eventtype->add($tags['default']);
+            $all_event_types = array();
+            $all_event_types[] = $tags['default'];
+            $eventtype = serialize($all_event_types);
         }
-        if (isset($event_data['event_entered'])) {
+        
+     if (isset($event_data['event_entered'])) {
             $event_entered = explode('-', $event_data['event_entered']);
         } else {
             $event_entered[0] = $timeofday['sec'];
             $event_entered[1] = $timeofday['usec'];
         }
-        if (isset($event_data['oldversions'])) {
+     
+     if (isset($event_data['oldversions'])) {
             $oldversions = $event_data['oldversions'];
         } else {
             $oldversions = '';
         }
-        ;
-        $event_blob = array(
+        
+     $event_blob = array(
             'amount' => self::Getfloat($event_data['event_amount']),
             'oldversions' => $oldversions
             //'something else' => 'some future data'
-        );
-        if ($event_data['images']) {
-            $uplimages = explode(',', $event_data['images']);
-            foreach ($uplimages as $uplimage) {
-                $imagelist->add($uplimage);
-            }
-        }
-        $insertstuff = array(
-            'car' => new Cassandra\Uuid($event_data['car_id']),
-            'event_author' => new Cassandra\Uuid(Session::get('user_uuid')),
-            'event_content' => $event_data['event_content'],
-            'event_data' => serialize($event_blob),
-		   'event_time' => $event_time,
-            'event_type' => $eventtype,
-            'event_entered' => new Cassandra\Timestamp($event_entered[0], $event_entered[1]),
-            'event_odo' => intval($event_data['event_odo']),
-            'images' => $imagelist
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $insertstuff
-        ));
-        if ($casssession->execute($statement, $options)) {
-			
-			    //reminder
-            
-            if (($setReminders) && ($event_data['reminder_toggle'] == 'on')) {
+        );  
+        
+      $database = DatabaseFactory::getFactory()->getConnection();
+      $query = $database->prepare("INSERT INTO events (car, event_author, event_content, event_data, event_time, event_type, event_entered, event_odo, images, event_datetime) VALUES (:car, :event_author, :event_content, :event_data, :event_time, :event_type, :event_entered, :event_odo, :images, :event_datetime)");
+      if	($query->execute(array(
+      ':car' => $event_data['car_id'],
+      ':event_author' => Session::get('user_uuid'),
+      ':event_content' => $event_data['event_content'],
+      ':event_data' => serialize($event_blob),
+      ':event_time' => $event_time,
+      ':event_type' => $eventtype,
+      ':event_entered' => $event_entered[0].'.'.$event_entered[1],
+      ':event_odo' => intval($event_data['event_odo']),
+      ':images' => $imagelist,
+      ':event_datetime' => date("Y-m-d H:i:s", $macrotime),
+						  )))		{
+              
+        //reminder
+        if (($setReminders) && ($event_data['reminder_toggle'] == 'on')) {
                 $reminder_time = substr($event_data['reminder_time'], 0, strlen($event_data['reminder_time']) - 3); //we added 3 extra zeroes at the end due to the way jqueryui datepicker interprets a timestamp
 				$timeofday = gettimeofday(); $microtime = $timeofday['usec'];
                 ReminderModel::setReminder($event_data['car_id'], $reminder_time, $microtime, $event_data['reminder_content'], 'Q');
-                
             }
             
             //update car odo
 			self::updateOdoReading($event_data['car_id'], intval($event_data['event_odo']));
 			
-			$result = self::ConvertCassObject($event_time);
-            return $result['seconds'].':'.$result['microseconds'];
-        }
+			      
+        return $macrotime.':'.$microtime;
+		           }
+        
         
         // default return
         Session::add('feedback_negative', _('FEEDBACK_EVENT_CREATION_FAILED'));
@@ -983,25 +862,21 @@ class CarModel
     public static function getEvent($event_id)
     {
         $event_array = unserialize(urldecode($event_id));
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('SELECT * FROM events WHERE car = ? and event_time = ?');
-        $selectstuff = array(
-            'car' => new Cassandra\Uuid($event_array['c']),
-            'event_time' => new Cassandra\Timestamp($event_array['t'], $event_array['m'])
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $selectstuff
+    
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("SELECT * FROM events WHERE car = :car AND event_time = :event_time;");
+        $query->execute(array(
+            ':car' => $event_array['c'],
+            ':event_time' => $event_array['t'].'.'.$event_array['m'],
         ));
-        $result      = $casssession->execute($statement, $options);
-        if ($result->count() == 0)
+        if ($data = $query->fetchAll()) {
+            return $data;
+        } else
             return false;
-        else
-            return ($result);
     }
 	
     
-    
+    /*
     public static function addNewCarBit($car_bit_data) //no longer used
     {
         if (!is_array($car_bit_data)) {
@@ -1049,11 +924,12 @@ class CarModel
             
         }
     }
+    */
     
     
     
     
-    
+        /*
     public static function removeCarBit($car_bit_data)  //no longer used
     {
         if (!is_array($car_bit_data)) {
@@ -1079,7 +955,7 @@ class CarModel
                 }
                 }
                 }*/
-                
+                /*
                 unset($data_arr[$keytodelete]);
                 $serialized = serialize($data_arr);
                 
@@ -1109,7 +985,7 @@ class CarModel
             }
             
         }
-    }
+    } */
 	
 	
 	public static function editXmlCarBit($data) {
@@ -1277,6 +1153,14 @@ class CarModel
 		$new_reading = intval($new_reading);
 		if ($new_reading > 10) {
 		$old_reading=intval(self::getCarsField('car_odo', $car_id));
+    if ($oil_change = ExpiriesModel::readExpiry($car_id, 'OIL')) {
+        $oil_change = intval($oil_change->odo);
+        if ($new_reading > $oil_change) {
+        Session::add('feedback_negative', _('OIL_CHANGE_DUE'));
+        ReminderModel::MoveReminder($car_id, '', date('Y-m-d'), _('OIL_CHANGE_DUE'), 1);        
+        }
+        
+    } 
 	//	if ($new_reading > $old_reading) {
 			self::updateCarsField('car_odo', (string)$new_reading, $car_id);
 	//	}
@@ -1289,47 +1173,34 @@ class CarModel
     
     public static function updateCarsField($field, $value, $car_id) {
 		
-		$casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('UPDATE cars SET '.$field.' = ? WHERE id = ?');
-                $updatestuff = array(
-                    $field => $value,
-                    'id' => new Cassandra\Uuid($car_id)
-                );
-                $options     = new Cassandra\ExecutionOptions(array(
-                    'arguments' => $updatestuff
-                ));
-                if ($casssession->execute($statement, $options)) {
-                    return true;
-                } else {
-					return false;
-				}
+		$database = DatabaseFactory::getFactory()->getConnection();
+    $query    = $database->prepare("UPDATE cars SET $field = :value WHERE id = :id");
+    if ($query->execute(array(
+            ':value' => $value,
+            ':id' => $car_id,
+        ))) { return true; }
+    
+		return false;
 	}
 	
 	
 	public static function getCarsField($field, $car_id) {
-		
-		$casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('SELECT '.$field.' FROM cars WHERE id = ?');
-                $stuff = array(
-                    'id' => new Cassandra\Uuid($car_id)
-                );
-                $options     = new Cassandra\ExecutionOptions(array(
-                    'arguments' => $stuff
-                ));
-				 $result      = $casssession->execute($statement, $options);
-        if ($result->count() == 0)
+  
+    
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("SELECT $field FROM cars WHERE id = :id");
+        $query->execute(array(
+            ':id' => $car_id,
+        ));
+        if ($data = $query->fetch()) {
+            return $data->$field;
+        } else
             return false;
-        else
-		$result = self::ConvertCassObject($result);
-		$result = $result[0];
-            return $result[$field];
 				
 	}
     
     
-    public static function editCarBit($car_bit_data)  //no longer used
+/*    public static function editCarBit($car_bit_data)  //no longer used
     {
         if (!is_array($car_bit_data)) {
             Session::add('feedback_negative', _('FEEDBACK_EVENT_EDIT_FAILED'));
@@ -1374,7 +1245,7 @@ class CarModel
             
         }
     }
-    
+  */  
     
     
     
@@ -1405,23 +1276,17 @@ class CarModel
         )));
         $thisevent = self::getEvent($event_url);
         $thisevent = $thisevent[0];
-        $thisevent = self::ConvertCassObject($thisevent);
+        
         $microtime = gettimeofday(); //timestamp of whent the old event was overwritten
         $time_id   = $microtime['sec'] . '-' . $microtime['usec'];
         
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('INSERT INTO oldevents (car, time_id, event_data) VALUES (?,?,?)');
-        $insertstuff = array(
-            'car' => new Cassandra\Uuid($event_data['car_id']),
-            'time_id' => $time_id,
-            'event_data' => serialize($thisevent)
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $insertstuff
-        ));
-        
-        if ($casssession->execute($statement, $options)) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("INSERT INTO oldevents (car, time_id, event_data) VALUES (:car,:time_id,:event_data)");
+        if ($query->execute(array(
+            ':car' => $event_data['car_id'],
+            ':time_id' => $time_id,
+            ':event_data' => serialize($thisevent),
+        )))  {
             if (isset($event_data['oldversions'])) {
                 $event_data['oldversions'] .= ',' . $time_id;
             } else {
@@ -1470,20 +1335,14 @@ class CarModel
         if ($level < 98) {
             Session::add('feedback_negative', _('ACCESS_RESTRICTION'));
             return false;
-            
         }
         
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('DELETE FROM events WHERE car = ? AND event_time = ?');
-        $updatestuff = array(
-            'car' => new Cassandra\Uuid($event_data['c']),
-            'event_time' => new Cassandra\Timestamp($event_data['t'], $event_data['m'])
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $updatestuff
-        ));
-        if ($casssession->execute($statement, $options)) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query    = $database->prepare("DELETE FROM events WHERE car = :car AND event_time = :event_time");
+        if ($query->execute(array(
+            ':car' => $event_data['c'],
+            ':event_time' => $event_data['t'].'.'.$event_data['m'],
+        )))  {
             if ($event_data['source'] == 'edit')
                 Session::add('feedback_positive', _('FEEDBACK_EVENT_SAVED'));
             if ($event_data['source'] == 'delete')
@@ -1653,12 +1512,14 @@ class CarModel
 			if ($event_data['wherefrom'] == 'car') {
 			self::editCarImages(array('car_id' => $event_data['car_id'], 'images' => $user_images,));
 			};
+      if ($event_data['wherefrom'] == 'attribute') {
+			self::writeAttribute($event_data['car_id'], $event_data['chapter'], 'PICTURES', $user_images, '');
+			};
             return $newfname;
         } else {
             return 'false';
         }
     }
-    
     
     
     
@@ -1958,14 +1819,17 @@ public static function updateXmlBits($model_structure, $user_structure, $car_id)
           'images' => $event_data['user_images'],
           ));
 			};
+      if ($event_data['wherefrom'] == 'attribute') {
+			self::writeAttribute($event_data['car_id'], $event_data['chapter'], 'PICTURES', $event_data['user_images'], '');
+			};
 			
-			$upload_dir = Config::get('CAR_IMAGE_PATH').$event_data['owner'].'/';
+			$upload_dir = Config::get('CAR_IMAGE_PATH').$event_data['car_id'].'/';
 			
-			if (file_exists($upload_dir.$event_data['car_id'].'_'.$event_data['img'])) { @unlink($upload_dir.$event_data['car_id'].'_'.$event_data['img']); }
+			if (file_exists($upload_dir.$event_data['img'])) { @unlink($upload_dir.$event_data['img']); }
 			
 			$subdirs = glob($upload_dir . '*' , GLOB_ONLYDIR);
 				foreach ($subdirs AS $subdir) {
-					if (file_exists($subdir.'/'.$event_data['car_id'].'_'.$event_data['img'])) { @unlink($subdir.'/'.$event_data['car_id'].'_'.$event_data['img']); }		
+					if (file_exists($subdir.'/'.$event_data['img'])) { @unlink($subdir.'/'.$event_data['img']); }		
 				}
 				
 		return '<i class="icon-trash"> </i>';
@@ -1987,30 +1851,21 @@ public static function updateXmlBits($model_structure, $user_structure, $car_id)
             return false;
         }
 		
-		 $imagelist   = new Cassandra\Collection(Cassandra::TYPE_TEXT);
+		 $imagelist   = array();
 
         if ($images) {
-            $uplimages = explode(',', $images);
-            foreach ($uplimages as $uplimage) {
-                $imagelist->add($uplimage);
-            }
+            $imagelist   = explode(',', $images);
+            
 			}
-		
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('UPDATE events SET images = ? WHERE car = ? AND event_time = ?');
-        $updatestuff = array(
-			'images' => $imagelist,
-            'car' => new Cassandra\Uuid($car_id),
-            'event_time' => new Cassandra\Timestamp($time, $microtime),
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $updatestuff
-        ));
-        if ($casssession->execute($statement, $options)) {
-            return true;
-        }
-        
+      
+      $database = DatabaseFactory::getFactory()->getConnection();
+    $query    = $database->prepare("UPDATE events SET images = :images WHERE car = :car AND event_time = :event_time");
+    if ($query->execute(array(
+            ':images' => serialize($imagelist),
+            ':car' => $car_id,
+            ':event_time' => $time.'.'.$microtime
+        ))) { return true; }
+      
         // default return
         Session::add('feedback_negative', _('FEEDBACK_EVENT_EDIT_FAILED'));
         return false;
@@ -2248,19 +2103,14 @@ public static function updateXmlBits($model_structure, $user_structure, $car_id)
 	
 	public static function ExecuteTransfer($car_id, $old_owner, $new_owner) {
 	
-	
-	$casscluster = Cassandra::cluster()->build();
-    $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-    $statement   = $casssession->prepare("UPDATE cars SET owner = ? WHERE id = ?");
-        $updatestuff = array(
-            'owner'  => new Cassandra\Uuid($new_owner),
-            'id' => new Cassandra\Uuid($car_id),
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $updatestuff
-        ));
-        if ($result = $casssession->execute($statement, $options)) {
-			
+
+    $database = DatabaseFactory::getFactory()->getConnection();
+    $query    = $database->prepare("UPDATE cars SET owner = :owner WHERE id = :id AND owner = :old_owner");
+        if ($query->execute(array(
+            ':owner' => $new_owner,
+            ':id' => $car_id,
+            ':old_owner' => $old_owner,
+        ))) { 
 			
 		self::transferCarAccessEntry($car_id, $old_owner, $new_owner, UserModel::getUserNameByUUid($new_owner));
 			
@@ -2529,18 +2379,15 @@ public static function updateXmlBits($model_structure, $user_structure, $car_id)
             return 'false';
         }
 		
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('UPDATE events SET visibility = ? WHERE car = ? AND event_time = ?');
-        $updatestuff = array(
-			'visibility' => $visibility,
-            'car' => new Cassandra\Uuid($car_id),
-            'event_time' => new Cassandra\Timestamp($time, $microtime),
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $updatestuff
-        ));
-        if ($casssession->execute($statement, $options)) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "UPDATE events SET visibility = :visibility WHERE car = :car AND event_time = :event_time";
+			  $query = $database->prepare($sql);
+			  if	($query->execute(array
+                ( ':visibility' => $visibility,
+                  ':car' => $car_id,
+                  ':event_time' => $time.'.'.$microtime,
+                  )
+            )) {
             return 'true';
         }
         
@@ -2561,34 +2408,27 @@ public static function updateXmlBits($model_structure, $user_structure, $car_id)
 		return false;
 	}
 	
-	  public static function getCarIdFiltered($car_name, $owner_id) //filtered, cassandra, top be used only when no lookup table results are produced
+	  public static function getCarIdFiltered($car_name, $owner_id) //filtered, to be used only when no lookup table results are produced
     {
-        $casscluster = Cassandra::cluster()->build();
-        $casssession = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-        $statement   = $casssession->prepare('SELECT id FROM cars WHERE owner = ? and car_name = ? ALLOW FILTERING');
-        $selectstuff = array(
-            'owner' => new Cassandra\Uuid($owner_id),
-			'car_name' => $car_name,
-        );
-        $options     = new Cassandra\ExecutionOptions(array(
-            'arguments' => $selectstuff
-        ));
-        $result      = $casssession->execute($statement, $options);
-        if ($result->count() == 0)
-            return false;
-        else {
-            
-            foreach ($result as $row) {
-				$car_id = (array) $row['id'];
-				$car_id = $car_id['uuid'];
+    
+    
+    	$database = DatabaseFactory::getFactory()->getConnection();
+			$sql = "SELECT id FROM cars WHERE owner = :owner AND car_name = :car_name";
+			$query = $database->prepare($sql);
+			if	($query->execute(array(
+										':owner' => $owner_id,
+										':car_name' => $car_name,
+							  )))
+			{
 				
-				};
-		return $car_id;		
-		
-		
-		
-		
-        }
+        	if ($result = $query->fetch())
+				{
+         return $result->id; 
+         }
+				
+				 }
+    
+        
         return false;
     }
 	
@@ -2604,8 +2444,10 @@ public static function updateXmlBits($model_structure, $user_structure, $car_id)
 							  )))
 			{
 				if ($result = $query->fetch())
-				{ return $result->car_id; }
-				 }
+				{
+         return $result->car_id; 
+         }
+			}
 				 
 				if ($filtered = self::getCarIdFiltered($car_name, $owner_id)) {return $filtered;}
 				//if lookup table does not have the data, we look in the cass table
@@ -2614,5 +2456,160 @@ public static function updateXmlBits($model_structure, $user_structure, $car_id)
 				 return false;
 		
 	}
+  
+  
+  
+  
+  public static function parsetimestamp($data) {
+    if (strpos($data, '.') > 2) {
+    $explosion =  explode('.', $data);
+    $result = array();
+		$result['seconds'] = $explosion[0];
+    $result['microseconds'] = $explosion[1];
+		return $result;
+    
+    } else return false;
+		
+	}
+  
+  public static function timestampToMysql($timestamp) {
+    return date("Y-m-d H:i:s", $timestamp);
+  }  
+  
+  //*****NEW_ATTRIBUTES*********
+  
+  public static function writeAttribute($car_id, $chapter, $attribute, $itemvalue, $unit)   //writes a single attribute
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+		$sql = "INSERT INTO attributes (car_id, chapter, attribute, item, unit) VALUES (:car_id, :chapter, :attribute, :item, :unit) ON DUPLICATE KEY UPDATE item = :item, unit = :unit";
+		$query = $database->prepare($sql);
+        if	($query->execute(array(
+        ':car_id' => $car_id,
+		    ':chapter' => $chapter,
+		    ':attribute' => $attribute,
+        ':item' => $itemvalue,
+        ':unit' => $unit,
+						  )))
+		{ return true; }
+    
+    return false;
+    }
+    
+     public static function readAttribute($car_id, $chapter, $attribute) //reads a single attribute
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+		$sql = "SELECT item, unit FROM attributes WHERE car_id = :car_id AND chapter = :chapter AND attribute = :attribute;";
+		$query = $database->prepare($sql);
+        $query->execute(array(
+        ':car_id' => $car_id,
+		    ':chapter' => $chapter,
+		    ':attribute' => $attribute,
+						  ));
+        if ($data = $query->fetch()) {
+            return $data->item;
+        } 
+    
+    return false;
+    }
+    
+         public static function readAttributes($car_id, $chapter) //reads attribute values for a chapter
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+		$sql = "SELECT attribute, item, unit FROM attributes WHERE car_id = :car_id AND chapter = :chapter;";
+		$query = $database->prepare($sql);
+        $query->execute(array(
+        ':car_id' => $car_id,
+		    ':chapter' => $chapter,
+		    					  ));
+        if ($data = $query->fetchAll()) {
+        $result = array();
+            foreach ($data as $item) {
+            $result[$item->attribute]['value'] = $item->item;
+            $result[$item->attribute]['unit'] = $item->unit;
+            };
+         return $result;   
+            
+        }
+        
+      return false;
+      }  
+        
+        public static function readAllAttributes($car_id) //reads attribute values for all chapter
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+		$sql = "SELECT chapter, attribute, item FROM attributes WHERE car_id = :car_id;";
+		$query = $database->prepare($sql);
+        $query->execute(array(
+        ':car_id' => $car_id,
+		    					  ));
+        if ($data = $query->fetchAll()) {
+            return $data;
+        } 
+    
+    return false;
+    }
+    
+    
+    public static function getAttributeChapters()  //gets all preset chapters
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+		$sql = "SELECT DISTINCT chapter FROM attr_names;";
+		$query = $database->prepare($sql);
+        $query->execute();
+        $response = array();
+        if ($data = $query->fetchAll()) {
+            foreach ($data as $item) {
+              $response[] = $item->chapter;
+            }
+            return $response;
+        } 
+    
+    return false;
+    
+    
+    }
+    
+    
+    
+    public static function getAttributeChapterItems($chapter)  //gets all items for a chapter
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+		$sql = "SELECT * FROM attr_names WHERE chapter = :chapter ORDER BY ord;";
+		$query = $database->prepare($sql);
+        $query->execute(array(
+        ':chapter' => $chapter,
+        ));
+        if ($data = $query->fetchAll()) {
+            return $data;
+        } 
+    
+    return false;
+    
+    
+    }
+    
+    
+      public static function commitAttribute($data) {
+    //'key'          'value'         'car_id'   'chapter'      'entry'   'validate' 'unit'
+    if (is_array($data)) {
+			array_walk_recursive($data, 'Filter::XSSFilter');
+			if (($data['car_id']) &&
+			(self::checkAccessLevel($data['car_id'],Session::get('user_uuid')) >= 80))
+			{  
+         if ($value = self::ValidateEntry($data['value'], $data['validate'])) {
+         $unit = (isset($data['unit'])) ? substr(strip_tags($data['unit']), 0, 3) : '';
+        if (self::writeAttribute($data['car_id'], $data['chapter'], $data['entry'], $value, $data['unit']))
+        {
+        return $value;
+        } 
+        }
+      }
+      }
+      
+      return false;
+  } 
+  
 
 }
+
+

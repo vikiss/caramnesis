@@ -5,18 +5,24 @@
           
        //  print '<pre>'; print_r($row); print '</pre>';
            
-                       $event_content = $row['event_content'];
-                       $event_types = $row['event_type'];
-                       $event_id = (array) $row['event_time']; 
-                       $event_time = $event_id['seconds'];
-                       $event_microtime = $event_id['microseconds'];
-                       $event_entered = (array) $row['event_entered'];
-                       $car_id = (array) $row['car']; 
-                       $car_id = $car_id['uuid'];
-                       $event_data = unserialize($row['event_data']);
-                       $event_images = (array) $row['images'];
-                       if (isset($event_images['values'])) {
-                       $event_images = $event_images['values'];
+                       $event_content = $row->event_content;
+                       $event_types = unserialize($row->event_type);
+
+                       $event_id = $row->event_time; 
+                       $serialized_event_time =  CarModel::parsetimestamp($event_id);
+                       $event_time = $serialized_event_time['seconds'];
+                       $event_microtime = $serialized_event_time['microseconds'];
+                       
+                       $event_entered = $row->event_entered;
+                       $serialized_entry_time =  CarModel::parsetimestamp($event_entered);
+                       $entry_time =  $serialized_entry_time['seconds'];
+                       $entry_microtime = $serialized_entry_time['microseconds'];
+                        
+                       $car_id = $row->car; 
+                       $event_data = unserialize($row->event_data);
+                       
+                       $event_images = unserialize($row->images);
+                       if (is_array($event_images)) {
                        $images_list = '';
                        $images_list = implode(',', $event_images);} else {
                        $event_images = false; }  

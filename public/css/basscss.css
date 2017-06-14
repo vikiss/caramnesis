@@ -490,7 +490,7 @@ hr {
 }
 
 
-@media (max-width: 40em) { 
+@media (max-width: 40em) {
   .sm-hide { display: none !important }
 }
 
@@ -695,7 +695,7 @@ hr {
   .md-col-12 {
     width: 100%;
   }
-  
+
   .carcol {    padding-right: 2em;}
 
 }
@@ -972,7 +972,7 @@ hr {
 	position:relative;
 	font-size:11px;
 	}
-  
+
   .tags a, .tags span{
 	margin-left:20px;
 	padding:0 10px 0 12px;
@@ -980,13 +980,13 @@ hr {
 	color:#fff;
 	text-decoration:none;
 	-moz-border-radius-bottomright:4px;
-	-webkit-border-bottom-right-radius:4px;	
+	-webkit-border-bottom-right-radius:4px;
 	border-bottom-right-radius:4px;
 	-moz-border-radius-topright:4px;
-	-webkit-border-top-right-radius:4px;	
-	border-top-right-radius:4px;	
-	} 
-  
+	-webkit-border-top-right-radius:4px;
+	border-top-right-radius:4px;
+	}
+
   .tags a:before{
 	content:"";
 	float:left;
@@ -997,9 +997,9 @@ hr {
 	height:0;
 	border-color:transparent #CC9 transparent transparent;
 	border-style:solid;
-	border-width:12px 12px 12px 0;		
+	border-width:12px 12px 12px 0;
 	}
-  
+
   .tags a:after{
 	content:"";
 	position:absolute;
@@ -1013,32 +1013,32 @@ hr {
 	border-radius:3px;
 	background:#fff;
 	}
-  
+
 */
 
 
 
- 
 
-  
+
+
  /*
  misc
- */ 
-  
+ */
+
   div.contentWrap {
     max-height:90%;
-    
+
   }
-  
+
   div.contentWrap img {}
-  
+
   /*#dropbox {position: relative; width: 120px; height: 80px; border: #CC9 dashed 3px; display: none;  }*/
   .square {width: 120px; height: 120px; }
   .midsquare {margin-top: 50px;}
-  
+
   .striped tr:nth-child(even) { background-color: rgba(204, 204, 153, 0.37) }
   .striped tr:nth-child(odd) { background-color: rgba(204, 204, 153, 0.17) }
-  
+
 .vlist {
   display: table;
 }
@@ -1091,7 +1091,7 @@ border-color: transparent rgba(255, 64, 54, 0.67) transparent transparent;
     top:0;
     bottom:0;
     margin: auto;
-    max-height: 50vh; max-width: 67vh; 
+    max-height: 50vh; max-width: 67vh;
     }
 .abscenter {top: 48%; left: 48%;}
 .fs {width: 100%; height: 100%; position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
@@ -1107,7 +1107,7 @@ border-color: transparent rgba(255, 64, 54, 0.67) transparent transparent;
 .top-48 {top: 48%;}
 .ui-tooltip {
     background-color: #CC9 !important;
-    font-size: .78rem !important; 
+    font-size: .78rem !important;
   }
 .ui-widget {font-size: inherit;}
 .pic120margin {margin-left: 140px;}
@@ -1129,3 +1129,8 @@ border-color: transparent rgba(255, 64, 54, 0.67) transparent transparent;
 .odo {padding: 1px; margin: 1px;}
 .fheight {height: 3em}
 .event.public-event {border-left: 6px solid #cddc39; background-color: rgba(205, 220, 57, 0.36); margin-left: -5px; }
+
+.autoheight{
+        min-height: 24px;
+        resize: none;
+      }

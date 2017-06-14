@@ -39,7 +39,7 @@ foreach ($tags as $key => $tag) {
             
             <div class="">
                <div class="lblgrp"><label for="event_odo"><?= _("EVENT_ODO").', '.$units->user_distance; ?></label>
-                        <input type="number" min="0" step="1" name="event_odo" id="event_odo" class="block field mt1 col-12" value="<?php if ($row['event_odo']) {echo $row['event_odo'];}; ?>"  />
+                        <input type="number" min="0" step="1" name="event_odo" id="event_odo" class="block field mt1 col-12" value="<?php if ($row->event_odo) {echo $row->event_odo;}; ?>"  />
                </div>
                <div class="lblgrp"><label for="event_amount"><?= _("EVENT_AMOUNT").', '._('CURRENCY_'.$units->user_currency); ?></label>
                         <input type="number" min="0" step="0.01" name="event_amount"  id="event_amount" class="block field mt1 col-12" value="<?php if ($event_data['amount'] > 0) {echo $event_data['amount']; } ?>" />   
@@ -58,7 +58,7 @@ foreach ($tags as $key => $tag) {
             <input type="hidden" id="reminder_content" name="reminder_content" value="<?= $taglist; ?>" />
             <input type="hidden" id="event_time" name="event_time" value = "<?= $event_time; ?>" />
             <input type="hidden" id="event_microtime" name="event_microtime" value = "<?= $event_microtime; ?>" />
-            <input type="hidden" name="event_entered" value = "<?= $event_entered['seconds'].'-'.$event_entered['microseconds']; ?>" />
+            <input type="hidden" name="event_entered" value = "<?= $entry_time.'-'.$entry_microtime; ?>" />
             <input type="hidden" name="oldversions" value = "<?php if (isset($event_data['oldversions'])) echo $event_data['oldversions']; ?>" />
             <input type="hidden" name="owner" id="owner" value = "<?= $owner; ?>" />
             <div id="response" class="hide"></div>

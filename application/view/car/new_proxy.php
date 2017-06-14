@@ -12,24 +12,25 @@ if ($this->cars) { ?>
 <?php
 foreach ($this->cars as $car) {
   foreach ($car as $row) {
-      $id = (array) $row['id']; //typecast cassandra object into array
-      $car_images = (array) $row['images'];
-                         if (isset($car_images['values'])) {
-                         $car_images = $car_images['values'];
+  
+  
+      $id = $row->id;
+      $car_images = unserialize($row->images);
+                         if (is_array($car_images)) {
                          $car_image =  reset($car_images);} else {
                          $car_images = false; $car_image = '';}
-      $owner = (array) $row['owner'];                     
+      $owner = $row->owner;                     
                         
       
-      $plates_or_vin = '';
-      if ($plates_or_vin = (array) $row['car_plates']) {$plates_or_vin=$plates_or_vin['values'][0]; }
-      if (is_array($plates_or_vin)) $plates_or_vin=$row['car_vin'];
+      $plates_or_vin = unserialize($row->car_plates);
+      if (count($plates_or_vin)) {$plates_or_vin=$plates_or_vin[0]; }
+      else { $plates_or_vin=$row->car_vin; }
       ?>
 <div class="mb1 mr1 p1 black bg-kclite left fauxfield square center truncate">
-<a href="<?= Config::get('URL') . 'car/index/' . $id['uuid']; ?>" title="<?= UserModel::getUserNameByUUid($owner['uuid']); ?>: <?= $row['car_name']; ?> (<?= $row['car_make']; ?> <?= $row['car_model']; ?> <?= $plates_or_vin; ?>)"><?= $row['car_name']; ?> (<?= UserModel::getUserNameByUUid($owner['uuid']); ?>)</a>
+<a href="<?= Config::get('URL') . 'car/index/' . $id; ?>" title="<?= UserModel::getUserNameByUUid($owner); ?>: <?= $row->car_name; ?> (<?= $row->car_make; ?> <?= $row->car_model; ?> <?= $plates_or_vin; ?>)"><?= $row->car_name; ?> (<?= UserModel::getUserNameByUUid($owner); ?>)</a>
 <?php if ($car_images) { ?>
-<div><a href="<?= Config::get('URL') . 'car/index/' . $id['uuid']; ?>" title="<?= $row['car_name']; ?> (<?= $row['car_make']; ?> <?= $row['car_model']; ?> <?= $plates_or_vin; ?>)">
-<?php print '<img class="crop" src="/car/image/'.$id['uuid'].'/'.$car_image.'/120" />'; ?>
+<div><a href="<?= Config::get('URL') . 'car/index/' . $id; ?>" title="<?= $row->car_name; ?> (<?= $row->car_make; ?> <?= $row->car_model; ?> <?= $plates_or_vin; ?>)">
+<?php print '<img class="crop" src="/car/image/'.$id.'/'.$car_image.'/120" />'; ?>
 </a></div>
 <?php }; ?>
 </div>

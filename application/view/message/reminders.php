@@ -10,13 +10,11 @@ $this->since_when ? $since_when = $this->since_when : $since_when = 172800; //17
 
 if ($cars = $this->cars) {
     foreach ($cars as $car) {
-        $car_id = (array) $car['id'];
-        $car_id = $car_id['uuid'];
+        $car_id = $car->id;
         if ($reminders = ReminderModel::getReminders($car_id, $since_when)) {
             foreach ($reminders AS $reminder) {
-                $time = (array) $reminder['time'];
-                $microtime = $time['microseconds'];
-                $time = $time['seconds'];
+              $time = $reminder->time;
+              $microtime = $reminder->microtime;
                 $msgstatus = 'R'; //bold events, Q for future, R for past to use message classes
                 $icon = '<i class ="icon-bell"> </i>';
                 if ($time >= time()) {
@@ -28,9 +26,9 @@ if ($cars = $this->cars) {
                 $table_data[$time] = array(
                     'icon' => $icon,
                     'msgstatus' => $msgstatus,
-                    'car_name' => $car['car_name'],
+                    'car_name' => $car->car_name,
                     'reminder_time' => ReminderModel::formatDate($time),
-                    'reminder_content' => $reminder['content'],
+                    'reminder_content' => $reminder->content,
                     'reminder_link' => Config::get('URL').'message/reminder/'.$car_id.'/'.$time.'/'.$microtime.'/'.$msgstatus, //if reminder is active (msgstatus = Q), we know we have to decrement active reminders count in single reminder page
                     'time' => $time,
                     'microtime' => $microtime,

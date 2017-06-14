@@ -13,24 +13,35 @@
             </tr>
             
             <?php
-            foreach ($this->messages as $row) {
-             $message_time = (array) $row['system.dateof(time)'];
-             $timeuuid = (array) $row['time'];
-             $message_link = Config::get('URL').'message/single/'.$timeuuid['uuid'].'/'.$row['recipient'];
+            $totalrows = array_pop($this->messages);
+            $totalrows = (array) $totalrows; 
+            $totalrows = intval($totalrows['FOUND_ROWS()']);
+            //print $totalrows; 
+            
+            foreach ($this->messages as $key=>$row) {
+            
+            $serialized_message_time =  CarModel::parsetimestamp($row->time);
+            $message_time = $serialized_message_time['seconds'];
+            $message_microtime = $serialized_message_time['microseconds'];
+     
+             $timeuuid = $row->time;
+             $message_link = Config::get('URL').'message/single/'.$timeuuid.'/'.$row->recipient;
+            
                         ?>
-
-<tr class="msgstatus-<?= $row['status']; ?>">
-                <td><?php
-            if ($row['status'] == 'R') {echo '<i class ="icon-mail"> </i>';}
-            if ($row['status'] == 'Q') {echo '<i class ="icon-mail-alt"> </i>';}
+                        
+                        
+<tr class="msgstatus-<?= $row->status; ?>">
+            <td><?php
+            if ($row->status == 'R') {echo '<i class ="icon-mail"> </i>';}
+            if ($row->status == 'Q') {echo '<i class ="icon-mail-alt"> </i>';}
                 ?></td>
-            <td><a href="<?= $message_link; ?>"><?= UserModel::getUserNameByUUid($row['recipient']); ?></a></td>
-            <td><a href="<?= $message_link; ?>"><?= MessageModel::formatDate($message_time['seconds']);  ?></a></td>
-            <td><a href="<?= $message_link; ?>"><?= $row['subject']; ?></a></td>
+            <td><a href="<?= $message_link; ?>"><?= UserModel::getUserNameByUUid($row->recipient); ?></a></td>
+            <td><a href="<?= $message_link; ?>"><?= MessageModel::formatDate($message_time);  ?></a></td>
+            <td><a href="<?= $message_link; ?>"><?= $row->subject; ?></a></td>
 </tr>
 
 <?php 
-            }      } ?>
+             }     } ?>
                        
 </tbody></table>
             <div>

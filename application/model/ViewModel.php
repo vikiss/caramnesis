@@ -37,19 +37,6 @@ public static function getCarAccessByCarId($car_id, $level) {
  
  }
  
- 
-
-                            public static function getCar($car_id)
-    {
-
-	     $casscluster   = Cassandra::cluster()  ->build();
-       $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-       $statement = $casssession->prepare('SELECT id, car_access, car_data, car_make, car_model, car_name, car_plates, car_vin, images, owner FROM cars WHERE id = ?');
-       $selectstuff = array('id' => new Cassandra\Uuid($car_id));
-       $options = new Cassandra\ExecutionOptions(array('arguments' => $selectstuff));
-       $result = $casssession->execute($statement, $options); 
-       if ($result->count() == 0) return false; else return($result);
-    }
     
     public static function getCarIdByImg($img) {
     $car_id=explode('_', $img);
@@ -59,18 +46,6 @@ public static function getCarAccessByCarId($car_id, $level) {
     
     
       
-    public static function get_public_event_types ($car_id) {
-    
-    $casscluster   = Cassandra::cluster()  ->build();
-       $casssession   = $casscluster->connect(Config::get('CASS_KEYSPACE'));
-       $statement = $casssession->prepare('SELECT car_access FROM cars WHERE id = ?');
-       $selectstuff = array('id' => new Cassandra\Uuid($car_id));
-       $options = new Cassandra\ExecutionOptions(array('arguments' => $selectstuff));
-       $result = $casssession->execute($statement, $options);
-       $result = $result[0]; $result = (array) $result['car_access']; if (array_key_exists('values', $result)) $result = $result['values'];
-       return($result);
-    
-    }
     
     public static function limit_teaser($text, $length = 300) {
 	$result = $text;

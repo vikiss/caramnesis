@@ -8,7 +8,7 @@
     <?php }; ?>
     <script>var lang='<?= strtolower(Session::get('user_lang')); ?>';</script>
     <script src="/js/bespoke.js"></script>
-  
+ 
      
     <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

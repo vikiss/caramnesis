@@ -15,9 +15,9 @@ $(window).click(function() {
 });
 
 
-$('.jqtooltip').tooltip({ 
-  content: function(callback) { 
-     callback($(this).prop('title').replace('|', '<br />')); 
+$('.jqtooltip').tooltip({
+  content: function(callback) {
+     callback($(this).prop('title').replace('|', '<br />'));
   }
 });
 
@@ -26,12 +26,12 @@ $('.jqtooltip').tooltip({
 
 
   $(function() {
-    
+
 //    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) { mobile = true;  }
-//    if (!mobile) {$('#dropbox').show(); } 
+//    if (!mobile) {$('#dropbox').show(); }
 
         if (lang === '') { lang = 'en';}
-  $.datepicker.setDefaults( $.datepicker.regional[ lang ] );  
+  $.datepicker.setDefaults( $.datepicker.regional[ lang ] );
     $( "#reminder_time" ).datepicker({
       changeMonth: true,
       changeYear: true,
@@ -39,31 +39,51 @@ $('.jqtooltip').tooltip({
       altFormat: "@",
       minDate: 1
     });
-    
+
     $( "#sortimages").sortable({
        handle: ".portlet-header",
        placeholder: "mb1 mr1 p1 black bg-kclite left fauxfield square ",
        cancel: ".meta",
        update: function( event, ui ) {
         var data = $(this).sortable('toArray');
-            $('#user_images').val(data);        
+            $('#user_images').val(data);
+            if ($(this).hasClass( "autosortsave" ))
+            {
+
+
+
+              var car_id = $("#car_id").val();
+              var chapter = $("#chapter").val();
+              var pics = $('#user_images').val();
+      $('.response[data-key="attritem-1"]').load('/car/write_attr', {"key":'attritem-1', "value":pics, "car_id":car_id, "chapter":chapter, "entry":'PICTURES', "unit":'', "validate":'text' });
+
+
+
+
+
+
+
+
+
+
+            }
        },
     });
-    
+
   //  $( "#event_type_select" ).selectmenu();
-  
-  
-    
+
+
+
     if ($( "#accordion" ).length) {$( "#accordion" ).accordion({      heightStyle: "content",  collapsible: true,  active: false    }); }
-  
-    
-    
+
+
+
   });
-  
-  
-  
-    
-  
+
+
+
+
+
 //message count updater
 
 setInterval(function() {
@@ -82,7 +102,7 @@ $('#event_type_select').on('change', function () {
     var evtype_id = this.value;
     var evtype_name = $("#event_type_select option:selected").text();
     if ($('#event_type').val().indexOf(evtype_id) == -1) {
-    
+
 $('#event_type').val(function(i, val) {
   return (val ? val + ',' : '') + evtype_id;      });
 $('#taglisting').append('<li><a href="' + evtype_id + '"><i class="icon-cancel white brdrw"> </i></a> <span>'+evtype_name+'</span></li>');
@@ -128,10 +148,10 @@ $( ".deleteconfdlgopnr" ).click(function(e) {
     $("#dlg_car_id").val($(this).data('car_id'));
     $("#dlg_time").val($(this).data('time'));
     $("#dlg_microtime").val($(this).data('microtime'));
-    
+
     });
 $( "#deleteconfdlg .close_dialog" ).click(function() {  $( "#deleteconfdlg" ).dialog( "close" ); });
-  
+
  //car make picker
   $( "#nwcardialog" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.75), modal: true });
 $( "#nwcaropener" ).click(function(e) {
@@ -141,9 +161,9 @@ $( "#nwcaropener" ).click(function(e) {
 
 $( "#nwcardialog .nwmake" ).click(function(e) {
     e.preventDefault();
-$("#nwcaropener").val($(this).attr('href')); 
+$("#nwcaropener").val($(this).attr('href'));
 $("#car_make_id").val($(this).data('make-id'));
-$( "#nwcardialog" ).dialog( "close" );   
+$( "#nwcardialog" ).dialog( "close" );
 } );
 
 $( "#nwcardialog #show-all-makes" ).click(function() {
@@ -165,9 +185,9 @@ $( "#nwmodelopener" ).click(function(e) {
 
 $('body').on('click', '#nwmodeldialog .nwmodel', function(e) {
     e.preventDefault();
-$("#nwmodelopener").val($(this).attr('href')); 
+$("#nwmodelopener").val($(this).attr('href'));
 $("#car_model_id").val($(this).data('model-id'));
-  $( "#nwmodeldialog" ).dialog( "close" );   
+  $( "#nwmodeldialog" ).dialog( "close" );
 } );
 
 
@@ -184,17 +204,17 @@ $( "#nwvariantopener" ).click(function(e) {
 
 $('body').on('click', '#nwvariantdialog .nwvariant', function(e) {
     e.preventDefault();
-$("#nwvariantopener").val($(this).attr('href')); 
+$("#nwvariantopener").val($(this).attr('href'));
 $("#car_variant_id").val($(this).data('variant-id'));
 var maxyear = $(this).data('year-max');
     if ( !maxyear )
-{maxyear = new Date().getFullYear();}   
+{maxyear = new Date().getFullYear();}
 $("#car_year").attr({"min" : $(this).data('year-min'), "max" : $(this).data('year-max')});
 
 
 
 
-  $( "#nwvariantdialog" ).dialog( "close" );   
+  $( "#nwvariantdialog" ).dialog( "close" );
 } );
 
 
@@ -203,14 +223,14 @@ $("#car_year").attr({"min" : $(this).data('year-min'), "max" : $(this).data('yea
 
 function saveDataBits() {
     var new_car_data_val = $("#new_car_data_val").val();
-            
-            
+
+
             if (new_car_data_val) {
               var new_car_data_bit = $("#new_car_data_bit").val();
               var car_id = $("#car_id").val();
 
           $( "#car_data_container" ).html('<div class="icon-spin3 spinner"> </div>');
-             $("#new_car_data_bit").val('BIT_OTHER');  
+             $("#new_car_data_bit").val('BIT_OTHER');
              $("#new_car_data_val").val('');
             $('#car_data_container').load('/car/car_data_bits', {"new_car_data_bit":new_car_data_bit, "new_car_data_val":new_car_data_val, "car_id":car_id });
                             }
@@ -221,18 +241,18 @@ function saveDataBits() {
             e.preventDefault();
            saveDataBits();
             });
-            
-        
+
+
 
 $("#new_car_data_val").on('keyup keypress', function(e) {
   var keyCode = e.keyCode || e.which;
-  if (keyCode === 13) { 
+  if (keyCode === 13) {
     e.preventDefault();
     saveDataBits();
   }
 });
-            
-            
+
+
 //car data bit delete
 $( "#cardatadeletedlg" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.45), modal: true });
 $('body').on('click', '.cardatadeletesw', function() {  $( "#cardatadeletedlg" ).dialog( "open" ); the_data_bit = $(this).data('id');    });
@@ -264,14 +284,14 @@ $( "#cardataeditdlg .close_dialog" ).click(function() {  $( "#cardataeditdlg" ).
 $( "#cardatasavebtn" ).click(function() {  editDataBits();        });
 $("#edit_car_data_val").on('keyup keypress', function(e) {
   var keyCode = e.keyCode || e.which;
-  if (keyCode === 13) { 
+  if (keyCode === 13) {
     e.preventDefault();
     editDataBits();
   }
 });
 
-           
- 
+
+
  // user profile editor
 $( "#userlangdialog" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.45), modal: true });
 $( "#user_lang .icon-cog" ).click(function() {  $( "#userlangdialog" ).dialog( "open" ); });
@@ -288,7 +308,7 @@ $( "#user_cons .icon-cog" ).click(function() {  $( "#userconsdialog" ).dialog( "
 $( "#hometowndialog" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.45), modal: true });
 $( "#hometown .icon-cog" ).click(function() {  $( "#hometowndialog" ).dialog( "open" );
 $( "#hometowndialog" ).html('<div class="icon-spin3 spinner"> </div>');
-$( "#hometowndialog" ).load( "/login/city_list/"+$("#country_id").val()+"/"+$("#state_id").val()+"/"+$("#city").val() ); });                                 
+$( "#hometowndialog" ).load( "/login/city_list/"+$("#country_id").val()+"/"+$("#state_id").val()+"/"+$("#city").val() ); });
 
 $( "#statedialog" ).dialog({ autoOpen: false, width: Math.floor($(window).width()*0.45), modal: true });
 $( "#state .icon-cog" ).click(function() {  $( "#statedialog" ).dialog( "open" );
@@ -377,7 +397,7 @@ $( "#authusrremovebtn" ).click(function(e) {
   var car_id = $("#car_id").val();
   var user_name = $("#authusrtoremove").html();
   $('#auth_user_result').load('/car/remove_auth_usr', {"auth_usr_name":user_name, "car_id":car_id });
-  $( "#authusrremovedlg" ).dialog( "close" ); 
+  $( "#authusrremovedlg" ).dialog( "close" );
                                });
 
 
@@ -416,8 +436,8 @@ function changePic(caller) {
   $("#heroimgcenter" ).html('');
   $('#heroimg').removeClass('muted');
   $('.imgbutton').removeClass('active');
-  caller.addClass('active');  
-    
+  caller.addClass('active');
+
     });
 }
 
@@ -429,8 +449,8 @@ function changeFSPic(caller) {
   $("#fsimgcenter" ).html('');
   $('#fsimg img').removeClass('muted');
   $('.imgbutton').removeClass('active');
-  caller.addClass('active');  
-    
+  caller.addClass('active');
+
     });
 }
 
@@ -440,11 +460,11 @@ function slidePicStrip(amount) {
   if (amount > 0) {
   newMargin = existingMargin + (stripPicWidth * amount);
                 } else {
-  newMargin = existingMargin - (stripPicWidth * Math.abs(amount));                  
+  newMargin = existingMargin - (stripPicWidth * Math.abs(amount));
                 }
-  
-  
-  
+
+
+
     var totalPics = $("#picstrip a").length;
    if (newMargin < ((totalPics * stripPicWidth) - (fsPicStripWidth - stripPicWidth)  )) {  //check if we're not at the end of strip
                   $('#fspicstrip').animate({ marginLeft: '-'+ newMargin +'px' }, 500);
@@ -462,7 +482,6 @@ $('body').on('click', '#heroimg-link', function(e) {
   $('#fs').addClass('fs');
   $('#fs').removeClass('display-none');
   $('#fsimg img').attr("src", $(this).attr('href'));
-  console.log($(this).attr('href'));
   var thisord = $('#picstrip .imgbutton.active').children('a').data('ord');
   var totalPics = $("#picstrip a").length;
   fsPicStripWidth = $("#fspicstrip").width();
@@ -503,9 +522,9 @@ $('body').on('click', '#fsnext', function(e) {
   $("#fsimgcenter" ).html('');
   $('#fsimg img').removeClass('muted');
   $('#fspicstrip .imgbutton').removeClass('active');
-  $('#fspicstrip .imgbutton').find("[data-ord='" + next + "']").parent().addClass('active');  
-     }); 
-     
+  $('#fspicstrip .imgbutton').find("[data-ord='" + next + "']").parent().addClass('active');
+     });
+
 });
 
 
@@ -514,7 +533,7 @@ $('body').on('click', '#fsprev', function(e) {
   var current = $('#fsimg').data('ord');
   var prev = current - 1;
   if (prev < 1) {prev = parseInt($('#piccount').html());}
-    
+
   var url = $('#fspicstrip .imgbutton').find("[data-ord='" + prev + "']").data('url');
   $('#fsimg img').addClass('muted');
   $("#fsimgcenter" ).html('<div class="icon-spin3 spinner"> </div>');
@@ -523,9 +542,9 @@ $('body').on('click', '#fsprev', function(e) {
   $("#fsimgcenter" ).html('');
   $('#fsimg img').removeClass('muted');
   $('#fspicstrip .imgbutton').removeClass('active');
-  $('#fspicstrip .imgbutton').find("[data-ord='" + prev + "']").parent().addClass('active');  
-     }); 
-     
+  $('#fspicstrip .imgbutton').find("[data-ord='" + prev + "']").parent().addClass('active');
+     });
+
 });
 
 $('body').on('click', '#picstrip .imgbutton', function(e) {
@@ -544,16 +563,16 @@ $('body').on('click', '#fspicstrip .imgbutton', function(e) {
 $('body').on({
   mouseenter: function() {
   var caller = $(this);
-  changeFSPic(caller);  
+  changeFSPic(caller);
   },
   mouseleave: function() {}
   }, '#fspicstrip .imgbutton'
   ); */
-  
+
 $('body').on({
   mouseenter: function() {
   var caller = $(this);
-  changePic(caller);  
+  changePic(caller);
   },
   mouseleave: function() {}
   }, '#picstrip .imgbutton'
@@ -576,13 +595,13 @@ $( ".event-opener" ).click(function(e) {
     e.preventDefault();
     var event_id = $(this).data("event_id");
     var event_title = $(this).data("event_title");
-    
+
     $( "#event-view" ).load( "/car/eventm/"+ event_id);
   $( "#event-view" ).dialog( "open" );
   $( "#event-view" ).dialog( "option", "title", event_title );
     $( "#event-view" ).html('<div class="icon-spin3 spinner"> </div>');
 
-    
+
 });*/
 
 /* event navigation back and forth*/
@@ -597,7 +616,7 @@ $("#previous-event-link a").attr("href", prevurl);
 $("#next-event-link a").attr("href", nexturl);
 if (parseInt(data.prev) !== 0) {$( "#previous-event-link" ).show();}
 if (parseInt(data.next) !== 0) {$( "#next-event-link" ).show();}
-});  
+});
   }
 }
 
@@ -612,7 +631,7 @@ showEventNavArrows();
 if ( typeof event_types_present !== 'undefined') {
   $("#event-types-present").removeClass('hide');
   $.each(event_types_present, function(key, entry) {
-    $("#event-types-present").append('<a href="#" data-type="'+entry+'" class="smallish bold kcms mr1 evfilter">['+key+']</a>'); 
+    $("#event-types-present").append('<a href="#" data-type="'+entry+'" class="smallish bold kcms mr1 evfilter">['+key+']</a>');
   });
 }
 
@@ -652,7 +671,7 @@ $('#reminder_time_offset').on('change', function () {
     var time_offset_timestamp = $("#reminder_time_offset option:selected").data('timestamp');
 $('#reminder_time').val(time_offset);
 
-$('#timestampdate').val(time_offset_timestamp); 
+$('#timestampdate').val(time_offset_timestamp);
   console.log(time_offset_timestamp)  ;
 } );
 
@@ -670,13 +689,13 @@ $('body').on('click', '.request_car_access_dlgopnr', function() {
 
 //request to be authorised user on someone elses car
 $('body').on('click', '.request_car_access', function() {
-    $('.requestparent[data-car_id="' + $("#car_id").val() + '"]').load('/car/request_auth', {"car_id":$("#car_id").val() }); 
+    $('.requestparent[data-car_id="' + $("#car_id").val() + '"]').load('/car/request_auth', {"car_id":$("#car_id").val() });
   });
 
 
 $('body').on({
   mouseenter: function() {
-    $('#fspicstrip').fadeIn();    
+    $('#fspicstrip').fadeIn();
   },
   mouseleave: function() {
     setTimeout(function () { $('#fspicstrip').fadeOut(); }, 1500);
@@ -686,13 +705,62 @@ $('body').on({
 
 //car data xml edit
 
-$('.databittxt').click(function() { 
-    $(this).addClass( "field " );
+$('.databittxt').click(function() {    $(this).addClass( "field " );    });
+$('.databittxt').blur(function() {    $(this).removeClass( "field " );    });
+
+$('.attrtxt').click(function() { $(this).addClass( "field " ); });
+$('.attrtxt').blur(function() { $(this).removeClass( "field " ); });
+
+function writeAttrTxt(key, val, chapter, entry, unit, validate) {
+  var car_id = $("#car_id").val();
+      $('.response').html('<div class="icon-spin3 spinner"> </div>');
+      $( ".attrtxt, .attrunit" ).prop( "disabled", true ); //disable all inputs while we get the response
+      $('.response').load(
+            '/car/write_attr',
+            {"key":key, "value":val, "car_id":car_id, "chapter":chapter, "entry":entry, "unit":unit, "validate":validate  },
+            function() {
+                       var response = $('.response').html();
+                       if (response == 'false') {
+                       $('.response').html('<i class="icon-cancel red"> </i>');
+                       } else {
+                       $('.response').html('<i class="icon-ok green"> </i>');
+                       $('#' + key + '.attrtxt' ).val(response);
+                       }
+                       $( ".attrtxt, .attrunit" ).prop( "disabled", false );
+     });
+}
+
+$(".attrtxt").on('change', function() {
+    key = $(this).attr('id');
+    val = $(this).val();
+    chapter = $(this).data('chapter');
+    entry = $(this).data('entry');
+    validate  = $(this).data('validate');
+    unit = '';
+    if ( $( '.attrunit[data-id="' + key + '"]' ).length ) {        unit = $( '.attrunit[data-id="' + key + '"]' ).val();    }
+    writeAttrTxt(key, val, chapter, entry, unit, validate);
+   //console.log(key+' : '+val+' : '+chapter+' : '+entry+' : '+unit+' : '+validate);
     });
 
-$('.databittxt').blur(function() { 
-    $(this).removeClass( "field " );
+
+$(".attrunit").on('change', function() {
+    unit = $(this).val();
+    key = $(this).data('id');
+    databittxt = $( '#' + key );
+    if (databittxt.length) {
+    val = databittxt.val();
+    chapter = databittxt.data('chapter');
+    entry = databittxt.data('entry');
+    validate  = databittxt.data('validate');
+    if ($( this ).hasClass( "unit-inches" )) {databittxt.val(convertLength(unit, val));  val = databittxt.val();}
+    if ($( this ).hasClass( "unit-millimeters" )) {databittxt.val(convertLength(unit, val));  val = databittxt.val();}
+    if ($( this ).hasClass( "unit-volume" )) {databittxt.val(convertVolume(unit, val));  val = databittxt.val();}
+    if ($( this ).hasClass( "unit-power" )) {databittxt.val(convertPower(unit, val));  val = databittxt.val();}
+    if ($( this ).hasClass( "unit-weight" )) {databittxt.val(convertWeight(unit, val));  val = databittxt.val();}
+    writeAttrTxt(key, val, chapter, entry, unit, validate);
+        }
     });
+
 
 function editXMLDataBits(key, val, chapter, chapterno, entry, unit, validate) {
   var car_id = $("#car_id").val();
@@ -818,6 +886,7 @@ $( ".databit-date" ).datepicker({
      dateFormat: 'yy-mm-dd',
       changeMonth: true,
       changeYear: true,
+      yearRange: "c-20:c",
       maxDate: 1
     });
 
@@ -848,16 +917,16 @@ $( ".deletedatabitdlg" ).click(function() {
     entry = databittxt.data('entry');
     validate  = databittxt.data('validate');
     unit = '';
-    $('#key').val(key); 
+    $('#key').val(key);
     $('#val').val(value);
     $('#chapter').val(chapter);
     $('#chapterno').val(chapterno);
     $('#entry').val(entry);
     $('#unit').val(unit);
     $('#validate').val(validate);
-    
+
   //  console.log(key+' '+unit+' '+chapter+' '+chapterno+' '+entry+' '+value+' '+validate);
-    
+
     $( "#deletedialog" ).dialog( "open" );
     });
 
@@ -867,7 +936,7 @@ $('body').on('click', '.imgdel', function(e) {
   e.preventDefault();
   var img =  $(this).closest('.portlet').attr('id');
   var no =  $(this).closest('.portlet').data('number');
-  
+
     $( "#imgdeldlg" ).dialog( "open" );
 $('#image_id').val(img);
   $('#image_no').val(no);
@@ -877,7 +946,7 @@ $('#image_id').val(img);
 $('#imgdeldlg .delete').click(function() {
     var img = $('#image_id').val();
     var no = $('#image_no').val();
-    
+
     var usrimg = $('#user_images').val();
   var usrimg_array = usrimg.split(',');
   var index = usrimg_array.indexOf(img);
@@ -886,11 +955,12 @@ $('#imgdeldlg .delete').click(function() {
     usrimg = usrimg_array.join();
     $('#user_images').val(usrimg);
     }
-  
+
  $( '.portlet[data-number="'+no+'"]' ).load( '/car/imgedit', {
     "task":"del",
     "owner":$('#owner').val(),
     "car_id":$('#car_id').val(),
+    "chapter":$('#chapter').val(),
     "img":img,
     "user_images":usrimg,
     "event_time":$('#event_time').val(),
@@ -904,7 +974,7 @@ $('#imgdeldlg .delete').click(function() {
       $( '.portlet[data-number="'+no+'"]' ).hide('fast');
       }
     });
-    
+
 });
 
 
@@ -917,11 +987,12 @@ $('body').on('click', '.imgrotate', function(e) {
   var car_id = $('#car_id').val();
   var direction = 'cw';
   if ($(this).hasClass( "imgccw" )) {direction = 'ccw';}
-    
+
     $( '.portlet[data-number="'+no+'"] .portlet-content img ' ).attr("src", "/images/spinner.gif" );
     $( '#response' ).load( '/car/imgedit', {
     "task":direction,
     "owner":owner,
+    "chapter":$('#chapter').val(),
     "car_id":car_id,
     "img":img,
     "user_images":usrimg,
@@ -941,12 +1012,12 @@ $('body').on('click', '.imgrotate', function(e) {
     usrimg = usrimg_array.join();
     $('#user_images').val(usrimg);
     }
-        
+
         var imgurl = '/car/image/'+car_id+'/'+response+'/120';
         $( '.portlet[data-number="'+no+'"] .portlet-content img ' ).attr("src", imgurl );
       }
     });
-    
+
 
 });
 
@@ -956,8 +1027,8 @@ console.log('klik');
     return;
    }
    $('#odo_warning_box').removeClass('hide');
-    e.preventDefault();   
-  
+    e.preventDefault();
+
 });
 
 
@@ -969,10 +1040,11 @@ $(window).load(function() {
          $( '#carindex_my_car_list' ).load( '/car/my_car_list');
           $( "#carindex_my_car_list" ).removeClass('hide');
     }
-    
-    if ($('#carindex_expiry_list').length) {
-         $( '#carindex_expiry_list' ).load( '/car/expiry_list/'+$("#car_id").val());
-    }
+
+  // hide this for now
+  //  if ($('#carindex_expiry_list').length) {
+  //       $( '#carindex_expiry_list' ).load( '/car/expiry_list/'+$("#car_id").val());
+  //  }
 });
 
 $( ".nestedlink" ).click(function(e) {
@@ -983,7 +1055,7 @@ window.location.href = $(this).data('href');
 //full size image display
 $('body').on('click', '.fsgalimg-link', function(e) {
   e.preventDefault();
-  
+
   if (parseInt($('#piccount').html()) > 1) {
     $('#fsprev').show(); $('#fsnext').show();
   }
@@ -1013,7 +1085,7 @@ $('body').on('click', '#retest_vin', function(e) {
 
 $("#new_vin").on('keyup keypress', function(e) {
   var keyCode = e.keyCode || e.which;
-  if (keyCode === 13) { 
+  if (keyCode === 13) {
     e.preventDefault();
  getVinData($('#new_vin').val());
   }
@@ -1024,7 +1096,7 @@ function getVinData(vin) {
         $( "#new_car_data_by_vin" ).html('<div class="icon-spin3 spinner"> </div>' +  $( "#new_car_data_by_vin" ).data('body'));
         $( "#new_car_data_by_vin" ).load( '/car/new_vin_data/'+vin );
         $( "#submit_vin_container" ).hide();
-        
+
         }
 }
 
@@ -1034,8 +1106,8 @@ $('body').on('click', '.visibility_setting_private', function(e) {
     $( '.visibility_setting_private[data-event="'+event+'"] a i' ).addClass('gray');
     $.ajax({
         url: '/car/make_event_public/'+event,
-        dataType: "text", 
-        success: function(data) { 
+        dataType: "text",
+        success: function(data) {
         if (data == 'true') {
             $( '.visibility_setting_private[data-event="'+event+'"] a i' ).removeClass('gray');
             $( '.visibility_setting_private[data-event="'+event+'"]' ).addClass('hide');
@@ -1044,17 +1116,17 @@ $('body').on('click', '.visibility_setting_private', function(e) {
         }
         }
     });
-    
+
     });
-    
+
 $('body').on('click', '.visibility_setting_public', function(e) {
     e.preventDefault();
     var event = $(this).data('event');
     $( '.visibility_setting_public[data-event="'+event+'"] a i' ).addClass('gray');
     $.ajax({
         url: '/car/make_event_private/'+event,
-        dataType: "text", 
-        success: function(data) { 
+        dataType: "text",
+        success: function(data) {
         if (data == 'true') {
             $( '.visibility_setting_public[data-event="'+event+'"] a i' ).removeClass('gray');
             $( '.visibility_setting_public[data-event="'+event+'"]' ).addClass('hide');
@@ -1064,21 +1136,53 @@ $('body').on('click', '.visibility_setting_public', function(e) {
         }
         });
      });
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-   
+
+
+$('.exptxt').click(function() { $(this).addClass( "field " ); });
+$('.exptxt').blur(function() { $(this).removeClass( "field " ); });
+
+function writeExpiry(key, val, chapter, entry, validate, siblings) {
+  var car_id = $("#car_id").val();
+      $('.response').html('<div class="icon-spin3 spinner"> </div>');
+      $( ".exptxt" ).prop( "disabled", true ); //disable all inputs while we get the response
+      $('.response').load(
+            '/car/write_expiry',
+            {"key":key, "value":val, "car_id":car_id, "chapter":chapter, "entry":entry, "validate":validate, "siblings":siblings  },
+            function() {
+                       var response = $('.response').html();
+                       if (response == 'false') {
+                       $('.response').html('<i class="icon-cancel red"> </i>');
+                       } else {
+                       $('.response').html('<i class="icon-ok green"> </i>');
+                       $('#' + key + '.exptxt' ).val(response); //if input
+                       $('#' + key + '.exptxt' ).html(response); //if plain div
+                       }
+                       $( ".exptxt" ).prop( "disabled", false );
+     });
+}
+
+$(".exptxt").on('change', function() {
+    key = $(this).attr('id');
+    val = $(this).val();
+    chapter = $(this).data('chapter');
+    entry = $(this).data('entry');
+    validate  = $(this).data('validate');
+    var siblings = $('*[data-chapter="' + chapter + '"]').map(function() {
+    var rObj = {};
+    if ($(this).val())
+    {
+    rObj[$(this).data('entry')] = $(this).val();
+    } else {
+    rObj[$(this).data('entry')] = $(this).html();
+    }
+    return rObj;
+    }).get();
+    writeExpiry(key, val, chapter, entry, validate, JSON.stringify(siblings));
+    //console.log(key+' : '+val+' : '+chapter+' : '+entry+' : '+validate+' : '+JSON.stringify(siblings));
+    });
+
+  $('.autoheight').on('keyup',function(){
+  $(this).css('height','auto');
+  $(this).css('overflow','hidden');
+  $(this).height(this.scrollHeight);
+});

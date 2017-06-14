@@ -4,31 +4,29 @@ foreach ($this->event as $row) { //this runs only once
           
        //  print '<pre>'; print_r($row); print '</pre>';
            
-    $event_content = $row['event_content'];
-    $event_types = (array)$row['event_type'];
-        $event_types = $event_types['values']; $event_types_out = '';
+    $event_content = $row->event_content;
+    $event_types = unserialize($row->event_type);
+        $event_types_out = '';
         if($event_types) { 
             foreach ($event_types AS $event_type) {
                 $event_types_out.= '<span class="smallish bg-kcms white px1 mx1 rounded ">'._($event_type).'</span>';
             };
         };
     
-    $car_id = (array) $row['car']; 
-    $car_id = $car_id['uuid'];
+    $car_id = $row->car; 
     $car_name = CarModel::getCarName($car_id);
     
-    $serialized_event_time = (array) $row['event_time'];
+     $serialized_event_time =  CarModel::parsetimestamp($row->event_time);
      $event_time = $serialized_event_time['seconds'];
      $event_microtime = $serialized_event_time['microseconds'];
      $event_id = urlencode(serialize(array('c' => $car_id, 't' => $event_time, 'm' => $event_microtime)));
     
     
     
-    $entry_time = (array) $row['event_entered'];
+    $entry_time = CarModel::parsetimestamp($row->event_entered);
     $entry_time =  $entry_time ['seconds'];
     
-    
-    $entry_data = unserialize($row['event_data']);
+    $entry_data = unserialize($row->event_data);
         $oldversions = ''; $oldversion = array();
         if ((key_exists('oldversions', $entry_data)) && ($entry_data['oldversions'])) {
                 $oldversions = ' '._("EVENT_REVISIONS").": "; 	   
@@ -46,9 +44,9 @@ foreach ($this->event as $row) { //this runs only once
         }
     
     
-    $event_images = (array) $row['images'];
-        if (isset($event_images['values'])) {
-            $event_images = $event_images['values'];
+    $event_images = unserialize($row->images);
+    
+        if (is_array($event_images)) {
             $images_list = '';
             $images_list = implode(',', $event_images);
         } else {
@@ -117,8 +115,8 @@ foreach ($this->event as $row) { //this runs only once
     <div class=" ">
         
         
-        <?php if($row['event_odo']) { ?>
-        <div class="inline"><?= $row['event_odo'].' '.$units->user_distance; ?></div>
+        <?php if($row->event_odo) { ?>
+        <div class="inline"><?= $row->event_odo.' '.$units->user_distance; ?></div>
         <?php } ?>
         <?php if(intval($entry_data['amount']) > 0) { ?>
         <div class="inline"><?= $entry_data['amount'].' '._('CURRENCY_'.$units->user_currency); ?></div>

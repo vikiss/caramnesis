@@ -131,5 +131,5 @@ file_put_contents('/var/www/cronlog.txt', $log, FILE_APPEND);
   header("HTTP/1.0 404 Not Found");  exit;
     
 }
-
+
 ?>
