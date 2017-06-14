@@ -23,7 +23,7 @@ $defunits=array(
                       'inches' => 'in',
                       'millimeters' => 'mm',
                       ),
-                );  
+                );
 
 ?>
 <div class="container">
@@ -31,11 +31,11 @@ $defunits=array(
         <!-- echo out the system feedback (error and success messages) -->
         <?php $this->renderFeedbackMessages(); ?>
 	</div>
-<div class="clearfix">       
+<div class="clearfix">
     <div class="md-col md-col-3 carcol">
-      <?php  include 'carcol.php'; ?>       
+      <?php  include 'carcol.php'; ?>
     </div>
-    <div class="md-col md-col-9 ">   
+    <div class="md-col md-col-9 ">
 <h1><?= _($this->chapter); ?></h1>
 <div class="right response"> </div>
 <div id="response" class="hide"> </div>
@@ -45,49 +45,49 @@ $defunits=array(
             [entry] => PICTURES
             [type] => PICTURES
             [ord] => 0
-            [items] => 
+            [items] =>
   */
   $car_items = $this->car_items;  // print_r($this->structural_items);
   $i = 1;
   $inline_buffer = array();
-    foreach ($this->structural_items AS $entry) {  
+    foreach ($this->structural_items AS $entry) {
     $saved = array(); $saved['value'] = ''; $saved['unit'] = '';
-    if(isset($car_items[$entry->entry])) {$saved = $car_items[$entry->entry];}                           
+    if(isset($car_items[$entry->entry])) {$saved = $car_items[$entry->entry];}
 ?>
-   <div class="mt2"> 
+   <div class="mt2">
 <?php
     switch($entry->type)
-    { 
+    {
     case 'DATE':
 ?>
     <div class="small"><?= _($entry->entry); ?></div>
-    <input type = "text" class = "attrtxt small-field stealthfield databit-date col-10" 
+    <input type = "text" class = "attrtxt small-field stealthfield databit-date col-10"
         data-chapter = "<?= $entry->chapter; ?>" data-entry = "<?= $entry->entry; ?>"
         id = "attritem-<?= $i; ?>" data-validate = "text" value = "<?= $saved['value']; ?>" />
-<?php    
+<?php
     break;
     case 'TEXT':
 ?>
     <div class="small"><?= _($entry->entry); ?></div>
-    <input type = "text" class = "attrtxt small-field stealthfield  col-10" 
+    <input type = "text" class = "attrtxt small-field stealthfield  col-10"
         data-chapter = "<?= $entry->chapter; ?>" data-entry = "<?= $entry->entry; ?>"
         id = "attritem-<?= $i; ?>" data-validate = "text" value = "<?= $saved['value']; ?>" />
-<?php    
+<?php
     break;
     case 'PICTURES':
                        if (strlen($saved['value']) > 10) {
                        $images_list = $saved['value'];
-                        $chapter_images = explode(',', $saved['value']);                       
+                        $chapter_images = explode(',', $saved['value']);
                        } else {
-                       $chapter_images = false; }  
+                       $chapter_images = false; }
     break;
     case 'WEIGHT':
         $units =   $databit_units['WEIGHT'];
         $saved['unit'] ? $thisunit = $saved['unit'] : $thisunit = $defunits[$usrloc]['weight'];
-        
-?>      
+
+?>
         <div class="small"><?= _($entry->entry); ?></div>
-        <input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "attrtxt small-field stealthfield  col-10" 
+        <input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "attrtxt small-field stealthfield  col-10"
         data-chapter = "<?= $entry->chapter; ?>" data-entry = "<?= $entry->entry; ?>"
         id = "attritem-<?= $i; ?>" data-validate = "dec2" value = "<?= $saved['value']; ?>" />
         <select class = "attrunit unit-weight small-field stealthfield" data-id = "attritem-<?= $i; ?>">';
@@ -98,9 +98,9 @@ $defunits=array(
 <?php
     break;
     case 'INT':
-?>  
+?>
     <div class="small"><?= _($entry->entry); ?></div>
-    <input type = "text" pattern="\d*" class = "attrtxt small-field stealthfield  col-10" 
+    <input type = "text" pattern="\d*" class = "attrtxt small-field stealthfield  col-10"
         data-chapter = "<?= $entry->chapter; ?>" data-entry = "<?= $entry->entry; ?>"
         id = "attritem-<?= $i; ?>" data-validate = "int" value = "<?= $saved['value']; ?>" />
 <?php
@@ -108,9 +108,9 @@ $defunits=array(
     case 'POWER':
         $units =   $databit_units['POWER'];
         $saved['unit'] ? $thisunit = $saved['unit'] : $thisunit = $defunits[$usrloc]['power'];
-?>      
+?>
         <div class="small"><?= _($entry->entry); ?></div>
-        <input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "attrtxt small-field stealthfield  col-10" 
+        <input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "attrtxt small-field stealthfield  col-10"
         data-chapter = "<?= $entry->chapter; ?>" data-entry = "<?= $entry->entry; ?>"
         id = "attritem-<?= $i; ?>" data-validate = "dec2" value = "<?= $saved['value']; ?>" />
         <select class = "attrunit unit-power small-field stealthfield" data-id = "attritem-<?= $i; ?>">';
@@ -118,14 +118,14 @@ $defunits=array(
             <option value="<?= $unit; ?>"<?php if ($thisunit == $unit) {echo ' selected';} ?>><?= _($unit); ?></option>
   <?php }; ?>
         </select>
-<?php       
+<?php
     break;
     case 'VOLUME':
         $units =   $databit_units['VOLUME'];
         $saved['unit'] ? $thisunit = $saved['unit'] : $thisunit = $defunits[$usrloc]['volume'];
-?>      
+?>
         <div class="small"><?= _($entry->entry); ?></div>
-        <input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "attrtxt small-field stealthfield  col-10" 
+        <input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "attrtxt small-field stealthfield  col-10"
         data-chapter = "<?= $entry->chapter; ?>" data-entry = "<?= $entry->entry; ?>"
         id = "attritem-<?= $i; ?>" data-validate = "dec2" value = "<?= $saved['value']; ?>" />
         <select class = "attrunit unit-volume small-field stealthfield" data-id = "attritem-<?= $i; ?>">';
@@ -133,13 +133,13 @@ $defunits=array(
             <option value="<?= $unit; ?>"<?php if ($thisunit == $unit) {echo ' selected';} ?>><?= _($unit); ?></option>
   <?php }; ?>
         </select>
-<?php        
+<?php
     break;
      case 'CHOICE':
      $items = unserialize($entry->items);
 ?>
         <div class="small"><?= _($entry->entry); ?></div>
-        <select class = "attrtxt small-field stealthfield  col-10" 
+        <select class = "attrtxt small-field stealthfield  col-10"
         data-chapter = "<?= $entry->chapter; ?>" data-entry = "<?= $entry->entry; ?>"
         id = "attritem-<?= $i; ?>" data-validate = "text">
         <option value="">..</option>
@@ -167,9 +167,9 @@ $defunits=array(
       case 'INCHES':
         $units =   $databit_units['INCHES'];
         $saved['unit'] ? $thisunit = $saved['unit'] : $thisunit = $defunits[$usrloc]['inches'];
-?>      
+?>
       <div class="small"><?= _($entry->entry); ?></div>
-        <input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "attrtxt small-field stealthfield  col-10" 
+        <input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "attrtxt small-field stealthfield  col-10"
         data-chapter = "<?= $entry->chapter; ?>" data-entry = "<?= $entry->entry; ?>"
         id = "attritem-<?= $i; ?>" data-validate = "dec2" value = "<?= $saved['value']; ?>" />
         <select class = "attrunit unit-inches small-field stealthfield" data-id = "attritem-<?= $i; ?>">';
@@ -177,14 +177,14 @@ $defunits=array(
             <option value="<?= $unit; ?>"<?php if ($thisunit == $unit) {echo ' selected';} ?>><?= _($unit); ?></option>
   <?php }; ?>
         </select>
-<?php        
+<?php
       break;
        case 'MILLIMETERS':
         $units =   $databit_units['MILLIMETERS'];
         $saved['unit'] ? $thisunit = $saved['unit'] : $thisunit = $defunits[$usrloc]['millimeters'];
-?>      
+?>
       <div class="small"><?= _($entry->entry); ?></div>
-        <input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "attrtxt small-field stealthfield  col-10" 
+        <input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "attrtxt small-field stealthfield  col-10"
         data-chapter = "<?= $entry->chapter; ?>" data-entry = "<?= $entry->entry; ?>"
         id = "attritem-<?= $i; ?>" data-validate = "dec2" value = "<?= $saved['value']; ?>" />
         <select class = "attrunit unit-millimeters small-field stealthfield" data-id = "attritem-<?= $i; ?>">';
@@ -192,12 +192,12 @@ $defunits=array(
             <option value="<?= $unit; ?>"<?php if ($thisunit == $unit) {echo ' selected';} ?>><?= _($unit); ?></option>
   <?php }; ?>
         </select>
-<?php        
+<?php
       break;
     }
-    ?>    
+    ?>
     </div>
-<?php 
+<?php
 $i++;
 }
 if (substr($this->chapter, 0, 9) == 'TYRE_DATA') {
@@ -211,11 +211,13 @@ print '</div>';
                           <?php
                            if ($chapter_images)
     {
-    $script =  ''; 
+    $script =  '';
     $pic_dir = Config::get('CAR_IMAGE_PATH').$car_id.'/';
     $i = 1;
       foreach($chapter_images AS $image) {
-      if (file_exists($pic_dir.$image)) {$fullsize = getimagesize ($pic_dir.$image); }
+      if (file_exists($pic_dir.$image)) {
+          $is_pdf = ($fullsize = getimagesize ($pic_dir.$image)) ? false : true;
+      }
             print '<div class="portlet mb1 mr1 p1 black bg-kclite left fauxfield square truncate " data-number="'.$i.'" id="'.$image.'">
                     <div class="portlet-header bg-kcms move-cursor">
                     <div class="right meta z4"><a class="context_menu_opener" data-element="editpic'.$i.'" href="#" title="'._("EDIT").'"><i class="icon-wrench white"> </i></a></div>
@@ -224,25 +226,25 @@ print '</div>';
                     <div class="portlet-content relative">';
             print '<div id="editpic'.$i.'" class="absolute top-0 right-0 border z3 active bg-white display-hide p2 closeonclick ">
                                 <ul class="list-reset">
-                                       <li><a href="#" class="imgdel"><i class="icon-trash"> </i></a></li>
-                                       <li><a href="#" class="imgrotate imgcw"><i class="icon-cw"> </i></a></li>
-                                       <li><a href="#" class="imgrotate imgccw"><i class="icon-ccw"> </i></a></li>
-                                </ul>
+                                       <li><a href="#" class="imgdel"><i class="icon-trash"> </i></a></li>';
+            if (!$is_pdf) {print '     <li><a href="#" class="imgrotate imgcw"><i class="icon-cw"> </i></a></li>
+                                       <li><a href="#" class="imgrotate imgccw"><i class="icon-ccw"> </i></a></li>';};
+            print '  </ul>
                          </div>';
             print '<a href="/car/image/'.$car_id.'/'.$image.'" data-index="'.$i.'" class="pswpitem"><img src="/car/image/'.$car_id.'/'.$image.'/120" /></a> ';
             print '</div></div>';
-            $script.="{
+            if (!$is_pdf) {$script.="{
             src: '/car/image/$car_id/$image',
             w: {$fullsize[0]},
             h: {$fullsize[1]},
             msrc: '/car/image/$car_id/$image/120',
-            },";
+            },";};
             $i++;
       }
     print "
 <script>
 var itemclass = '.pswpitem';
-var items = [$script]; 
+var items = [$script];
 </script>";
 ?>
 <script src="<?php echo Config::get('URL'); ?>js/pswipe.js"></script>
@@ -269,42 +271,42 @@ var items = [$script];
                 <div class="btn mb1 mr1 px1 black bg-kclite " ><a class="close_dialog cancel" href="#"><?= _('CANCEL'); ?></a></div>
                 <div class="btn mb1 mr1 px1 black bg-kclite " ><a class="close_dialog delete" href="#"><?= _('DELETE'); ?></a></div>
            </div>
-<?php  
+<?php
   /*
-  
-  
-  
+
+
+
   $buffer = '';
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
         if ((string) $entry['type'] == 'HIDDEN') {
         $buffer.= '<div>';
         } else {
         $buffer.= '<div class="mt2"><div class="small">'._($entry['name']).'</div>';
         };
-        switch((string) $entry['type']) { 
+        switch((string) $entry['type']) {
     case 'DATE':
-        $buffer.= '<input type = "text" placeholder="'.date('Y-m-d').'" class = "databittxt small-field stealthfield databit-date col-10" 
+        $buffer.= '<input type = "text" placeholder="'.date('Y-m-d').'" class = "databittxt small-field stealthfield databit-date col-10"
         data-chapter = "'.$chapter['name'].'" data-entry = "'.$entry['name'].'" data-chapterno = "'.$chapter->number.'"
         id = "xmlbit-'.$i.'" data-validate = "date"  value = "'.$entry->value.'" /> ';
         break;
     case 'TEXT':
-        $buffer.= '<input type = "text" class = "databittxt small-field stealthfield  col-10" 
+        $buffer.= '<input type = "text" class = "databittxt small-field stealthfield  col-10"
         data-chapter = "'.$chapter['name'].'" data-entry = "'.$entry['name'].'" data-chapterno = "'.$chapter->number.'"
         id = "xmlbit-'.$i.'" data-validate = "text" value = "'.$entry->value.'" /> ';
         break;
     case 'HIDDEN':
-        $buffer.= '<input type = "hidden" class = "databittxt small-field stealthfield  col-10" 
+        $buffer.= '<input type = "hidden" class = "databittxt small-field stealthfield  col-10"
         data-chapter = "'.$chapter['name'].'" data-entry = "'.$entry['name'].'" data-chapterno = "'.$chapter->number.'"
         id = "xmlbit-'.$i.'" data-validate = "text" value = "'.$entry->value.'" /> ';
         break;
      case 'WEIGHT':
         $units =   $databit_units['WEIGHT'];
-        $buffer.= '<input type = "text" class = "databittxt small-field stealthfield  col-10" 
+        $buffer.= '<input type = "text" class = "databittxt small-field stealthfield  col-10"
         data-chapter = "'.$chapter['name'].'" data-entry = "'.$entry['name'].'" data-chapterno = "'.$chapter->number.'"
         id = "xmlbit-'.$i.'" data-validate = "dec2" value = "'.$entry->value.'" /> ';
         $buffer.= '<select class = "databitunit unit-weight small-field stealthfield " data-id = "xmlbit-'.$i.'">';
@@ -317,13 +319,13 @@ var items = [$script];
         $buffer.= '</select>';
         break;
      case 'INT':
-        $buffer.= '<input type = "text" pattern="\d*" class = "databittxt small-field stealthfield  col-10" 
+        $buffer.= '<input type = "text" pattern="\d*" class = "databittxt small-field stealthfield  col-10"
         data-chapter = "'.$chapter['name'].'" data-entry = "'.$entry['name'].'" data-chapterno = "'.$chapter->number.'"
         id = "xmlbit-'.$i.'" data-validate = "int" value = "'.$entry->value.'" /> ';
         break;
      case 'POWER':
-        $units =   $databit_units['POWER'];      
-        $buffer.= '<input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "databittxt small-field stealthfield  col-10" 
+        $units =   $databit_units['POWER'];
+        $buffer.= '<input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "databittxt small-field stealthfield  col-10"
         data-chapter = "'.$chapter['name'].'" data-entry = "'.$entry['name'].'" data-chapterno = "'.$chapter->number.'"
         id = "xmlbit-'.$i.'" data-validate = "dec2" value = "'.$entry->value.'" /> ';
         $buffer.= '<select class = "databitunit unit-power small-field stealthfield " data-id = "xmlbit-'.$i.'">';
@@ -336,8 +338,8 @@ var items = [$script];
         $buffer.= '</select>';
         break;
      case 'VOLUME':
-        $units =   $databit_units['VOLUME']; 
-        $buffer.= '<input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "databittxt small-field stealthfield col-10" 
+        $units =   $databit_units['VOLUME'];
+        $buffer.= '<input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "databittxt small-field stealthfield col-10"
         data-chapter = "'.$chapter['name'].'" data-entry = "'.$entry['name'].'" data-chapterno = "'.$chapter->number.'"
         id = "xmlbit-'.$i.'" data-validate = "dec2" value = "'.$entry->value.'" /> ';
         $buffer.= '<select class = "databitunit unit-volume small-field stealthfield " data-id = "xmlbit-'.$i.'">';
@@ -350,7 +352,7 @@ var items = [$script];
         $buffer.= '</select>';
         break;
      case 'CHOICE':
-        $buffer.= '<select class = "databittxt small-field stealthfield  col-10" 
+        $buffer.= '<select class = "databittxt small-field stealthfield  col-10"
         data-chapter = "'.$chapter['name'].'" data-entry = "'.$entry['name'].'" data-chapterno = "'.$chapter->number.'" data-validate = "text" id = "xmlbit-'.$i.'"> ';
             $buffer.= '<option value="">..</option>';
             foreach($entry->item as $item) {
@@ -361,8 +363,8 @@ var items = [$script];
         $buffer.= '</select>';
         break;
     case 'INCHES':
-        $units =   $databit_units['INCHES']; 
-        $buffer.= '<input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "databittxt small-field stealthfield col-10" 
+        $units =   $databit_units['INCHES'];
+        $buffer.= '<input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "databittxt small-field stealthfield col-10"
         data-chapter = "'.$chapter['name'].'" data-entry = "'.$entry['name'].'" data-chapterno = "'.$chapter->number.'"
         id = "xmlbit-'.$i.'" data-validate = "dec2" value = "'.$entry->value.'" /> ';
         $buffer.= '<select class = "databitunit unit-inches small-field stealthfield " data-id = "xmlbit-'.$i.'">';
@@ -375,8 +377,8 @@ var items = [$script];
         $buffer.= '</select>';
         break;
      case 'MILLIMETERS':
-        $units =   $databit_units['MILLIMETERS']; 
-        $buffer.= '<input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "databittxt small-field stealthfield col-10" 
+        $units =   $databit_units['MILLIMETERS'];
+        $buffer.= '<input type = "text" pattern="[0-9]+([\.,][0-9]+)?" class = "databittxt small-field stealthfield col-10"
         data-chapter = "'.$chapter['name'].'" data-entry = "'.$entry['name'].'" data-chapterno = "'.$chapter->number.'"
         id = "xmlbit-'.$i.'" data-validate = "dec2" value = "'.$entry->value.'" /> ';
          $buffer.= '<select class = "databitunit unit-millimeters small-field stealthfield " data-id = "xmlbit-'.$i.'">';
@@ -390,31 +392,26 @@ var items = [$script];
         break;
     }
     }
-  
-  
+
+
     */
-  
-  
-include('multi_img_uploader.php');  
+
+
+include('multi_img_uploader.php');
   ?>
 <input type="hidden" name="chapter" id="chapter" value = "<?= $this->chapter; ?>" />
-<input type="hidden" name="user_images" id="user_images" value = "<?php if ($chapter_images) {print $images_list;} ?>" />  
+<input type="hidden" name="user_images" id="user_images" value = "<?php if ($chapter_images) {print $images_list;} ?>" />
 
 <div class="clearfix mt4">
 <?php
 foreach ($this->chapters as $chapter) {
-      
-          ?> 
-    <div class="mb1 mr1 p1 black bg-kclite left fauxfield square center  " >       
+
+          ?>
+    <div class="mb1 mr1 p1 black bg-kclite left fauxfield square center  " >
       <a href = "<?= Config::get('URL') . 'car/attribute_chapter/' . $car_id.'/'.$chapter; ?>">
-        <?= _($chapter); ?></a>       
-    </div>                                     
+        <?= _($chapter); ?></a>
+    </div>
 <?php }  ?>
 </div>
  </div>
  </div>
-
-
-                                 
-
-                       
