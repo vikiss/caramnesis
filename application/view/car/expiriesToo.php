@@ -5,6 +5,7 @@
   </div>
   <div class="clearfix">
     <div class="md-col md-col-3 carcol">
+        [...]
       <?php  include 'carcol.php'; ?>
     </div>
     <div class="md-col md-col-9 ">
