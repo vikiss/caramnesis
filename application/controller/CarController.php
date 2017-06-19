@@ -404,7 +404,7 @@ class CarController extends Controller
 
      public function save_odo()
     {
-      CarModel::updateOdoReading(Request::post('this_car_id'), Request::post('this_event_odo'));
+      CarModel::updateOdoReading(Request::post('this_car_id'), Request::post('this_event_odo'), true);
       Redirect::to('car/index/'.Request::post('this_car_id'));
     }
 
