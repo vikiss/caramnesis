@@ -168,6 +168,7 @@ hr {
 
 .small {font-size: .62rem; line-height: .82rem; }
 .smallish {font-size: .72rem; line-height: .88rem; }
+.smallishblock {font-size: .72rem; }
 
 .small-field {
 	height: auto !important;
@@ -1134,3 +1135,13 @@ border-color: transparent rgba(255, 64, 54, 0.67) transparent transparent;
         min-height: 24px;
         resize: none;
       }
+
+.eventlist td, .eventlist th { font-size: .72rem; line-height: .88rem; height: 1rem; }
+
+.pl0 {padding-left: 0;}
+.pr0 {padding-right: 0;}
+.eventlisttxt { height: 1rem; overflow: hidden; text-overflow: ellipsis;}
+
+.cardatatable td, .cardatatable th { font-size: .72rem; line-height: .88rem; height: 1rem; }
+.cardatatable td {font-weight: bold; padding-right: 0;}
+.cardatatable th {font-weight: 100; padding-left: 0;}

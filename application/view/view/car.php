@@ -1,145 +1,160 @@
 <div class="container"><?php  //var prep moved into header include to get fb graph api values into header ?>
-<div id="piccount" class="hide"><?= count($images); ?></div>
 <div class="box"><?php $this->renderFeedbackMessages(); ?></div>
 <div class="clearfix">
-<input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
-       <div class="md-col md-col-3 carcol">
-              <div class="clearfix relative">
-                    
-                     
-       <?php if ($image_out) {  ?>
-              <a id="heroimg-link" href="<?= $initial_img; ?>">   
-                     <div class="pic120width bg-white relative"  style="background-image: url(<?= $image_out; ?>)"><?= $image_meta; ?></div>
-              </a>
-       <?php } ; ?>
-                                
-                            <div class="bold mt2"><?= $car_name;  //$thisowner ?></div>                        
-                            <div class="smallish mt1"><?= $car_make.' '.$car_model.' '.$car_variant; ?></div>
-                            <?php include ('joincaramnesis.php'); ?>
-                            
-                            <div id="shareBtn" class="btn btn-success clearfix"><?= _('SHARE'); ?></div>
-<script>
-document.getElementById('shareBtn').onclick = function() {
-  FB.ui({
-    method: 'share',
-    display: 'popup',
-    href: '<?= Config::get('URL').$filename.'/'.$car_id; ?>',
-  }, function(response){});
-};
-</script>
-                            
-                            
-                            
-              </div>
-       </div>
-        
-        
-       
-        
-        
-   
-   
-    
-    <div class="md-col md-col-9 ">
- 
-    <?php     if ($this->events) {
-        
 
-        foreach ($this->events as $event) {
-              if ($event->visibility == 'pub') {
-        displayEventTerse($event, $car_id, $owner, $units);
-              };
-        
-                
-                
-                
-                
-                }
-        }            ?>
-        
-    
-    
-    
+    <div class="md-col md-col-5">
+        <div class="clearfix relative mr2 mt2">
+            <?php if (Session::userIsLoggedIn()) { ?><h3><?= $car_name ?></h3><?php }; ?>
+            <?php if ($thisowner) { ?><div class=""><?= $thisowner ?></div><?php }; ?>
+<hr />
+    <table class="cardatatable mt2">
+        <tr>
+            <th><?= _("NEWCAR_MAKE"); ?></th>
+            <td><?= $car_make; ?></td>
+        </tr>
+        <tr>
+            <th><?= _("NEWCAR_MODEL"); ?></th>
+            <td><?= $car_model; ?></td>
+        </tr>
+        <tr>
+            <th><?= _("NEWCAR_VARIANT"); ?></th>
+            <td><?= $car_variant; ?></td>
+        </tr>
+        <tr>
+            <th><?= _("NEWCAR_YEAR"); ?></th>
+            <td><?= $car_year; ?></td>
+        </tr>
+
+        <tr>
+            <th><?= _("NEWCAR_VIN"); ?></th>
+            <td><?= $car_vin; ?></td>
+        </tr>
+        <tr>
+            <th><?= _("NEWCAR_PLATES"); ?></th>
+            <td><?= $car_plates; ?></td>
+        </tr>
+        <tr>
+            <th><?= _("EVENT_ODO"); ?></th>
+            <td style="font-weight: 100;"><?= $odometer; ?></td>
+        </tr>
+    <?php
+        foreach ($this->car_items as $key => $attribute)
+        {
+            if ($attribute['value'])
+            {
+                print '<tr><th>'._($key).'</th><td>';
+                print _($attribute['value']);
+                if ($attribute['unit']) print ' '._($attribute['unit']);
+                print '</td></tr>';
+            };
+        };
+    ?>
+    </table>
+
     </div>
+    <div class="mt2 mr2">
+        <?php  if (!Session::userIsLoggedIn()) {  include ('joincaramnesis.php'); }; ?>
+        <div id="shareBtn" class="mt2 bg-kclite rounded p1 center pointer"><i class = "icon-facebook-official"> fb </i> <?= _('SHARE'); ?></div>
+    </div>
+    <script>
+    document.getElementById('shareBtn').onclick = function() {
+      FB.ui({
+        method: 'share',
+        display: 'popup',
+        href: '<?= Config::get('URL').$filename.'/'.$car_id; ?>',
+      }, function(response){});
+    };
+    </script>
+  </div>
+
+  <div class="md-col md-col-7 ">
+      <div class="clearfix">
+    <?php
+         if ($images)
+    {
+    $script =  '';
+    $pic_dir = Config::get('CAR_IMAGE_PATH').$car_id.'/';
+    $i = 1;
+    foreach($images AS $image) {
+    if (file_exists($pic_dir.$image)) {
+    $is_pdf = ($fullsize = getimagesize ($pic_dir.$image)) ? false : true;
+    }
+    print '<div class="left mr2" data-number="'.$i.'" id="'.$image.'">';
+    print '<a href="/car/image/'.$car_id.'/'.$image.'" data-index="'.$i.'" class="pswpitem"><img src="/view/image/'.$car_id.'/'.$image;
+    if ($i > 1) print '/120';
+    print '" /></a> ';
+    print '</div>';
+    if (!$is_pdf) {$script.="{
+    src: '/view/image/$car_id/$image',
+    w: {$fullsize[0]},
+    h: {$fullsize[1]},
+    msrc: '/car/image/$car_id/$image/120',
+    },";};
+    $i++;
+    }
+    print "
+    <script>
+    var itemclass = '.pswpitem';
+    var items = [$script];
+    </script>";
+    ?>
+    <script src="<?php echo Config::get('URL'); ?>js/pswipe.js"></script>
+    <?php
+    }
+    ?>
+    </div>
+
+
+<?php
+    if ($this->events)
+    {
+        print '<div class="py2"><h3>'._('EVENTS').'</h3>';
+        print '<table class="eventlist"><tr><th></th><th>'.$units->user_distance.'</th><th></th><th>'._('CURRENCY_'.$units->user_currency).'</th><th></th></tr>';
+        foreach ($this->events as $event)
+        {
+            if ($event->visibility == 'pub')
+            {
+                displayEventUltraTerse($event, $car_id, $owner);
+            };
+        }
+        print '</table></div>';
+    }
+?>
+
+
 </div>
-    
-    
-
-    
+</div>
 </div>
 
 
-<?php include 'fsgallery.php'; ?>
 
-
-
-<?php 
-        function displayEventTerse($event, $car_id, $owner, $units) {
+<?php
+        function displayEventUltraTerse($event, $car_id, $owner) {
  $event_types_present = array();
 
-        
-     
     $serialized_event_time =  CarModel::parsetimestamp($event->event_time);
      $event_time = $serialized_event_time['seconds'];
      $event_microtime = $serialized_event_time['microseconds'];
+$images = unserialize($event->images);
 
-     $serialized_entry_time =  CarModel::parsetimestamp($event->event_entered);
-     $entry_time =  $serialized_entry_time['seconds'];
-     $entry_microtime = $serialized_entry_time['microseconds'];
-     
-     
     $event_id = urlencode(serialize(array('c' => $car_id, 't' => $event_time, 'm' => $event_microtime)));
                                          //car           //time               /microtime
-        
+
      $entry_data = unserialize($event->event_data);
-          
-       $images = unserialize($event->images); $image_out=''; $image_meta='';
-     if ($images)
-       { //we only show the first one and count
-                             if (CarModel::get_extension($images[0]) == 'pdf')
-                        {
-                                $image_meta.= '<div class="red-triangle absolute top-0 right-0"> </div> ';
-                                $image_meta.= '<div class="icon-file-pdf white absolute top-0 right-0"> </div> ';
-                        }
-                                $image_out = Config::get('URL') .'view/image/'.$car_id.'/'.$images[0].'/480';
-                        if (count($images) > 1) {
-                                $image_meta.= '<div class="white bg-darken-4 absolute bold px1 bottom-0 right-0">+'.(count($images)-1).'</div> ';
-                        }
-        } 
-     
 
-     
-     
-          $oldversions = '';      $entrytime = '';         
 
-     
      $event_link = Config::get('URL') . 'view/event/' . $event_id;
       ?>
-    
-<div class="mt1 p1 border mw480 bg-kcultralite event " data-event="<?= $event_id; ?>">
-  <div class="clearfix relative">
-   <div class="">
-        <div class="inline smallish bold"><?= strftime('%x', $event_time); if ($entrytime or $oldversions) { ?> <a href="#" class="jqtooltip" title="<?= $entrytime.$oldversions; ?>"><i class="icon-history"> </i></a> <?php }; ?></div>
-        <?php if($event->event_odo) { ?><div class="inline small"><?= $event->event_odo.' '.$units->user_distance; ?></div><?php }; ?>
-       <?php if(($entry_data['amount']) && ($entry_data['amount'] > 0)) { ?>
-       <div class="inline small"><?= $entry_data['amount'].' '._('CURRENCY_'.$units->user_currency); ?></div>
-       <?php }; ?>
-   </div>
-   <a href="<?= $event_link; ?>" title="<?= _("VIEW"); ?>">
-   <div class="relative">
-        <?php
-        if ($image_out) { ?>
-        <div class="relative pic480width"  style="background-image: url(<?= $image_out; ?>)"><?= $image_meta; ?></div>
-        <?php }; ?>
-        <div class="mt1 smallish"><?= $event->event_content; ?></div>
-   </div>
-   </a>
-  </div>
-</div>
-        
+
+<tr>
+        <td class="pl0"><a href="<?= $event_link; ?>"><?= strftime('%x', $event_time); ?></a></td>
+        <td><a href="<?= $event_link; ?>"><?= $event->event_odo; ?></a></td>
+        <td class="small"><div class="eventlisttxt"><a href="<?= $event_link; ?>"><?= $event->event_content; ?></a></div></td>
+        <td><a href="<?= $event_link; ?>"><?= $entry_data['amount']; ?></a></td>
+        <td class="pr0"><a href="<?= $event_link; ?>"><?php if ($images) print '<i class = "icon-camera-alt"> </i>'; ?></a></td>
+  </tr>
+
+
         <?php
         return $event_types_present;
         } ?>
-
-
-

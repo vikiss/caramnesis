@@ -18,10 +18,10 @@
     <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/basscss.css" />
     <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/fontello.css" />
     <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/jquery-ui.css" />
-    <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>js/photoswipe/photoswipe.css"> 
-    <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>js/photoswipe/default-skin/default-skin.css"> 
-    <script src="<?php echo Config::get('URL'); ?>js/photoswipe/photoswipe.min.js"></script> 
-    <script src="<?php echo Config::get('URL'); ?>js/photoswipe/photoswipe-ui-default.min.js"></script> 
+    <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>js/photoswipe/photoswipe.css">
+    <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>js/photoswipe/default-skin/default-skin.css">
+    <script src="<?php echo Config::get('URL'); ?>js/photoswipe/photoswipe.min.js"></script>
+    <script src="<?php echo Config::get('URL'); ?>js/photoswipe/photoswipe-ui-default.min.js"></script>
 </head>
 <body>
 <?php include 'pswp.php'; ?>
@@ -46,33 +46,33 @@
     <nav class="clearfix white bg-kcms">
         <!-- navigation -->
         <div class="col col-6">
-          <a href="<?php echo Config::get('URL'); ?>index/index" class="sbtn py1"><img src="/img/tiny-exhaust-header-gasket.png" alt="caramnesis" /></a>
-          
-       
+          <a href="<?php echo Config::get('URL'); ?>index/index" class="sbtn py1"><img src="/img/mrgagamascot.svg" alt="motorgaga" style="height:24px;" /></a>
             <?php if (Session::userIsLoggedIn()) { ?>
                     <a href="<?php echo Config::get('URL'); ?>car/index" class="sbtn py1" title="<?php echo _("MENU_MY_CARS"); ?>"><i class ="icon-th"> </i> <span class="sm-hide"><?php echo _("MENU_MY_CARS"); ?></span></a>
-            <?php }; ?>
+            <?php }  else { ?>
+          <a href="<?php echo Config::get('URL'); ?>index/index" class="sbtn py1"><img src="/img/mrgagascript.svg" alt="motorgaga" style="height:16px;" /></a>
+            <?php };  ?>
         </div>
         <!-- my account -->
         <div class="col col-6 right-align ltop">
-        <?php if (Session::userIsLoggedIn()) { ?> 
-                    
+        <?php if (Session::userIsLoggedIn()) { ?>
+
                 <div id="msgcount" class="inline relative">
-                <?php MessageModel::getUnreadMessages(Session::get('user_uuid')); ?>                    
+                <?php MessageModel::getUnreadMessages(Session::get('user_uuid')); ?>
                 <a href="<?php echo Config::get('URL'); ?>message" class="sbtn py1" title="<?= _("MESSAGES").' ('.Session::get('unread_messages').')'; ?>"><i class ="icon-mail"> </i> <span class="sm-hide"><?= _("MESSAGES"); ?></span></a>
                 <div class="absolute top-0  right-0 bg-red small bold <?php if (Session::get('unread_messages') == 0) { echo 'hide '; } ?>"><?= Session::get('unread_messages'); ?></div>
                 </div>
                 <div id="reminderCount" class="inline relative">
-                <?php ReminderModel::getReminderCount(Session::get('user_uuid')); ?>                                        
+                <?php ReminderModel::getReminderCount(Session::get('user_uuid')); ?>
                 <a href="<?php echo Config::get('URL'); ?>message/reminders" class="sbtn py1" title="<?= _("REMINDERS").' ('.Session::get('active_reminders').')'; ?>"><i class ="icon-bell-alt"> </i> <span class="sm-hide"><?= _("REMINDERS"); ?></span></a>
                 <div class="absolute top-0  right-0 bg-red small bold <?php if (Session::get('active_reminders') == 0) { echo 'hide '; } ?>"><?= Session::get('active_reminders'); ?></div>
                 </div>
                 <a href="<?php echo Config::get('URL'); ?>login/showprofile" class="sbtn py1" title="<?= _("MENU_MY_ACCOUNT").' ('.Session::get('user_name').')'; ?>">
                 <i class ="icon-user"> </i> <span class="sm-hide"><?= _("MENU_MY_ACCOUNT"); ?></span></a>
-                
+
                 <a href="<?php echo Config::get('URL'); ?>login/login/logout" class="sbtn py1" title="<?= _("MENU_LOGOUT"); ?>">
                 <i class ="icon-logout"> </i> </a>
-                                     
+
         <?php } else {
             if (!View::checkForActiveControllerAndAction($filename, "index/about")) { ?>
                  <a href="<?php echo Config::get('URL'); ?>aboutCaramnesis" class="sbtn py1"><?php echo _("MENU_ABOUT_CARAMNESIS"); ?></a>
@@ -80,9 +80,9 @@
                 if (!View::checkForActiveControllerAndAction($filename, "login/index")) { ?>
             <a href="<?php echo Config::get('URL'); ?>login/index" class="sbtn py1"><?php echo _("LOGIN"); ?></a>
                <?php }
-        
+
         }; ?>
-            
+
         </div>
       </nav>
       <section class="flex-auto p2">
