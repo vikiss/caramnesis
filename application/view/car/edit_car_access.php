@@ -17,9 +17,12 @@ $this->public_access ? $public_access=true : $public_access=false;
         if ($public_access) echo ' checked'; ?> /><?= _('CAR_PUBLIC'); ?><br />
     <div id="car_public_settings" <?php if (!$public_access) {echo ' class="display-hide"'; } ?>>
     <input type="checkbox" class="car-meta" id="meta_allow_public_vin" name="meta_allow_public_vin" data-key="allow_public_vin" value="yes" <?php
-            if ($this->car_meta['allow_public_vin'] == 'yes') echo ' checked'; ?> /><?= _('ALLOW_VIN'); ?><br />
+            if ( (array_key_exists('allow_public_vin', $this->car_meta)) &&
+            ($this->car_meta['allow_public_vin'] == 'yes'))
+            echo ' checked'; ?> /><?= _('ALLOW_VIN'); ?><br />
     <input type="checkbox" class="car-meta" id="meta_allow_public_plates" name="meta_allow_public_plates" data-key="allow_public_plates" value="yes" <?php
-            if ($this->car_meta['allow_public_plates'] == 'yes') echo ' checked'; ?>/><?= _('ALLOW_PLATES'); ?><br />
+            if (  (array_key_exists('allow_public_plates', $this->car_meta)) &&
+                ($this->car_meta['allow_public_plates'] == 'yes')) echo ' checked'; ?>/><?= _('ALLOW_PLATES'); ?><br />
     </div>
 </div>
        <?php   $publiclink=Config::get('URL').'view/car/'.$car_id; ?>

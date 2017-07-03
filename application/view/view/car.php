@@ -42,7 +42,7 @@
             <td style="font-weight: 100;"><?= $odometer; ?></td>
         </tr>
     <?php
-}; if ($this->car_items) {
+}; if (is_array($this->car_items)) {
         foreach ($this->car_items as $key => $attribute)
         {
             if ($attribute['value'])
