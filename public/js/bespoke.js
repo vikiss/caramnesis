@@ -1186,3 +1186,68 @@ $(".exptxt").on('change', function() {
   $(this).css('overflow','hidden');
   $(this).height(this.scrollHeight);
 });
+
+
+$(".car-meta").on('change', function() {
+    var element = $(this).attr('id');
+    var val = $(this).val();
+    var key = $(this).data('key');
+    var checked = $(this).prop('checked');
+    var car_id = $("#car_id").val();
+    writeCarMeta(car_id, element, key, val, checked, '.response');
+    });
+
+
+function writeCarMeta(car_id, element, key, val, checked, responseel) {
+      $(responseel).html('<div class="icon-spin3 spinner"> </div>');
+    //  console.log(car_id+' : '+element+' : '+key+' : '+val+' : '+checked);
+      $("#"+element).prop( "disabled", true );
+      var value = '';
+      if (checked) value = val;
+      $(responseel).load(
+            '/car/write_car_meta',
+            {"car_id":car_id, "meta_key":key, "meta_value":value  },
+            function() {
+                       var response = $(responseel).html();
+                       if (response == 'false') {
+                       $(responseel).html('<i class="icon-cancel red"> </i>');
+                       } else {
+                       $(responseel).html('<i class="icon-ok green"> </i>');
+                       }
+                       $( "#"+element ).prop( "disabled", false );
+     });
+}
+
+$("#set_car_public").on('change', function() {
+    var checked = $(this).prop('checked');
+    var car_id = $("#car_id").val();
+    var enable_car_access = '';
+    var disable_car_access = '';
+    if (checked) {enable_car_access = car_id;} else {disable_car_access = car_id;}
+    $("#set_car_public").prop( "disabled", true );
+    $(".response").load(
+          '/car/change_car_access',
+          {"car_id":car_id, "enable_car_access":enable_car_access, "disable_car_access":disable_car_access  },
+          function() {
+                     var response = $(".response").html();
+                     if (response == 'false') {
+                     $(".response").html('<i class="icon-cancel red"> </i>');
+                     } else {
+                     $(".response").html('<i class="icon-ok green"> </i>');
+                      if (checked) {
+                        $("#car_public_settings").show();
+                        $(".car_public_msg_pub").show();
+                        $(".car_public_msg_priv").hide();
+                      } else {
+                        $("#car_public_settings").hide();
+                        $(".car_public_msg_pub").hide();
+                        $(".car_public_msg_priv").show();
+                      }
+                     }
+           $( "#set_car_public" ).prop( "disabled", false );
+   });
+
+
+
+
+    });

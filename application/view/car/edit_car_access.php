@@ -1,5 +1,5 @@
 <?php if ($this->car) {
-include('car_data_prep.php'); 
+include('car_data_prep.php');
 $this->public_access ? $public_access=true : $public_access=false;
     ?>
     <div class="container">
@@ -8,34 +8,31 @@ $this->public_access ? $public_access=true : $public_access=false;
     <h1><?= $car_name; ?></h1>
 <div class="box">
    <h3><?php print _('PUBLIC_TAGS'); ?></h3>
-	<form method="post" action="<?php echo Config::get('URL');?>car/save_car_access">
-	<div class="mt2">
-       <?php
-       
-       if ($public_access) { 
-       
-       print '<input type="checkbox" name="disable_car_access" value="'.$car_id.'" />'._('MAKE_CAR_PRIVATE');
-       
-       } else {
-        
-         print '<input type="checkbox" name="enable_car_access" value="'.$car_id.'" />'._('MAKE_CAR_PUBLIC');
-        
-        }
-         ?>
+
+<div class="mt2 mb2">
+
+<input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
+    <div class="response right"></div>
+    <input type="checkbox" id="set_car_public" name="set_car_public" value="yes" <?php
+        if ($public_access) echo ' checked'; ?> /><?= _('CAR_PUBLIC'); ?><br />
+    <div id="car_public_settings" <?php if (!$public_access) {echo ' class="display-hide"'; } ?>>
+    <input type="checkbox" class="car-meta" id="meta_allow_public_vin" name="meta_allow_public_vin" data-key="allow_public_vin" value="yes" <?php
+            if ($this->car_meta['allow_public_vin'] == 'yes') echo ' checked'; ?> /><?= _('ALLOW_VIN'); ?><br />
+    <input type="checkbox" class="car-meta" id="meta_allow_public_plates" name="meta_allow_public_plates" data-key="allow_public_plates" value="yes" <?php
+            if ($this->car_meta['allow_public_plates'] == 'yes') echo ' checked'; ?>/><?= _('ALLOW_PLATES'); ?><br />
+    </div>
 </div>
-			<input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
-			<input type="submit" class="btn btn-primary mb1 mt1 black bg-kcms" value='<?php echo _("SAVE"); ?>' autocomplete="off" />
+       <?php   $publiclink=Config::get('URL').'view/car/'.$car_id; ?>
+       <div class="mt2 mb2 md-col-6 p1 bg-kcultralite border rounded">
+         <div class="car_public_msg_priv smallish<?php if ($public_access) {echo ' display-hide'; } ?>"><?= _('PUBLIC_TAGS_INFO_PRIVATE'); ?></div>
+         <div class="car_public_msg_pub smallish<?php if (!$public_access) {echo ' display-hide'; } ?>"><?= _('PUBLIC_TAGS_INFO_PUBLIC'); ?></div>
+       </div>
 
-</form> 
 
-       <?php $publiclink=Config::get('URL').'view/car/'.$car_id; ?>
-       
-       
-       <p class="smallish"><?php  if ($public_access) {print _('PUBLIC_TAGS_INFO_PUBLIC');} else {print _('PUBLIC_TAGS_INFO_PRIVATE');} ?></p>
-       <?php if ($public_access) { ?>
+<div class="car_public_msg_pub <?php if (!$public_access) {echo ' display-hide'; } ?>">
        <p><a href="<?= $publiclink; ?>" target="_blank"><?= $publiclink; ?></a></p>
 		 <div class="mt2">
-			<div id="shareBtn" class="btn btn-success clearfix"><?= _('SHARE'); ?></div>
+			<div id="shareBtn" class="btn btn-success clearfix border"><i class="icon-facebook-official blue"> </i><?= _('SHARE'); ?></div>
 <script>
 document.getElementById('shareBtn').onclick = function() {
   FB.ui({
@@ -46,9 +43,8 @@ document.getElementById('shareBtn').onclick = function() {
 };
 </script>
 		 </div>
-       <?php }; ?>
-			 
+</div>
+
 </div>
     </div>
     <?php } ?>
-			 

@@ -237,6 +237,7 @@ class CarController extends Controller
             'car' => CarModel::getCar($car_id),
             'units' => UserModel::getUserUnits(Session::get('user_uuid')),
             'public_access' => ViewModel::getCarAccessByCarId($car_id, 10),  //level 10 - car publically visible
+            'car_meta' => CarModel::readCarMeta($car_id, array('allow_public_vin', 'allow_public_plates')),
         ));
     }  else
             { Session::add('feedback_negative', _('INSUFFICIENT PERMISSION TO ACCESS OTHER USERS CAR'));
@@ -365,11 +366,29 @@ class CarController extends Controller
           'car_id' => Request::post('car_id'),
           'disable_car_access' => Request::post('disable_car_access'),
           'enable_car_access' => Request::post('enable_car_access'),
-          'public_tags' => Request::post('tag_access')
           ));
         CarModel::updateCarLookupEntry(Request::post('car_id'), implode(',',CarModel::getCarPlates(Request::post('car_id'))), CarModel::getCarVin(Request::post('car_id')));
         Redirect::to('car/edit_car_access/'.Request::post('car_id'));
     }
+
+
+
+    public function write_car_meta()
+    {
+       $response = CarModel::writeCarMeta(Request::post('car_id'), Request::post('meta_key'), Request::post('meta_value'));
+       $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('response' => $response, 'type' => 'passthrough'));
+    }
+
+
+    public function change_car_access()
+   {
+     $response = CarModel::editCarAccess(array(
+         'car_id' => Request::post('car_id'),
+         'disable_car_access' => Request::post('disable_car_access'),
+         'enable_car_access' => Request::post('enable_car_access'),
+         ));
+$this->View->renderWithoutHeaderAndFooter('car/generic_response', array('response' => $response, 'type' => 'passthrough'));
+   }
 
 
 

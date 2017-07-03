@@ -24,20 +24,25 @@
             <th><?= _("NEWCAR_YEAR"); ?></th>
             <td><?= $car_year; ?></td>
         </tr>
-
+<?php if ((array_key_exists('allow_public_vin', $this->car_meta)) &&
+    ($this->car_meta['allow_public_vin'] == 'yes')) {    ?>
         <tr>
             <th><?= _("NEWCAR_VIN"); ?></th>
             <td><?= $car_vin; ?></td>
         </tr>
+<?php }; if ((array_key_exists('allow_public_plates', $this->car_meta)) &&
+($this->car_meta['allow_public_plates'] == 'yes')) {   ?>
         <tr>
             <th><?= _("NEWCAR_PLATES"); ?></th>
             <td><?= $car_plates; ?></td>
         </tr>
+<?php }; if ($odometer) { ?>
         <tr>
             <th><?= _("EVENT_ODO"); ?></th>
             <td style="font-weight: 100;"><?= $odometer; ?></td>
         </tr>
     <?php
+}; if ($this->car_items) {
         foreach ($this->car_items as $key => $attribute)
         {
             if ($attribute['value'])
@@ -47,14 +52,14 @@
                 if ($attribute['unit']) print ' '._($attribute['unit']);
                 print '</td></tr>';
             };
-        };
+        }; };
     ?>
     </table>
 
     </div>
     <div class="mt2 mr2">
         <?php  if (!Session::userIsLoggedIn()) {  include ('joincaramnesis.php'); }; ?>
-        <div id="shareBtn" class="mt2 bg-kclite rounded p1 center pointer"><i class = "icon-facebook-official"> fb </i> <?= _('SHARE'); ?></div>
+        <div id="shareBtn" class="mt2 bg-kclite rounded p1 center pointer"><i class = "icon-facebook-official"> </i> <?= _('SHARE'); ?></div>
     </div>
     <script>
     document.getElementById('shareBtn').onclick = function() {
@@ -112,10 +117,9 @@
         print '<table class="eventlist"><tr><th></th><th>'.$units->user_distance.'</th><th></th><th>'._('CURRENCY_'.$units->user_currency).'</th><th></th></tr>';
         foreach ($this->events as $event)
         {
-            if ($event->visibility == 'pub')
-            {
+
                 displayEventUltraTerse($event, $car_id, $owner);
-            };
+
         }
         print '</table></div>';
     }

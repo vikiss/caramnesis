@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Caramnesis\n"
 "POT-Creation-Date: 2016-02-06 22:36+0200\n"
-"PO-Revision-Date: 2016-12-15 01:26+0200\n"
+"PO-Revision-Date: 2017-07-01 00:02+0200\n"
 "Last-Translator: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language-Team: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language: lt_LT\n"
@@ -1414,7 +1414,7 @@ msgid "FEEDBACK_CAR_ACCESS_EDIT_FAILED"
 msgstr "Nepavyko išsaugoti automobilio prieigos duomenų"
 
 msgid "FEEDBACK_EVENT_CREATION_FAILED"
-msgstr "nepavyko sukurti įvykio"
+msgstr "nepavyko sukurti įrašo"
 
 msgid "MESSAGE_QUOTED"
 msgstr "-----Gautas pranešimas-----"
@@ -1434,7 +1434,7 @@ msgstr ""
 
 msgid "PUBLIC_TAGS_INFO_PUBLIC"
 msgstr ""
-"Automobilio profilis gali būti viešai matomas ir randamas. Įvykiai, kurie "
+"Automobilio profilis gali būti viešai matomas ir randamas. Įrašai, kurie "
 "nėra pažymėti viešais, ir automobilio identifikaciniai duomenys, nėra viešai "
 "matomi."
 
@@ -1527,7 +1527,7 @@ msgid "FILTER"
 msgstr "Filtruoti"
 
 msgid "EVENT_TYPES"
-msgstr "Įvykių tipai"
+msgstr "Įrašų tipai"
 
 msgid "ALL"
 msgstr "Visi"
@@ -1690,7 +1690,7 @@ msgstr "Naujo įrašo pavadinimas"
 
 msgid "NEW_RECORD_BLURB"
 msgstr ""
-"Nuotraukos, serviso įrašai, pastabos, darytini dalykai ar bet koks įvykis, "
+"Nuotraukos, serviso įrašai, pastabos, darytini dalykai ar bet koks įrašas, "
 "susijęs su automobiliu"
 
 msgid "UPLOAD_IMAGES_OR_TAKE_A_PICTURE"
@@ -2031,3 +2031,15 @@ msgstr "Padaryti šį įrašą privačiu"
 
 msgid "MAKE_EVENT_PUBLIC"
 msgstr "Padaryti šį įrašą viešai matomu"
+
+msgid "OIL_CHANGE_DUE"
+msgstr "Metas keisti tepalus"
+
+msgid "RECURRING_EVENTS"
+msgstr "Periodinė priežiūra"
+
+msgid "EVENTS"
+msgstr "Įrašai"
+
+msgid "HP"
+msgstr "AG"

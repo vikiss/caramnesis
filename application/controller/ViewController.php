@@ -16,13 +16,14 @@ class ViewController extends Controller
 
         $this->View->render('view/car', array(
             'car' => CarModel::getCar($car_id),
-            'events' => CarModel::getEvents($car_id),
+            'events' => ViewModel::getEvents($car_id),
             //'car_data_bits' => Config::get('CAR_DATA_BITS'),
             //'car_data' => CarModel::getCarXmlData($car_id),
             //'public_events' => ViewModel::get_public_event_types($car_id),
             //'tags' => Config::get('AVAILABLE_TAGS'),
             'units' => UserModel::getUserUnits(CarModel::getCarOwner($car_id)),
             'car_items' => CarModel::readAttributes($car_id, 'TECHNICAL_DATA'),
+            'car_meta' => CarModel::readCarMeta($car_id, array('allow_public_vin', 'allow_public_plates')),
             //'owner' => CarModel::getCarOwner($car_id)
             )
         );

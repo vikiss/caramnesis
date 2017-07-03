@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Caramnesis\n"
 "POT-Creation-Date: 2016-02-06 22:36+0200\n"
-"PO-Revision-Date: 2016-12-15 01:26+0200\n"
+"PO-Revision-Date: 2017-06-30 23:58+0200\n"
 "Last-Translator: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language-Team: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language: en_US\n"
@@ -306,7 +306,7 @@ msgid "MENU_LOGOUT"
 msgstr "Logout"
 
 msgid "MENU_ABOUT_CARAMNESIS"
-msgstr "About CarAmnesis"
+msgstr "About MotorGaga"
 
 msgid "PWCHANGE_REQUEST"
 msgstr "Request a password reset"
@@ -453,7 +453,7 @@ msgid "FEEDBACK_CAR_EDIT_FAILED"
 msgstr "Car data save failed"
 
 msgid "FEEDBACK_EVENT_SAVED"
-msgstr "Edits to event saved"
+msgstr "Edits to post saved"
 
 msgid "FEEDBACK_EVENT_DELETED"
 msgstr "Event deleted"
@@ -1540,19 +1540,19 @@ msgid "FEEDBACK_LANGUAGE_CHANGE_SUCCESSFUL"
 msgstr "Language succesfully changed"
 
 msgid "EMAIL_VERIFICATION_FROM_NAME"
-msgstr "CarAmnesis registration confirmation"
+msgstr "MotorGaga registration confirmation"
 
 msgid "EMAIL_PASSWORD_RESET_CONTENT"
 msgstr "Please click on this link to reset your password: "
 
 msgid "EMAIL_PASSWORD_RESET_FROM_NAME"
-msgstr "CarAmnesis registration"
+msgstr "MotorGaga registration"
 
 msgid "EMAIL_PASSWORD_RESET_SUBJECT"
-msgstr "Password reset for CarAmnesis"
+msgstr "Password reset for MotorGaga"
 
 msgid "EMAIL_VERIFICATION_SUBJECT"
-msgstr "CarAmnesis account activation"
+msgstr "MotorGaga account activation"
 
 msgid "EMAIL_VERIFICATION_CONTENT"
 msgstr "Please click on this link to activate your account: "
@@ -1564,11 +1564,10 @@ msgid "PICK_A_MAKE_AND_MODEL_FIRST"
 msgstr "Please pick car make and model first"
 
 msgid "NEW_MESSAGE_NOTIFICATION_FROM_%s"
-msgstr "New message from %s on CarAmnesis.com"
+msgstr "New message from %s on MotorGaga.com"
 
 msgid "NOTIFICATION_READ_AND_REPLY_LINK"
-msgstr ""
-"To read and reply to this message on CarAmnesis.com, follow this link: "
+msgstr "To read and reply to this message on MotorGaga.com, follow this link: "
 
 msgid "CAR_PICTURES"
 msgstr "Car pictures"
@@ -1592,7 +1591,7 @@ msgid "REMINDERS"
 msgstr "Reminders"
 
 msgid "EMAIL_NOTIFICATION_FROM_NAME"
-msgstr "CarAmnesis.com notification"
+msgstr "MotorGaga.com notification"
 
 msgid "CAR_NAME"
 msgstr "Car name"
@@ -1625,7 +1624,7 @@ msgid "REMINDER"
 msgstr "Reminder"
 
 msgid "DELETE_EVENT"
-msgstr "Delete event"
+msgstr "Delete post"
 
 msgid "SET_REMINDER"
 msgstr "Set reminder"
@@ -1696,7 +1695,7 @@ msgid "UPLOAD_IMAGES_OR_TAKE_A_PICTURE"
 msgstr "Upload images or take a picture"
 
 msgid "ADD_EVENT_TYPES"
-msgstr "Add another tag for this event"
+msgstr "Add another tag for this post"
 
 msgid "IN_A_WEEK"
 msgstr "In a week"
@@ -1990,13 +1989,13 @@ msgid "CAR_NOT_PUBLIC"
 msgstr "This car profile is hidden"
 
 msgid "JOIN_CARAMNESIS"
-msgstr "Join CarAmnesis!"
+msgstr "Join MotorGaga!"
 
 msgid "CARAMNESIS_CAR_PROFILE"
-msgstr "CarAmnesis car profile"
+msgstr "MotorGaga car profile"
 
 msgid "CARAMNESIS_CAR_EVENT"
-msgstr "CarAmnesis post"
+msgstr "MotorGaga post"
 
 msgid "SHARE"
 msgstr "Share"
@@ -2025,7 +2024,19 @@ msgstr ""
 "this is correct?"
 
 msgid "MAKE_EVENT_PRIVATE"
-msgstr "Make this event private"
+msgstr "Make this post private"
 
 msgid "MAKE_EVENT_PUBLIC"
-msgstr "Make this event public"
+msgstr "Make this post public"
+
+msgid "OIL_CHANGE_DUE"
+msgstr "Oil change due"
+
+msgid "RECURRING_EVENTS"
+msgstr "Recurring"
+
+msgid "EVENTS"
+msgstr "Posts"
+
+msgid "HP"
+msgstr "HP"

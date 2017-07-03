@@ -2612,4 +2612,67 @@ public static function updateXmlBits($model_structure, $user_structure, $car_id)
   }
 
 
+
+  public static function readCarMeta($car_id, $meta_key)
+{
+    //this is  readable by an outsider
+ $database = DatabaseFactory::getFactory()->getConnection();
+ if (is_array($meta_key))
+ {
+     array_walk_recursive($meta_key, 'Filter::XSSFilter');
+     $pieces = array();
+    foreach ($meta_key as $thiskey)
+    {
+        $pieces[] = 'meta_key = "'.$thiskey.'"';
+    }
+    $buffer = '('.implode(' OR ', $pieces).')';
+     $sql = "SELECT meta_key, meta_value FROM car_meta WHERE car_id = :car_id AND $buffer ;";
+     $query = $database->prepare($sql);
+      $query->execute(array(':car_id' => $car_id));
+      if ($data = $query->fetchAll()) {
+          $response = array();
+          foreach ($data as $row) {
+              $response[$row->meta_key] = $row->meta_value;
+          }
+          return $response;
+      }
+          return false;
+
+
+ } else {
+$sql = "SELECT meta_value FROM car_meta WHERE car_id = :car_id AND meta_key = :meta_key;";
+
+$query = $database->prepare($sql);
+ $query->execute(array(
+ ':car_id' => $car_id,
+   ':meta_key' => $meta_key,
+                         ));
+                         if ($data = $query->fetch()) {
+                             return $data->meta_value;
+                         }
+};
+
+return false;
+}
+
+public static function writeCarMeta($car_id, $meta_key, $meta_value)
+  {
+      if (self::checkAccessLevel($car_id, Session::get('user_uuid')) < 98) {
+          Session::add('feedback_negative', _('ACCESS_RESTRICTION'));
+          return 'false';
+      }
+      $database = DatabaseFactory::getFactory()->getConnection();
+      $sql = "INSERT INTO car_meta (car_id, meta_key, meta_value) VALUES (:car_id, :meta_key, :meta_value) ON DUPLICATE KEY UPDATE meta_value = :meta_value";
+      $query = $database->prepare($sql);
+      if	($query->execute(array(
+      ':car_id' => $car_id,
+          ':meta_key' => $meta_key,
+          ':meta_value' => $meta_value,
+                        )))
+      { return true; }
+
+  return false;
+  }
+
+
 }
