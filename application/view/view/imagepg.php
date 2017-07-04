@@ -1,7 +1,7 @@
-<?php  
+<?php
 
 $allowed_nonimage_ext = array('pdf','xls');
-if(in_array(CarModel::get_extension($this->image),$allowed_nonimage_ext)){ 
+if(in_array(CarModel::get_extension($this->image),$allowed_nonimage_ext)){
 
 $file = Config::get('CAR_IMAGE_PATH').$this->car.'/'.$this->image;
 header("Content-length: ". filesize($file));
@@ -18,9 +18,9 @@ readfile($file);
 <!doctype html>
 <html>
 <head>
-    <title>CARAMNESIS <?= $this->car.'/'.$this->image; ?></title>
+    <title>MotorGaga <?= $this->car.'/'.$this->image; ?></title>
 </head>
-<body> 
+<body>
 <img src="/view/image/<?= $this->car.'/'.$this->image; ?>" />
 </body>
 <?php }; ?>

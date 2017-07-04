@@ -75,7 +75,7 @@
 
         <?php } else {
             if (!View::checkForActiveControllerAndAction($filename, "index/about")) { ?>
-                 <a href="<?php echo Config::get('URL'); ?>aboutCaramnesis" class="sbtn py1"><?php echo _("MENU_ABOUT_CARAMNESIS"); ?></a>
+                 <a href="<?php echo Config::get('URL'); ?>aboutMotorGaga" class="sbtn py1"><?php echo _("MENU_ABOUT_CARAMNESIS"); ?></a>
             <?php }
                 if (!View::checkForActiveControllerAndAction($filename, "login/index")) { ?>
             <a href="<?php echo Config::get('URL'); ?>login/index" class="sbtn py1"><?php echo _("LOGIN"); ?></a>

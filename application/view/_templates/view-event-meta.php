@@ -83,7 +83,7 @@ foreach ($this->event as $row) { //this runs only once
         ?>
 <meta property="og:url" content="<?= Config::get('URL').'view/event/'.$event_id; ?>" />
     <meta property="og:title" content="<?= $car_name; ?>" />
-    <meta property="og:site_name" content="CarAmnesis" />
+    <meta property="og:site_name" content="MotorGaga" />
     <meta property="og:description" content="<?= ViewModel::limit_teaser($event_content); ?>" />
     <?php if ( $event_images ) { ?>
     <meta property="og:image" content="<?= $initial_img; ?>" />

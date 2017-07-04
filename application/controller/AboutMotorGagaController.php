@@ -1,6 +1,6 @@
 <?php
 
-class AboutCaramnesisController extends Controller
+class AboutMotorGagaController extends Controller
 {
     /**
      * Construct this object by extending the basic Controller class
@@ -19,4 +19,3 @@ class AboutCaramnesisController extends Controller
         $this->View->render('index/about');
     }
 }
-

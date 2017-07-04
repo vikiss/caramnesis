@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Caramnesis\n"
 "POT-Creation-Date: 2016-02-06 22:36+0200\n"
-"PO-Revision-Date: 2017-07-01 00:02+0200\n"
+"PO-Revision-Date: 2017-07-04 11:37+0200\n"
 "Last-Translator: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language-Team: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language: lt_LT\n"
@@ -306,7 +306,7 @@ msgid "MENU_LOGOUT"
 msgstr "Išeiti"
 
 msgid "MENU_ABOUT_CARAMNESIS"
-msgstr "Apie CarAmnesis"
+msgstr "Apie MotorGaga"
 
 msgid "PWCHANGE_REQUEST"
 msgstr "Slaptažodžio atnaujinimas"
@@ -1542,19 +1542,19 @@ msgid "FEEDBACK_LANGUAGE_CHANGE_SUCCESSFUL"
 msgstr "Kalba sėkmingai pakeista"
 
 msgid "EMAIL_VERIFICATION_FROM_NAME"
-msgstr "CarAmnesis registracijos patvirtinimas"
+msgstr "MotorGaga registracijos patvirtinimas"
 
 msgid "EMAIL_PASSWORD_RESET_CONTENT"
 msgstr "Slaptažodžio keitimo nuoroda: "
 
 msgid "EMAIL_PASSWORD_RESET_FROM_NAME"
-msgstr "CarAmnesis registracija"
+msgstr "MotorGaga registracija"
 
 msgid "EMAIL_PASSWORD_RESET_SUBJECT"
-msgstr "CarAmnesis slaptažodžio keitimas"
+msgstr "MotorGaga slaptažodžio keitimas"
 
 msgid "EMAIL_VERIFICATION_SUBJECT"
-msgstr "CarAmnesis paskyros aktyvavimas"
+msgstr "MotorGaga paskyros aktyvavimas"
 
 msgid "EMAIL_VERIFICATION_CONTENT"
 msgstr "Paskyros aktyvavimo nuoroda: "
@@ -1566,10 +1566,10 @@ msgid "PICK_A_MAKE_AND_MODEL_FIRST"
 msgstr "Pasirinkite gamintoją ir modelį"
 
 msgid "NEW_MESSAGE_NOTIFICATION_FROM_%s"
-msgstr "CarAmnesis.com gautas naujas pranešimas nuo %s"
+msgstr "MotorGaga gautas naujas pranešimas nuo %s"
 
 msgid "NOTIFICATION_READ_AND_REPLY_LINK"
-msgstr "Atsakyti į šią žinutę per CarAmnesis.com: "
+msgstr "Atsakyti į šią žinutę per MotorGaga: "
 
 msgid "CAR_PICTURES"
 msgstr "Automobilio nuotraukos"
@@ -1593,7 +1593,7 @@ msgid "REMINDERS"
 msgstr "Priminimai"
 
 msgid "EMAIL_NOTIFICATION_FROM_NAME"
-msgstr "CarAmnesis.com pranešimas"
+msgstr "MotorGaga pranešimas"
 
 msgid "CAR_NAME"
 msgstr "Automobilio vardas"
@@ -1992,13 +1992,13 @@ msgid "CAR_NOT_PUBLIC"
 msgstr "Automobilis nėra viešai matomas"
 
 msgid "JOIN_CARAMNESIS"
-msgstr "Prisijunkite prie CarAmnesis!"
+msgstr "Prisijunkite prie MotorGaga!"
 
 msgid "CARAMNESIS_CAR_PROFILE"
-msgstr "CarAmnesis automobilio profilis"
+msgstr "MotorGaga automobilio profilis"
 
 msgid "CARAMNESIS_CAR_EVENT"
-msgstr "CarAmnesis automobilio įrašas"
+msgstr "MotorGaga automobilio įrašas"
 
 msgid "SHARE"
 msgstr "Dalintis"

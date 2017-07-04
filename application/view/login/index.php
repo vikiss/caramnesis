@@ -1,7 +1,7 @@
 <div class="container">
-  <div class="clearfix">  
+  <div class="clearfix">
     <div class="relative center">
-    <h1 class="fw300 mt2 mb2"><img src="/img/caramnesis.svg" width="50%" alt="caramnesis" /></h1>
+    <h1 class="fw300 mt2 mb2"><img src="/img/motorgaga.svg" style="width: 25%;" alt="MotorGaga" /></h1>
     <p><i><?php echo _("HERO_BLURB"); ?></i></p>
     </div>
 
@@ -29,27 +29,27 @@
                     <label for="set_remember_me_cookie" class="block col-12 mt1 smallish">
                         <input type="checkbox" name="set_remember_me_cookie" />
                         <?php echo _("LOGIN_REMEMBER_ME"); ?>
-                    </label>										
-										
+                    </label>
+
                 </form>
-<div class="py1 right-align">	
-<?php /*<fb:login-button 
+<div class="py1 right-align">
+<?php /*<fb:login-button
   scope="public_profile,email"
   onlogin="checkLoginState();">
 </fb:login-button>
 */ ?>
 </div>
       </div>
-		</div>   
-								
+		</div>
+
 			<div class="sm-col md-col-6 lg-col-6 p2">
             <div class="m2">
-            <p><strong>CarAmnesis.com</strong><?php echo _("HERO_WRITEUP"); ?></p>
+            <p><strong>MotorGaga.com</strong><?php echo _("HERO_WRITEUP"); ?></p>
             </div>
 			</div>
-		
+
 		</div>
- 
+
    <div class="border-bottom my2"><div class="mx2"><?php
     $languages = $this->languages;
     foreach ($languages AS $key => $language) {
@@ -60,7 +60,7 @@
 			}
     }
     ?></div></div>
-		
+
 		<div class="sm-col md-col-6 lg-col-6 py2">
 				<div class="p1 m1">
 
@@ -68,21 +68,20 @@
                 <a class="btn btn-primary mb1 black bg-kcms" href="<?php echo Config::get('URL'); ?>login/register"><?php echo _("LOGIN_REGISTER_NEW_USR"); ?></a>
 
 				</div>
-				
+
 		</div>
-		
-		
-		
+
+
+
 
             <!-- register box on right side -->
             <div class="sm-col md-col-6 lg-col-6 p2">
             <div class="m2">
-                <p><strong>CarAmnesis.com</strong><?php echo _("REGISTRATION_WRITEUP"); ?></p>
-								  
+                <p><strong>MotorGaga.com</strong><?php echo _("REGISTRATION_WRITEUP"); ?></p>
+
             </div>
 						</div>
 
-   
-  </div>
-</div>                            
 
+  </div>
+</div>

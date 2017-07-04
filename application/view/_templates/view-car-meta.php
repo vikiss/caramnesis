@@ -45,7 +45,7 @@
 
        ?>    <meta property="og:url" content="<?= Config::get('URL').'view/car/'.$car_id; ?>" />
     <meta property="og:title" content="<?= $car_name; ?>" />
-    <meta property="og:site_name" content="CarAmnesis" />
+    <meta property="og:site_name" content="MotorGaga" />
     <meta property="og:description" content="<?= _('CARAMNESIS_CAR_PROFILE'); ?>" />
     <?php if ( $image_info ) { ?>
     <meta property="og:image" content="<?= $initial_img; ?>" />

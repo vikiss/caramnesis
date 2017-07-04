@@ -23,11 +23,10 @@
             <!-- register box on right side -->
             <div class="sm-col md-col-6 lg-col-6">
             <div class="m2">
-            <p><strong>Caramnesis.com</strong><?php echo _("HERO_WRITEUP"); ?></p>
+            <p><strong>MotorGaga.com</strong><?php echo _("HERO_WRITEUP"); ?></p>
             </div></div>
 
-        
-    
-  </div>
-</div>                            
 
+
+  </div>
+</div>
