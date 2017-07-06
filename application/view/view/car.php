@@ -24,13 +24,13 @@
             <th><?= _("NEWCAR_YEAR"); ?></th>
             <td><?= $car_year; ?></td>
         </tr>
-<?php if ((array_key_exists('allow_public_vin', $this->car_meta)) &&
+<?php if ( (is_array($this->car_meta))  &&  (array_key_exists('allow_public_vin', $this->car_meta)) &&
     ($this->car_meta['allow_public_vin'] == 'yes')) {    ?>
         <tr>
             <th><?= _("NEWCAR_VIN"); ?></th>
             <td><?= $car_vin; ?></td>
         </tr>
-<?php }; if ((array_key_exists('allow_public_plates', $this->car_meta)) &&
+<?php }; if ( (is_array($this->car_meta))  &&  (array_key_exists('allow_public_plates', $this->car_meta)) &&
 ($this->car_meta['allow_public_plates'] == 'yes')) {   ?>
         <tr>
             <th><?= _("NEWCAR_PLATES"); ?></th>

@@ -1145,3 +1145,5 @@ border-color: transparent rgba(255, 64, 54, 0.67) transparent transparent;
 .cardatatable td, .cardatatable th { font-size: .72rem; line-height: .88rem; height: 1rem; }
 .cardatatable td {font-weight: bold; padding-right: 0;}
 .cardatatable th {font-weight: 100; padding-left: 0;}
+
+.flowed-flex { flex-flow: row wrap;  justify-content: space-between;;}

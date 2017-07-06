@@ -22,6 +22,7 @@ class CarController extends Controller
             'units' => UserModel::getUserUnits(CarModel::getCarOwner($car_id)),
             'public_access' => ViewModel::getCarAccessByCarId($car_id, 10),
             'reminders' => ReminderModel::getReminders($car_id, -5184000), //2 months
+            'car_items' => CarModel::readAttributes($car_id, 'TECHNICAL_DATA'),
             ));
             }
             elseif (CarModel::getCarOwner($car_id) == Session::get('user_uuid')) { //new car viewed by the owner for the first time needs to get permission set

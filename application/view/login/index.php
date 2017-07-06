@@ -1,7 +1,7 @@
 <div class="container">
   <div class="clearfix">
     <div class="relative center">
-    <h1 class="fw300 mt2 mb2"><img src="/img/motorgaga.svg" style="width: 25%;" alt="MotorGaga" /></h1>
+    <h1 class="fw300 mt2 mb2 sm-hide"><img src="/img/motorgaga.svg" style="width: 25%;" alt="MotorGaga" /></h1>
     <p><i><?php echo _("HERO_BLURB"); ?></i></p>
     </div>
 
