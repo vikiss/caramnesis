@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Caramnesis\n"
 "POT-Creation-Date: 2016-02-06 22:36+0200\n"
-"PO-Revision-Date: 2017-06-30 23:58+0200\n"
+"PO-Revision-Date: 2017-08-01 22:52+0200\n"
 "Last-Translator: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language-Team: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language: en_US\n"
@@ -1931,12 +1931,7 @@ msgstr "Transfer your car to user"
 msgid "TRANSFER"
 msgstr "Transfer"
 
-msgid "TRANSFER_YOUR_CAR_TO_USER_WARNING"
-msgstr ""
-"If the recipient accepts, you will no longer be able to access this car "
-"profile, unless the new owner gives you permission."
-
-msgid "NEW_OWNER_NAME_OR_EMAIL username or email"
+msgid "NEW_OWNER_NAME_OR_EMAIL"
 msgstr "Username or email of the new owner"
 
 msgid "TRANSFER_YOUR_CAR_TO_USERNAME_%"
@@ -2040,3 +2035,32 @@ msgstr "Posts"
 
 msgid "HP"
 msgstr "HP"
+
+msgid "NEXT_OIL_CHANGE"
+msgstr "Next oil change"
+
+msgid "LAST_OIL_CHANGE"
+msgstr "Previous oil change"
+
+msgid "NEXT_DISTR_CHANGE"
+msgstr "Next timing belt change"
+
+msgid "LAST_DISTR_CHANGE"
+msgstr "Previous timing belt change"
+
+msgid "CHANGE_INTERVAL"
+msgstr "Change interval"
+
+msgid "EDIT_CHANGE_INTERVAL"
+msgstr "Edit change interval"
+
+msgid "TRANSFER_YOUR_CAR_TO_USER_WARNING"
+msgstr ""
+"By confirming this you agree that the ownership of account for this car and "
+"all associated records will be transferred to this user."
+
+msgid "FEEDBACK_DISTANCE_UNIT_CHANGE_SUCCESSFUL"
+msgstr "Distance units changes"
+
+msgid "DISTANCE_mi"
+msgstr "miles"

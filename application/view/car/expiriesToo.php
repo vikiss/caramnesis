@@ -52,9 +52,11 @@ if ($saved) {if (array_key_exists($title, $saved)) {$saved_chapter = $saved[$tit
         <input type = "text" class = "car-meta-txt small-field stealthfield col-6"
         pattern="\d*" data-key = "oil_interval"
         id = "oil-change-interval" value = "<?= $oil_interval; ?>" />
+        <?php if ($next_oil_change) { ?>
         <div class="small"><?= _('NEXT_OIL_CHANGE'); ?></div>
         <div class = "car-meta-txt small-field bg-kcms col-6"
         id = "next-oil-change"><?= $next_oil_change; ?></div>
+        <?php } ?>
 
 
 <?php  };
@@ -64,11 +66,12 @@ if ($saved) {if (array_key_exists($title, $saved)) {$saved_chapter = $saved[$tit
         <input type = "text" class = "car-meta-txt small-field stealthfield col-6"
         pattern="\d*" data-key = "distr_interval"
         id = "distr-change-interval" value = "<?= $distr_interval; ?>" />
+        <?php if ($next_distr_change) { ?>
         <div class="small"><?= _('NEXT_DISTR_CHANGE'); ?></div>
         <div class = "car-meta-txt small-field bg-kcms col-6"
         id = "next-distr-change"><?= $next_distr_change; ?></div>
-
-<?php    };
+        <?php }
+        };
 
      foreach ($entries as $entryname => $entry) {
 

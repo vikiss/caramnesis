@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Caramnesis\n"
 "POT-Creation-Date: 2016-02-06 22:36+0200\n"
-"PO-Revision-Date: 2017-07-04 11:37+0200\n"
+"PO-Revision-Date: 2017-08-01 22:48+0200\n"
 "Last-Translator: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language-Team: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language: lt_LT\n"
@@ -2043,3 +2043,35 @@ msgstr "Įrašai"
 
 msgid "HP"
 msgstr "AG"
+
+msgid "NEXT_OIL_CHANGE"
+msgstr "Būsimas tepalų keitimas"
+
+msgid "LAST_OIL_CHANGE"
+msgstr "Buvęs tepalų keitimas"
+
+msgid "NEXT_DISTR_CHANGE"
+msgstr "Būsimas paskirtymo dirželio keitimas"
+
+msgid "LAST_DISTR_CHANGE"
+msgstr "Buvęs paskirtymo dirželio keitimas"
+
+msgid "CHANGE_INTERVAL"
+msgstr "Keitimo intervalas"
+
+msgid "EDIT_CHANGE_INTERVAL"
+msgstr "Redaguoti keitimo intervalą"
+
+msgid "TRANSFER_YOUR_CAR_TO_USER_WARNING"
+msgstr ""
+"Patvirtindami šį veiksmą sutinkate, kad šio automobilio paskyra ir visi "
+"susiję įrašai pereina kitam vartotojui."
+
+msgid "NEW_OWNER_NAME_OR_EMAIL"
+msgstr "Naujo savininko vartoptojo vardas ar el. pašto adresas"
+
+msgid "FEEDBACK_DISTANCE_UNIT_CHANGE_SUCCESSFUL"
+msgstr "Atstumo matavimo vienetai sėkmingai pakeisti"
+
+msgid "DISTANCE_mi"
+msgstr "mylios"
