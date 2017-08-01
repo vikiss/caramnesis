@@ -5,14 +5,41 @@
   </div>
   <div class="clearfix">
     <div class="md-col md-col-3 carcol">
-      <?php  include 'carcol.php'; ?>
+      <?php  include 'carrow.php'; ?>
     </div>
     <div class="md-col md-col-9 ">
     <div class="right response"> </div>
 <?php
+$defaults = Config::get('DEFAULT_INTERVALS');
+$units = $this->units;
+$oil_interval = ($units->user_distance == 'km') ? $defaults['oil-km'] : $defaults['oil-miles'];
+$distr_interval = ($units->user_distance == 'km') ? $defaults['distr-km'] : $defaults['distr-miles'];
+$intervals = $this->intervals;
+if (is_array($intervals)) {
+    if (array_key_exists( 'oil_interval', $intervals )) { $oil_interval = $intervals['oil_interval']; };
+    if (array_key_exists( 'distr_interval', $intervals )) { $distr_interval = $intervals['distr_interval']; };
+};
+
+$next_oil_change = ''; $next_distr_change = '';
+$last_change = false;
+
 
 $structure = $this->structure;
 $saved = $this->expiries;
+if (is_array($saved))
+{
+    if (array_key_exists('OIL', $saved))
+    {
+    $last_change = intval($saved['OIL']->odo);
+    $next_oil_change = intval($last_change) + intval($oil_interval);
+    };
+
+    if (array_key_exists('TIMING_BELT', $saved))
+    {
+    $last_change = intval($saved['TIMING_BELT']->odo);
+    $next_distr_change = intval($last_change) + intval($distr_interval);
+    };
+} ;
 $i = 1;
 foreach ($structure as $title => $entries) {
 $saved_chapter = false;
@@ -20,6 +47,29 @@ if ($saved) {if (array_key_exists($title, $saved)) {$saved_chapter = $saved[$tit
 ?>
      <div class="md-col md-col-6"><h3><?= _($title); ?></h3>
 <?php
+    if ($title == 'OIL') { ?>
+        <div class="small"><?= _('CHANGE_INTERVAL'); ?></div>
+        <input type = "text" class = "car-meta-txt small-field stealthfield col-6"
+        pattern="\d*" data-key = "oil_interval"
+        id = "oil-change-interval" value = "<?= $oil_interval; ?>" />
+        <div class="small"><?= _('NEXT_OIL_CHANGE'); ?></div>
+        <div class = "car-meta-txt small-field bg-kcms col-6"
+        id = "next-oil-change"><?= $next_oil_change; ?></div>
+
+
+<?php  };
+
+    if ($title == 'TIMING_BELT') { ?>
+        <div class="small"><?= _('CHANGE_INTERVAL'); ?></div>
+        <input type = "text" class = "car-meta-txt small-field stealthfield col-6"
+        pattern="\d*" data-key = "distr_interval"
+        id = "distr-change-interval" value = "<?= $distr_interval; ?>" />
+        <div class="small"><?= _('NEXT_DISTR_CHANGE'); ?></div>
+        <div class = "car-meta-txt small-field bg-kcms col-6"
+        id = "next-distr-change"><?= $next_distr_change; ?></div>
+
+<?php    };
+
      foreach ($entries as $entryname => $entry) {
 
        switch($entry)
@@ -62,15 +112,15 @@ if ($saved) {if (array_key_exists($title, $saved)) {$saved_chapter = $saved[$tit
 
         case 'odo':
 ?>
-        <div class="small"><?= _($entryname); ?></div>
-        <input type = "text" pattern="\d*" class = "exptxt small-field stealthfield  col-6"
+        <div class="small"><?php if ($title == 'OIL') {echo _('LAST_OIL_CHANGE'); } elseif ($title == 'TIMING_BELT') {echo _('LAST_DISTR_CHANGE'); } else {echo _($entryname);} ?></div>
+        <input type = "text" pattern="\d*" class = "<?php if ($title == 'OIL') {echo 'exptxtsp oilchange'; } elseif ($title == 'TIMING_BELT') {echo 'exptxtsp distrbelt'; } else {echo 'exptxt';} ?> small-field stealthfield  col-6"
         data-chapter = "<?= $title; ?>" data-entry = "<?= $entry; ?>"
         id = "expitem-<?= $i; ?>" data-validate = "int" value = "<?php if ($saved_chapter) {echo $saved_chapter->odo;}; ?>" />
 <?php
         break;
 
         case 'prev_odo':
-          if ($saved_chapter) {
+          if (($saved_chapter) && ($saved_chapter->prev_odo)) {
 ?>
         <div class="small"><?= _($entryname); ?></div>
         <div class = "col-6"
@@ -87,7 +137,8 @@ if ($saved) {if (array_key_exists($title, $saved)) {$saved_chapter = $saved[$tit
 <?php
 }
 
-
+$return_to = 'expiries';
+include('odo_dlg.php');
 /*
 $data = array(
   'car_id' => $car_id,
@@ -103,6 +154,9 @@ ExpiriesModel::writeExpiry($data);
 */
 
   ?>
+  <input type="hidden" name="current_odo" id="current_odo" value = "<?= $odo; ?>" />
+  <input type="hidden" name="saved_oil_interval" id="saved_oil_interval" value = "<?= $oil_interval; ?>" />
+  <input type="hidden" name="saved_distr_interval" id="saved_distr_interval" value = "<?= $distr_interval; ?>" />
     </div>
   </div>
 </div>

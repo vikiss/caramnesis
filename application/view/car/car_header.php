@@ -1,6 +1,6 @@
 <div class="flex flowed-flex p1">
     <div class="pic120width">
-        <?php if ($image_out) {  ?>
+        <?php if (isset($image_out)) {  ?>
                <a id="heroimg-link" href="">
                <a href="<?= $image_out; ?>" data-index="1" class="pswpitem">
                       <div class="pic120width bg-white relative z1"  style="background-image: url(<?= $image_out; ?>/120)"><?= $image_meta; ?></div>
@@ -93,10 +93,12 @@
     </div>
 </div>
 <?php
+if (!isset($script)) {$script = '';}
 print "
 <script>
 var itemclass = '.pswpitem';
 var items = [$script];
 </script>";
+
  ?>
 <script src="<?php echo Config::get('URL'); ?>js/pswipe.js"></script>

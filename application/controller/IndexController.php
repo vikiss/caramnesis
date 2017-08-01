@@ -17,40 +17,40 @@ class IndexController extends Controller
      */
     public function index()
     {
-              
-        if (LoginModel::isUserLoggedIn()) {              
-              
+
+        if (LoginModel::isUserLoggedIn()) {
+
               if ( $cars = CarModel::getCars(Session::get('user_uuid'))  )
-                         
-	               {                   
-					$this->View->render('index/index', array('car' => $cars));
-				   
+
+	               {
+					$this->View->render('index/index', array('cars' => $cars));
+
 				   } else {
-					
+
         Redirect::to('car/new_car');
-					
-					} 
-          
+
+					}
+
           } else {
     Redirect::to('login/index');
     }
-				
+
 
     }
-	
+
 	public function jenesaisquoi () //cron job
     {
     $this->View->renderWithoutHeaderAndFooter('index/cron');
 	}
-    
-    
+
+
      public function save_it()
     {
         NoteModel::saveEmail(Request::post('email'));
         Redirect::to('index/index');
     }
-    
 
-    
-        
+
+
+
 }

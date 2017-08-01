@@ -425,10 +425,14 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
      public function save_odo()
     {
       CarModel::updateOdoReading(Request::post('this_car_id'), Request::post('this_event_odo'), true);
-      Redirect::to('car/index/'.Request::post('this_car_id'));
+      Redirect::to('car/'.Request::post('return_to').'/'.Request::post('this_car_id'));
     }
 
-
+    public function save_odo_ajax()
+    {
+     $response = CarModel::updateOdoReading(Request::post('this_car_id'), Request::post('this_event_odo'), true);
+     $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('response' => $response, 'type' => 'passthrough'));
+    }
 
      public function car_data_bits()  //loaded via ajax
     {
@@ -1030,6 +1034,7 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
             'units' => UserModel::getUserUnits(Session::get('user_uuid')),
             'expiries' => ExpiriesModel::readAllExpiries($car_id),
             'structure' => ExpiriesModel::structure(),
+            'intervals' => CarModel::readCarMeta($car_id, array('oil_interval', 'distr_interval')),
         ));
 
 

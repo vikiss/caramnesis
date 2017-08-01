@@ -1188,7 +1188,7 @@ $(".exptxt").on('change', function() {
 });
 
 
-$(".car-meta").on('change', function() {
+$(".car-meta").on('change', function() { /*for checkbox*/
     var element = $(this).attr('id');
     var val = $(this).val();
     var key = $(this).data('key');
@@ -1198,9 +1198,9 @@ $(".car-meta").on('change', function() {
     });
 
 
-function writeCarMeta(car_id, element, key, val, checked, responseel) {
+function writeCarMeta(car_id, element, key, val, checked, responseel) { /*for checkbox*/
       $(responseel).html('<div class="icon-spin3 spinner"> </div>');
-    //  console.log(car_id+' : '+element+' : '+key+' : '+val+' : '+checked);
+//      console.log(car_id+' : '+element+' : '+key+' : '+val+' : '+checked);
       $("#"+element).prop( "disabled", true );
       var value = '';
       if (checked) value = val;
@@ -1248,6 +1248,106 @@ $("#set_car_public").on('change', function() {
    });
 
 
-
-
     });
+
+    $(".car-meta-txt").on('change', function() { /*for textfield*/
+        var element = $(this).attr('id');
+        var val = $(this).val();
+        var key = $(this).data('key');
+        var car_id = $("#car_id").val();
+        writeCarMetaText(car_id, element, key, val, '.response');
+        });
+
+
+    function writeCarMetaText(car_id, element, key, val, responseel) { /*for textfield*/
+          $(responseel).html('<div class="icon-spin3 spinner"> </div>');
+          //console.log(car_id+' : '+element+' : '+key+' : '+val);
+          $("#"+element).prop( "disabled", true );
+          $(responseel).load(
+                '/car/write_car_meta',
+                {"car_id":car_id, "meta_key":key, "meta_value":val  },
+                function() {
+                           var response = $(responseel).html();
+                           if (response == 'false') {
+                           $(responseel).html('<i class="icon-cancel red"> </i>');
+                           } else {
+                           $(responseel).html('<i class="icon-ok green"> </i>');
+                           }
+                           $( "#"+element ).prop( "disabled", false );
+         });
+    }
+
+    $('#oil-change-interval').on('change', function() {
+      var oil_interval = parseInt($(this).val());
+      var next_change = parseInt($("#next-oil-change").html());
+      var old_oil_interval = parseInt($("#saved_oil_interval").val());
+      $("#next-oil-change").html(next_change - old_oil_interval + oil_interval);
+    });
+
+
+    $('#distr-change-interval').on('change', function() {
+      var distr_interval = parseInt($(this).val());
+      var next_change = parseInt($("#next-distr-change").html());
+      var old_distr_interval = parseInt($("#saved_distr_interval").val());
+      $("#next-distr-change").html(next_change - old_distr_interval + distr_interval);
+    });
+
+    $(".exptxtsp").on('change', function() {
+        var key = $(this).attr('id');
+        var val = parseInt($(this).val());
+        var chapter = $(this).data('chapter');
+        var entry = $(this).data('entry');
+        var validate  = $(this).data('validate');
+        var current_odo = parseInt($("#current_odo").val());
+        var car_id = $("#car_id").val();
+        var oil_interval = parseInt($("#oil-change-interval").val());
+        var distr_interval = parseInt($("#distr-change-interval").val());
+        var responseel = '.response';
+        if ($(this).hasClass( "oilchange" )) {
+          if (val > current_odo) {
+            $(responseel).load(
+                  '/car/save_odo_ajax',
+                  {"this_car_id":car_id, "this_event_odo":val  },
+                  function() {
+                             var response = $(responseel).html();
+                             if (response == 'false') {
+                             $(responseel).html('<i class="icon-cancel red"> </i>');
+                             } else {
+                             $(responseel).html('<i class="icon-ok green"> </i>');
+                             }
+
+           });
+           $("#next-oil-change").html(val+oil_interval);
+          }
+        }
+        if ($(this).hasClass( "distrbelt" )) {
+          if (val > current_odo) {
+            $(responseel).load(
+                  '/car/save_odo_ajax',
+                  {"this_car_id":car_id, "this_event_odo":val  },
+                  function() {
+                             var response = $(responseel).html();
+                             if (response == 'false') {
+                             $(responseel).html('<i class="icon-cancel red"> </i>');
+                             } else {
+                             $(responseel).html('<i class="icon-ok green"> </i>');
+                             }
+
+           });
+           $("#next-distr-change").html(val+distr_interval);
+          }
+        }
+
+        var siblings = $('*[data-chapter="' + chapter + '"]').map(function() {
+        var rObj = {};
+        if ($(this).val())
+        {
+        rObj[$(this).data('entry')] = $(this).val();
+        } else {
+        rObj[$(this).data('entry')] = $(this).html();
+        }
+        return rObj;
+        }).get();
+        writeExpiry(key, val, chapter, entry, validate, JSON.stringify(siblings));
+        //console.log(key+' : '+val+' : '+chapter+' : '+entry+' : '+validate+' : '+JSON.stringify(siblings));
+        });
