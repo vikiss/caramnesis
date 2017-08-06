@@ -1,95 +1,88 @@
 <?php
-$dates=array(
-    'INSURANCE' => '?',
-    'INSPECTION' => '?',
-    'TAXES' => '?',
-    'OIL'  => '?',
-    'TIMING_BELT' => '?',
-             );
-$visibility = $dates;
-$odos=$dates;
+
+//iš expiriesToo
+
+$defaults = Config::get('DEFAULT_INTERVALS');
 $units = $this->units;
+$current_odo = intval($this->odo);
+$oil_interval = ($units->user_distance == 'km') ? $defaults['oil-km'] : $defaults['oil-miles'];
+$distr_interval = ($units->user_distance == 'km') ? $defaults['distr-km'] : $defaults['distr-miles'];
+$intervals = $this->intervals;
+if (is_array($intervals)) {
+    if (array_key_exists( 'oil_interval', $intervals )) { $oil_interval = $intervals['oil_interval']; };
+    if (array_key_exists( 'distr_interval', $intervals )) { $distr_interval = $intervals['distr_interval']; };
+};
 
-	 function calcRemainingDays(&$dateno) { //calculates difference in days
-                if ($dateno) {
-                $date = explode('-', $dateno);
-                $timestamp = mktime(0,0,0,$date[1],$date[2],$date[0]);
-                $now = time();
-                $datediff = $timestamp - $now;
-                $dateno = floor($datediff / (60 * 60 * 24));
-		} else {
-			$dateno = '?';
-		}
-               }
-	   
-	   function setDayColor(&$days) {
-                $color = 'green';
-                if ($days < 14) {$color = 'orange';}
-                if ($days < 1) {$color = 'red';}
-	    if ($days == '?') {$color = 'red';}
-                $days = $color;
-               }
-	    
-	    
-	     function setOdoDayColor(&$odo_diff) {
-                $color = 'green';
-                if ($odo_diff < 800) {$color = 'orange';}
-                if ($odo_diff < 300) {$color = 'red';}
-                $odo_diff = $color;
-               }
-	    
-	    
+$next_oil_change = ''; $next_distr_change = '';
+$last_change = false;
 
-if ($xml = simplexml_load_string($this->expiries)) {
+$saved = $this->expiries;
+if (is_array($saved))
+{
 
-	foreach ($xml->expiry as $expiry) {
-		foreach($expiry->entry as $entry) {
-			if ($entry['name'] == 'VALID_UNTIL') {
-                                        $dates[(string)$expiry['name']] = (string)$entry->value;
-			}
-			if ($entry['name'] == 'SHOW') {
-				$visibility[(string)$expiry['name']] = (string)$entry->value;
-			}
-			if ($entry['name'] == 'ODOMETER') {
-                                        $odos[(string)$expiry['name']] = intval((string)$entry->value) - intval($this->odo);
-			}
-		}
-	}
-array_walk($dates, 'calcRemainingDays');
-}	
-               
-             $styles = $dates;  
-               array_walk($styles, 'setDayColor');
-	    $odo_styles = $odos;
-	    array_walk($odo_styles, 'setOdoDayColor');
-               
+foreach($saved as $name => $entry) {
+        switch($name) {
 
-?>
+            case 'OIL':
+            $last_change = intval($entry->odo);
+            $next_oil_change = intval($last_change) + intval($oil_interval);
+            $remaining_oil = intval($next_oil_change - $current_odo);
+            $percent_done = intval((($oil_interval - $remaining_oil) / $oil_interval) * 100);
+            if ($percent_done > 100) {$percent_done = 100;}
+            print thermometer($percent_done, 'icon-oil-change', _($name).' '.$remaining_oil.' '.$units->user_distance);
+            break;
 
-<ul class="list-reset">
-	<?php if ($visibility['INSURANCE'] !== 'NO') { ?>
-<li><a class="<?= $styles['INSURANCE'] ?>" href="<?= Config::get('URL') . 'car/expiries/' . $this->car_id; ?>" title="<?= _('INSURANCE'); ?>">
-		<i class="icon-umbrella"> </i><?= $dates['INSURANCE'] ?></li>
-	<?php }; if ($visibility['INSPECTION'] !== 'NO') { ?>
-<li><a class="<?= $styles['INSPECTION'] ?>" href="<?= Config::get('URL') . 'car/expiries/' . $this->car_id; ?>" title="<?= _('INSPECTION'); ?>">
-		<i class="icon-check"> </i><?= $dates['INSPECTION'] ?></li>
-	<?php }; if ($visibility['TAXES'] !== 'NO') { ?>
-<li><a class="<?= $styles['TAXES'] ?>" href="<?= Config::get('URL') . 'car/expiries/' . $this->car_id; ?>" title="<?= _('TAXES'); ?>">
-		<i class="icon-credit-card"> </i><?= $dates['TAXES'] ?></li>
-	<?php }; if ($visibility['OIL'] !== 'NO') {
-		$readout = $dates['OIL']; $color = $styles['OIL'];
-		if ( $odos['OIL'] !== '?' ) {	$readout = $odos['OIL'].' '.$units->user_distance; $color = $odo_styles['OIL'];	};
-		if ($dates['OIL'] < 1) { $readout = $dates['OIL']; $color = $styles['OIL']; }
-		?>
-<li><a class="<?= $color ?>" href="<?= Config::get('URL') . 'car/expiries/' . $this->car_id; ?>" title="<?= _('OIL_CHANGE'); ?>">
-		<i class="icon-oil-change"> </i><?= $readout ?></li>
-	<?php }; if ($visibility['TIMING_BELT'] !== 'NO') {
-		$readout = $dates['TIMING_BELT']; $color = $styles['TIMING_BELT'];
-		if ( $odos['TIMING_BELT'] !== '?' ) {	$readout = $odos['TIMING_BELT'].' '.$units->user_distance; $color = $odo_styles['TIMING_BELT'];	};
-		if ($dates['TIMING_BELT'] < 1) { $readout = $dates['TIMING_BELT']; $color = $styles['TIMING_BELT']; }
-		
-		?>
-<li><a class="<?= $color; ?>" href="<?= Config::get('URL') . 'car/expiries/' . $this->car_id; ?>" title="<?= _('TIMING_BELT'); ?>">
-		<i class="icon-timing-belt"> </i><?= $readout; ?></li>
-	<?php };	?>
-                            </ul>
+            case 'INSURANCE':
+            $expires = $entry->expiration;
+            //$year_before = $expires - 31536000; // (365 * 24 * 60 * 60)
+            $time_remaining = $expires - time();
+            $days_remaining = intval($time_remaining / 86400); //(24 * 60 * 60)
+            $percent_done = intval(((31536000 - $time_remaining) / 31536000) * 100);
+            if ($percent_done > 100) {$percent_done = 100;}
+            print thermometer($percent_done, 'icon-umbrella', _($name).' '.$days_remaining.' '._('DAYS'));
+            break;
+
+            case 'TAXES':
+            $expires = $entry->expiration;
+            $time_remaining = $expires - time();
+            $days_remaining = intval($time_remaining / 86400);
+            $percent_done = intval(((31536000 - $time_remaining) / 31536000) * 100);
+            if ($percent_done > 100) {$percent_done = 100;}
+            print thermometer($percent_done, 'icon-credit-card', _($name).' '.$days_remaining.' '._('DAYS'));
+            break;
+
+            case 'INSPECTION':
+            $expires = $entry->expiration;
+            $time_remaining = $expires - time();
+            $days_remaining = intval($time_remaining / 86400);
+            $percent_done = intval(((31536000 - $time_remaining) / 31536000) * 100);
+            if ($percent_done > 100) {$percent_done = 100;}
+            print thermometer($percent_done, 'icon-check', _($name).' '.$days_remaining.' '._('DAYS'));
+            break;
+
+            case 'TIMING_BELT':
+            $last_change = intval($entry->odo);
+            $next_distr_change = intval($last_change) + intval($distr_interval);
+            $remaining_distr = intval($next_distr_change - $current_odo);
+            $percent_done = intval((($distr_interval - $remaining_distr) / $distr_interval) * 100);
+            if ($percent_done > 100) {$percent_done = 100;}
+            print thermometer($percent_done, 'icon-timing-belt', _($name).' '.$remaining_distr.' '.$units->user_distance);
+            break;
+        }
+    }
+} ;
+
+
+function thermometer($percent, $icon, $text)
+{
+    $color = 'green';
+    if ($percent > 80) {$color = 'orange';}
+    if ($percent > 90) {$color = 'red';}
+    $output = '
+        <div class="mt2"><div class="inline white mr2" style="background-color: '.$color.'"><i class="'.$icon.'"> </i></div> <span class="small">'.$text.'</span></div>
+        <div style="width: 100%; height: 1em;" class="bg-silver mt05">
+            <div style="width: '.$percent.'%; background-color: '.$color.'; height: 1em;" > </div>
+        </div>
+    ';
+    return $output;
+}

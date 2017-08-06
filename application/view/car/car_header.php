@@ -89,6 +89,7 @@
            } ?>
         <div class="smallish mt1"><a href="<?= Config::get('URL') . 'car/car_reminders/' . $car_id; ?>"><i class="icon-bell-alt"> </i><?= _('REMINDERS'); ?></a></div>
         <div class="small"><?= $reminders; ?></div>
+        <div id="carindex_expiry_list" class="small pointer nestedlink" data-href="<?= Config::get('URL') . 'car/expiries/' . $car_id; ?>"></div>
 
     </div>
 </div>

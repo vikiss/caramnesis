@@ -840,15 +840,22 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
             public function expiry_list($car_id)  //ajax
     {
 					$this->View->renderWithoutHeaderAndFooter('car/expiry_list', array(
-                                                             'expiries' => CarModel::getCarsField('car_expiries', $car_id),
+                                                             //'expiries' => CarModel::getCarsField('car_expiries', $car_id), this cars field no longer used
+                                                             'expiries' => ExpiriesModel::readAllExpiries($car_id),
+                                                             'intervals' => CarModel::readCarMeta($car_id, array('oil_interval', 'distr_interval')),
                                                              'odo' => CarModel::getCarsField('car_odo', $car_id),
                                                              'units' => UserModel::getUserUnits(CarModel::getCarOwner($car_id)),
                                                              'car_id' => $car_id,
                                                              ));
     }
 
-
-
+/*
+    'car' => $car_row,
+    'units' => UserModel::getUserUnits(Session::get('user_uuid')),
+    'expiries' => ExpiriesModel::readAllExpiries($car_id),
+    'structure' => ExpiriesModel::structure(),
+    'intervals' => CarModel::readCarMeta($car_id, array('oil_interval', 'distr_interval')),
+    */
 
 
         public function expiries_old($car_id = '')

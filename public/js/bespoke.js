@@ -1041,10 +1041,10 @@ $(window).load(function() {
           $( "#carindex_my_car_list" ).removeClass('hide');
     }
 
-  // hide this for now
-  //  if ($('#carindex_expiry_list').length) {
-  //       $( '#carindex_expiry_list' ).load( '/car/expiry_list/'+$("#car_id").val());
-  //  }
+
+    if ($('#carindex_expiry_list').length) {
+         $( '#carindex_expiry_list' ).load( '/car/expiry_list/'+$("#car_id").val());
+    }
 });
 
 $( ".nestedlink" ).click(function(e) {
