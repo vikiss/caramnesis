@@ -78,10 +78,13 @@ function thermometer($percent, $icon, $text)
     $color = 'green';
     if ($percent > 80) {$color = 'orange';}
     if ($percent > 90) {$color = 'red';}
+    $percent = intval(100 - intval($percent));  //invert so that 100% done means no bar, 0% done full color bar
     $output = '
         <div class="mt2"><div class="inline white mr2" style="background-color: '.$color.'"><i class="'.$icon.'"> </i></div> <span class="small">'.$text.'</span></div>
-        <div style="width: 100%; height: 1em;" class="bg-silver mt05">
-            <div style="width: '.$percent.'%; background-color: '.$color.'; height: 1em;" > </div>
+        <div style="width: 100%; height: 1em;" class="bg-silver mt05 center">';
+    if ($percent == 0)   {$output.='<strong class="white bg-red px1">X</strong>';}
+    $output.=
+            '<div style="width: '.$percent.'%; background-color: '.$color.'; height: 1em;" > </div>
         </div>
     ';
     return $output;

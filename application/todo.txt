@@ -1,11 +1,12 @@
+
+gražesnės galbūt statuso rodyklės css gauge gal peieškoti
+dashboardas idėjoms https://colorlib.com/polygon/gentelella/index.html
+
+
+
 prie vartotojo nustatymu issaugoti GMT+3 ar pan. laiko juosta, nes dabar db issaugo viska GMT laiku
 
-
-
-
 message istrynimas, placiau parasyta messagemodel.php
-
-
 
 privatumas: reikia papildomos priemones kad anoniminiam vartotojui slepti privacias nuotr kai masina public (t.y. rodyti tik is public events ir masinos galvos, o nerodyti is private events ir atributu)
 tas gali truputi palaukti nes neturint nuotr URL nieko nesimatytu, jis anoniminiam vartotojui neeksponuojamas
@@ -99,14 +100,14 @@ nenorim automatiskai nustatyti savininko pagal masina siuntimo momentu kad nerei
                  WHERE (user_uuid = :user_uuid)
                  LIMIT 1";
         $query = $database->prepare($sql);
-                
+
         $query->execute(array(':user_uuid' => $uuid));
 
-        
+
         return $query->fetch();
     }
-    
-    
+
+
     /*
               balance:              stdClass Object(    [API Decode] => 20)
               info: stdClass Object (    [decode] => Array
@@ -129,11 +130,11 @@ nenorim automatiskai nustatyti savininko pagal masina siuntimo momentu kad nerei
             [15] => Transmission
             [16] => Number of Gears
         ))
-        
+
         crafteriukas:
         stdClass Object
 (
-    [decode] => Array  
+    [decode] => Array
         (
             [0] => Make
             [1] => Manufacturer
@@ -146,10 +147,10 @@ nenorim automatiskai nustatyti savininko pagal masina siuntimo momentu kad nerei
         )
 
 )
-        
-        
-        
-        
+
+
+
+
 decode:
 
 stdClass Object
