@@ -101,15 +101,24 @@ $('#event_type_select').on('change', function () {
     //var optionSelected = $("option:selected", this);
     var evtype_id = this.value;
     var evtype_name = $("#event_type_select option:selected").text();
-    if ($('#event_type').val().indexOf(evtype_id) == -1) {
+  addEventTypeToList(evtype_id, evtype_name);
+} );
+
+function addEventTypeToList(evtype_id, evtype_name) {
+  if ($('#event_type').val().indexOf(evtype_id) == -1) {
 
 $('#event_type').val(function(i, val) {
-  return (val ? val + ',' : '') + evtype_id;      });
+return (val ? val + ',' : '') + evtype_id;      });
 $('#taglisting').append('<li><a href="' + evtype_id + '"><i class="icon-cancel white brdrw"> </i></a> <span>'+evtype_name+'</span></li>');
 $('#event_type_select').val('');
 $('#reminder_content_proxy').val(evtype_name + ' ' + $('#reminder_content_proxy').val()); // feed the text into reminder textarea
+
+    if (evtype_id === 'TAG_MAINTENANCE') {
+      $( "#maintenance_panel" ).removeClass('hide');
     }
-} );
+
+  }
+}
 
 $(document).on("click","#taglisting > li > a",function(e){
             e.preventDefault();
@@ -1181,6 +1190,27 @@ $(".exptxt").on('change', function() {
     //console.log(key+' : '+val+' : '+chapter+' : '+entry+' : '+validate+' : '+JSON.stringify(siblings));
     });
 
+    $(".expchk").on('change', function() {
+        const val = ($(this).prop('checked')) ? 'V' : '0';
+        const chapter = $(this).data('chapter');
+        const car_id = $("#car_id").val();
+        $( ".exptxt, .expchk" ).prop( "disabled", true );
+        $('.response').load(
+              '/car/write_expiry_status',
+              {"car_id":car_id, "expiry":chapter, "status":val  },
+              function() {
+                         var response = $('.response').html();
+                         if (response == 'false') {
+                         $('.response').html('<i class="icon-cancel red"> </i>');
+                         } else {
+                         $('.response').html('<i class="icon-ok green"> </i>');
+                         }
+                         $( ".exptxt, .expchk" ).prop( "disabled", false );
+              });
+        });
+
+
+
   $('.autoheight').on('keyup',function(){
   $(this).css('height','auto');
   $(this).css('overflow','hidden');
@@ -1351,3 +1381,14 @@ $("#set_car_public").on('change', function() {
         writeExpiry(key, val, chapter, entry, validate, JSON.stringify(siblings));
         //console.log(key+' : '+val+' : '+chapter+' : '+entry+' : '+validate+' : '+JSON.stringify(siblings));
         });
+
+
+        //event type chooser dialog
+        $( ".evtypechooser" ).dialog({ autoOpen: true, width: 360, modal: true,  dialogClass: 'no-close', });
+        $('body').on('click', '.evtypechooser .evtype', function(e) {
+                e.preventDefault();
+        var evtype_id = $(this).attr('href');
+        var evtype_name = $(this).html();
+        addEventTypeToList(evtype_id, evtype_name);
+          $( ".evtypechooser" ).dialog( "close" );
+        } );

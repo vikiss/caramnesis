@@ -22,6 +22,7 @@ if (is_array($intervals)) {
 
 $next_oil_change = ''; $next_distr_change = '';
 $last_change = false;
+$remaining_to_oil_change = false;
 
 
 $structure = $this->structure;
@@ -32,6 +33,7 @@ if (is_array($saved))
     {
     $last_change = intval($saved['OIL']->odo);
     $next_oil_change = intval($last_change) + intval($oil_interval);
+    $remaining_to_oil_change = intval($next_oil_change - $odo);
     };
 
     if (array_key_exists('TIMING_BELT', $saved))
@@ -45,9 +47,19 @@ foreach ($structure as $title => $entries) {
 $saved_chapter = false;
 if ($saved) {if (array_key_exists($title, $saved)) {$saved_chapter = $saved[$title]; }}
 ?>
-     <div class="md-col md-col-6"><h3><?= _($title); ?></h3>
+     <div class="md-col md-col-6">
+         <h3><?= _($title); ?></h3>
+         <input type="checkbox" class="expchk"
+         data-chapter = "<?= $title; ?>"
+         value="yes" <?php if ( ($saved_chapter) &&  ($saved_chapter->status == 'V'))
+         echo ' checked'; ?> /><?= _('SHOW_EXPIRY_STATUS'); ?>
 <?php
     if ($title == 'OIL') { ?>
+        <?php if ($remaining_to_oil_change) { ?>
+        <div class="small"><?= _('REMAINING_TO_OIL_CHANGE'); ?></div>
+        <div class = "car-meta-txt small-field <?php if ($remaining_to_oil_change < 0) echo 'bg-red white bold'; else echo 'bg-kcms'; ?> col-6"
+        id = "remaining-to-oil-change"><?= $remaining_to_oil_change; ?></div>
+        <?php } ?>
         <div class="small"><?= _('CHANGE_INTERVAL'); ?></div>
         <input type = "text" class = "car-meta-txt small-field stealthfield col-6"
         pattern="\d*" data-key = "oil_interval"
@@ -57,7 +69,7 @@ if ($saved) {if (array_key_exists($title, $saved)) {$saved_chapter = $saved[$tit
         <div class = "car-meta-txt small-field bg-kcms col-6"
         id = "next-oil-change"><?= $next_oil_change; ?></div>
         <?php } ?>
-
+        <a href="<?= Config::get('URL'); ?>/car/new_event/<?= $car_id; ?>/TAG_MAINTENANCE"><i class="icon-oil-change"> </i> <?= _('ENTER_NEW_OIL_CHANGE'); ?></a>
 
 <?php  };
 
@@ -74,6 +86,7 @@ if ($saved) {if (array_key_exists($title, $saved)) {$saved_chapter = $saved[$tit
         };
 
      foreach ($entries as $entryname => $entry) {
+         if ($title !== 'OIL') {
 
        switch($entry)
         {
@@ -134,7 +147,7 @@ if ($saved) {if (array_key_exists($title, $saved)) {$saved_chapter = $saved[$tit
         break;
         }
      $i++;
-     }
+ } }
      ?>
     </div>
 <?php
@@ -142,19 +155,7 @@ if ($saved) {if (array_key_exists($title, $saved)) {$saved_chapter = $saved[$tit
 
 $return_to = 'expiries';
 include('odo_dlg.php');
-/*
-$data = array(
-  'car_id' => $car_id,
-  'expiry' => 'whatever',
-  'expiration' => 123456,
-  'prev_expiration' => 654987,
-  'description' => 'description here',
-  'reference' => 'reference here',
-  'ord' => 77,
-);
 
-ExpiriesModel::writeExpiry($data);
-*/
 
   ?>
   <input type="hidden" name="current_odo" id="current_odo" value = "<?= $odo; ?>" />

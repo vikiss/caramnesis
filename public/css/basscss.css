@@ -1149,3 +1149,6 @@ border-color: transparent rgba(255, 64, 54, 0.67) transparent transparent;
 .cardatatable th {font-weight: 100; padding-left: 0;}
 
 .flowed-flex { flex-flow: row wrap;  justify-content: space-between;;}
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}

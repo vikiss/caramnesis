@@ -416,9 +416,40 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
         'reminder_time' => Request::post('timestampdate'),
         'reminder_content' => Request::post('reminder_content'),
         'reminder_toggle' => Request::post('remindertoggle'),
+        'oil_type' => Request::post('oil_type'),
+        'new_oil' => Request::post('new_oil'),
+        'oil_filter' => Request::post('oil_filter'),
+        'air_filter' => Request::post('air_filter'),
+        'fuel_filter' => Request::post('fuel_filter'),
+        'cabin_filter' => Request::post('cabin_filter'),
         ));
-        CarModel::updateCarLookupEntry(Request::post('car_id'), implode(',',CarModel::getCarPlates(Request::post('car_id'))), CarModel::getCarVin(Request::post('car_id')));
-      if (Request::post('todolist_checkbox')) {CarModel::addTodoItem($new_event, Request::post('car_id'), Request::post('event_content')); }
+        CarModel::updateCarLookupEntry(
+            Request::post('car_id'),
+            implode(',',CarModel::getCarPlates(Request::post('car_id'))),
+            CarModel::getCarVin(Request::post('car_id'))
+        );
+      if (Request::post('todolist_checkbox')) {
+          CarModel::addTodoItem(
+              $new_event,
+              Request::post('car_id'),
+              Request::post('event_content'));
+      }
+      if (Request::post('new_oil')) { //write oil change to expiries
+          ExpiriesModel::commitExpiry(array(
+              'car_id' => Request::post('car_id'),
+              'expiry' => 'OIL',
+              'description' => Request::post('oil_type'),
+              'reference' => $new_event,
+              'odo' => Request::post('event_odo'),
+          ));
+      }
+
+        if (Request::post('oil_interval')) { //write update interval to car meta
+            CarModel::writeCarMeta(Request::post('car_id'), 'oil_interval', Request::post('oil_interval'));
+        }
+
+
+
         Redirect::to('car/index/'.Request::post('car_id'));
     }
 
@@ -538,6 +569,22 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
             'units' => UserModel::getUserUnits($owner),
             'owner' => $owner,
             'outstanding' => CarModel::getEventOutstandingStatus($event_id),
+            'oil_interval' => CarModel::readCarMeta($event_array['c'], 'oil_interval'),
+            'defaults' => Config::get('DEFAULT_INTERVALS'),
+        ));
+    }
+
+    public function new_event($car_id, $tag = '')
+    {
+        $owner = CarModel::getCarOwner($car_id);
+        $this->View->render('car/new_event', array(
+            'units' => UserModel::getUserUnits($owner),
+            'owner' => $owner,
+            'car_id' => $car_id,
+            'odo' => CarModel::getCarsField('car_odo', $car_id),
+            'oil_interval' => CarModel::readCarMeta($car_id, 'oil_interval'),
+            'defaults' => Config::get('DEFAULT_INTERVALS'),
+            'initial_tag' => $tag,
         ));
     }
 
@@ -596,6 +643,12 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
         'reminder_time' => Request::post('timestampdate'),
         'reminder_content' => Request::post('reminder_content'),
         'reminder_toggle' => Request::post('remindertoggle'),
+        'oil_type' => Request::post('oil_type'),
+        'new_oil' => Request::post('new_oil'),
+        'oil_filter' => Request::post('oil_filter'),
+        'air_filter' => Request::post('air_filter'),
+        'fuel_filter' => Request::post('fuel_filter'),
+        'cabin_filter' => Request::post('cabin_filter'),
         ));
         CarModel::deleteEvent(array('c' => Request::post('car_id'), 't' => Request::post('event_time'), 'm' => Request::post('event_microtime'), 'source' => 'edit' ));
         if (Request::post('todolist_checkbox')) {CarModel::addTodoItem($edited_event, Request::post('car_id'), Request::post('event_content')); }
@@ -841,7 +894,7 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
     {
 					$this->View->renderWithoutHeaderAndFooter('car/expiry_list', array(
                                                              //'expiries' => CarModel::getCarsField('car_expiries', $car_id), this cars field no longer used
-                                                             'expiries' => ExpiriesModel::readAllExpiries($car_id),
+                                                             'expiries' => ExpiriesModel::readAllExpiries($car_id, true),
                                                              'intervals' => CarModel::readCarMeta($car_id, array('oil_interval', 'distr_interval')),
                                                              'odo' => CarModel::getCarsField('car_odo', $car_id),
                                                              'units' => UserModel::getUserUnits(CarModel::getCarOwner($car_id)),
@@ -1066,6 +1119,16 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
        'siblings' => Request::post('siblings'),
        ));
        $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('response' => $response, 'type' => 'passthrough'));
+    }
+
+    public function write_expiry_status()
+    {
+        $response = ExpiriesModel::commitExpiry(array(
+            'car_id' => Request::post('car_id'),
+            'expiry' => Request::post('expiry'),
+            'status' => Request::post('status'),
+        ));
+        $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('response' => $response, 'type' => 'passthrough'));
     }
 
 

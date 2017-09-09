@@ -1,8 +1,9 @@
-<?php include('event_form.php'); ?>
+<?php    // include('event_form.php');
+?>
 <div class=" ">
     <div id="event-types-present" class="smallish bold hide"><?= _("EVENT_TYPES"); ?>: <a href="#" class="smallish bold kcms mx1 evfltreset">[<?= _("ALL"); ?>]</a></div>
-    <div class="mt1 p1 border mw480 new_event_dialog_opener pointer ">
-          <a href="#" id="new_event_dialog_opener" title="<?= _("NEW_RECORD"); ?>"><i class="icon-edit"> </i> <?= _("NEW_RECORD"); ?></a>
+    <div class="mt1 p1 border mw480 ">
+          <a href="<?= Config::get('URL') . 'car/new_event/' . $car_id; ?>" title="<?= _("NEW_RECORD"); ?>"><i class="icon-edit"> </i> <?= _("NEW_RECORD"); ?></a>
               <p class="smallish mt1"><?= _("NEW_RECORD_BLURB"); ?></p>
     </div>
 <?php
@@ -128,6 +129,6 @@ smallish"><?= $event->event_content; ?></div> </div> </a> </div> </div>
 
 
 
-
+<input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
 
 </div>
