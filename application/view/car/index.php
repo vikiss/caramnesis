@@ -39,7 +39,7 @@ if ($images)
         }
 
         if (!$is_pdf) {$script.="{
-        src: '/view/image/$car_id/$image',
+        src: '/car/image/$car_id/$image',
         w: {$fullsize[0]},
         h: {$fullsize[1]},
         msrc: '/car/image/$car_id/$image/120',
