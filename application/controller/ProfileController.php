@@ -10,10 +10,15 @@ class ProfileController extends Controller
 
      public function index()
     {
-        $this->View->render('profile/PrivatePage', array(
-              'saved_page' => ProfileModel::getProfilePage(Session::get('user_uuid')),
+        if ($saved_page = ProfileModel::getProfilePage(Session::get('user_uuid')))
+        {
+        $this->View->render('profile/privatePage', array(
+              'saved_page' => $saved_page,
               'page_owner' => Session::get('user_uuid'),
           ));
+      } else {
+          Redirect::to('profile/edit');
+      }
     }
 
 
@@ -38,8 +43,10 @@ class ProfileController extends Controller
 
     public function edit()
     {
-       $this->View->render('profile/EditPage', array(
-             'saved_page' => ProfileModel::getProfilePage(Session::get('user_uuid')),
+        if (!$saved_page = ProfileModel::getProfilePage(Session::get('user_uuid')))
+        $saved_page = false;
+       $this->View->render('profile/editPage', array(
+             'saved_page' => $saved_page,
              'page_owner' => Session::get('user_uuid'),
          ));
     }

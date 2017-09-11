@@ -1,5 +1,5 @@
 <?php
- $page = $this->saved_page[0];
+if ($page = $this->saved_page[0]) {
  $images = unserialize($page->images);
  $car_id = $page->user_id; // picture folder
 $location = explode(',', $page->location);
@@ -7,34 +7,15 @@ $showmap = (is_array($location)) ? true : false;
 ?>
 <div class="container">
 <div class="box"><?php $this->renderFeedbackMessages(); ?></div>
-<div class="mt1 md-col md-col-5">
+<div class="mt1 md-col md-col-5 mr2">
 <h1><?= $page->title; ?></h1>
 <p><?= $page->description; ?></p>
-<p class="py2 smallish"><?= $page->contact; ?></p>
-<?php if ($showmap) { ?>
-    <div id="map" style="width: 100%; height: 300px;"></div>
-       <script>
-         function initMap() {
-           var uluru = {lat: <?= $location[0]; ?>, lng: <?= $location[1]; ?>};
-           var map = new google.maps.Map(document.getElementById('map'), {
-             zoom: 14,
-             center: uluru
-           });
-           var marker = new google.maps.Marker({
-             position: uluru,
-             map: map
-           });
-         }
-       </script>
-       <script async defer
-       src="https://maps.googleapis.com/maps/api/js?key=<?= Config::get('GOOGLEMAPS_API_KEY'); ?>&callback=initMap">
-       </script>
-<?php } ?>
+<p class="py2 bold"><?= $page->contact; ?></p>
 <a href = "/profile/edit" class="smallish"><?= _('EDIT'); ?></a>
 </div>
 
-<div class="mt1 md-col md-col-7">
-<div class="clearfix ml2">
+<div class="mt1 md-col md-col-5 ml2">
+<div class="clearfix">
 <?php
    if ($images)
 {
@@ -45,7 +26,9 @@ foreach($images AS $image) {
 if (file_exists($pic_dir.$image)) {
 $is_pdf = ($fullsize = getimagesize ($pic_dir.$image)) ? false : true;
 }
-print '<div class="left mr2" data-number="'.$i.'" id="'.$image.'">';
+print '<div class="left ';
+if ($i > 1) print 'mr2';
+print '" data-number="'.$i.'" id="'.$image.'">';
 print '<a href="/car/image/'.$car_id.'/'.$image.'" data-index="'.$i.'" class="pswpitem"><img src="/car/image/'.$car_id.'/'.$image;
 if ($i > 1) print '/120';
 print '" /></a> ';
@@ -69,6 +52,28 @@ var items = [$script];
 }
 ?>
 </div>
+<div class="mt4">
+    <?php if ($showmap) { ?>
+        <div id="map" style="width: 100%; height: 300px;"></div>
+           <script>
+             function initMap() {
+               var uluru = {lat: <?= $location[0]; ?>, lng: <?= $location[1]; ?>};
+               var map = new google.maps.Map(document.getElementById('map'), {
+                 zoom: 14,
+                 center: uluru
+               });
+               var marker = new google.maps.Marker({
+                 position: uluru,
+                 map: map
+               });
+             }
+           </script>
+           <script async defer
+           src="https://maps.googleapis.com/maps/api/js?key=<?= Config::get('GOOGLEMAPS_API_KEY'); ?>&callback=initMap">
+           </script>
+    <?php } ?>
+</div>
 
 </div>
 </div>
+<?php }; ?>

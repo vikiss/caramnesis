@@ -3,18 +3,20 @@
 <div class="mt1 clearfix">
 <?php
 $images_list = '';
-$saved_page = $this->saved_page[0];
+$page_images = false;
+$saved_description = ''; $saved_contact = ''; $saved_title = '';
+$saved_location = ''; $cboxes = array();
+if ($saved_page = $this->saved_page[0]) {
 $saved_description = (isset($saved_page->description)) ? htmlentities($saved_page->description) : '';
 $saved_contact = (isset($saved_page->contact)) ? htmlentities($saved_page->contact) : '';
 $saved_title = (isset($saved_page->title)) ? htmlentities($saved_page->title) : '';
 $saved_location = (isset($saved_page->location)) ? $saved_page->location : '';
 $page_images = unserialize($saved_page->images);
 if (is_array($page_images)) {
-  $images_list = implode(',', $page_images);
-} else {
-  $page_images = false;
-}
+  $images_list = implode(',', $page_images);}
+
 $cboxes = json_decode($saved_page->content);
+}
  ?>
 
 

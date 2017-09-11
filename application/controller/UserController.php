@@ -11,10 +11,15 @@ class UserController extends Controller
     {
         if ($useruuid = UserModel::getUUidByUserName($user_name))
         {
+            if ($saved_page = ProfileModel::getProfilePage($useruuid)) {
         $this->View->render('profile/PublicPage', array(
              'page_owner' => $useruuid,
-             'saved_page' => ProfileModel::getProfilePage($useruuid),
+             'saved_page' => $saved_page,
           ));
+      } else {
+          header('HTTP/1.0 404 Not Found', true, 404);
+          $this->View->render('error/404');
+      }
         }
     }
 
