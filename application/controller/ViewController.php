@@ -66,14 +66,20 @@ class ViewController extends Controller
 
          public function image($car_id, $image_id, $size = 'full')
     {    if ($image_id) {
-           if (ViewModel::getCarAccessByCarId($car_id, 10)) { //is this car public? we still need to check if the pic belongs to public event or public car profile
+           if ((ViewModel::getCarAccessByCarId($car_id, 10))
+           or
+           (UserModel::hasPublicPage($car_id)))
+
+            { //is this car public? we still need to check if the pic belongs to public event or public car profile
         $this->View->renderWithoutHeaderAndFooter('view/image', array('car' => $car_id, 'image' => $image_id, 'size' => $size));
           }
     }}
 
     public function imagepg($car_id, $image_id, $size = 'full')
     {    if ($image_id) {
-            if (ViewModel::getCarAccessByCarId($car_id, 10)) { //is this car public?
+        if ((ViewModel::getCarAccessByCarId($car_id, 10))
+        or
+        (UserModel::hasPublicPage($car_id))) { //is this car public?
         $this->View->renderWithoutHeaderAndFooter('view/imagepg', array('car' => $car_id, 'image' => $image_id, 'size' => $size));
             }
     }}

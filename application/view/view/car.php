@@ -85,7 +85,7 @@
     $is_pdf = ($fullsize = getimagesize ($pic_dir.$image)) ? false : true;
     }
     print '<div class="left mr2" data-number="'.$i.'" id="'.$image.'">';
-    print '<a href="/car/image/'.$car_id.'/'.$image.'" data-index="'.$i.'" class="pswpitem"><img src="/view/image/'.$car_id.'/'.$image;
+    print '<a href="/view/image/'.$car_id.'/'.$image.'" data-index="'.$i.'" class="pswpitem"><img src="/view/image/'.$car_id.'/'.$image;
     if ($i > 1) print '/120';
     print '" /></a> ';
     print '</div>';
@@ -93,7 +93,7 @@
     src: '/view/image/$car_id/$image',
     w: {$fullsize[0]},
     h: {$fullsize[1]},
-    msrc: '/car/image/$car_id/$image/120',
+    msrc: '/view/image/$car_id/$image/120',
     },";};
     $i++;
     }

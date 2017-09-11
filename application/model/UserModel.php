@@ -1,5 +1,6 @@
 <?php
-
+// DISALLOW REGISTERING A USERNAME THAT COINCIDES WITH A CONTROLLER NAME!!!!!!!!
+//MAKE SURE ITA VALIDATES AS URL
 /**
  * UserModel
  * Handles all the PUBLIC profile stuff. This is not for getting data of the logged in user, it's more for handling
@@ -778,7 +779,7 @@ class UserModel
 
     public static function setCbox($field, $state, $uuid) {
 
-        $fields = array('send_sms', 'send_email');
+        $fields = array('send_sms', 'send_email', 'public_page');
         $states = array('0', '1');
 
         if ((in_array($field, $fields)) && (in_array($state, $states)))
@@ -806,6 +807,18 @@ class UserModel
         return 'M';
 
             }
+
+            public static function hasPublicPage($uuid) {
+
+            $database = DatabaseFactory::getFactory()->getConnection();
+            $query = $database->prepare("SELECT user_name FROM users WHERE user_uuid = :user_uuid AND public_page = 1");
+            $query->execute(array(':user_uuid' => $uuid));
+            if ($result = $query->fetch()) {
+                return true;
+            }
+            return false;
+
+                }
 
 
 

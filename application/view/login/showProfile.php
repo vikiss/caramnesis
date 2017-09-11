@@ -1,7 +1,7 @@
 <?php $profile_data = $this->profile_data; $languages = $this->languages; $currencies = $this->currencies; $cons_units = $this->cons_units; $distance_units = $this->distance_units;
 //CarModel::ExecuteTransfer('0cb71f32-b56a-49ae-8984-476eb5c0e3a9', '', 'c1d79520-8dfe-11e5-8145-001cc07ade33');
 ?>
-<div id="responsebox" class="right p1"> </div>                
+<div id="responsebox" class="right p1"> </div>
 <div class="container">
     <h1><?= _('YOUR_PROFILE'); ?></h1>
     <div class="box">
@@ -27,6 +27,12 @@
         <li><label for="hometown"><?= _('USER_HOMETOWN'); ?></label><span id="hometown"><?= $profile_data->hometown; ?><i class="icon-cog pointer"></i></span></li>
         <li><label for="state"><?= _('USER_STATE'); ?></label><span id="state"><?= $profile_data->state; ?><i class="icon-cog pointer"></i></span></li>
         <li><label for="country"><?= _('USER_COUNTRY'); ?></label><span id="country"><?php if ($profile_data->country) echo _('COUNTRY_'.$profile_data->country); ?><i class="icon-cog pointer"></i></span></li>
+        <li><label for="pubpage_checkbox"><?= _('ENABLE_PUBLIC_PAGE'); ?></label><span id="pubpage_checkbox_cont">
+        <input type="checkbox" class="cbrad" name="pubpage_checkbox" id="pubpage_checkbox" value="public_page" <?php if ($profile_data->public_page == 1) echo ' checked'; ?> /><br />
+        <a href="<?= Config::get('URL') . Session::get('user_name'); ?>" target="_blank" title="<?= _('PUBLIC_PAGE_URL'); ?>"><?= _('PUBLIC_PAGE_URL').': '.Config::get('URL') . Session::get('user_name'); ?> </a><br />
+        <a href="<?= Config::get('URL') . 'profile/index' ?>" title="<?= _('PREVIEW_PUBLIC_PAGE'); ?>"><?= _('PREVIEW_PUBLIC_PAGE'); ?> </a><br />
+        <a href="<?= Config::get('URL') . 'profile/edit' ?>" title="<?= _('EDIT_PUBLIC_PAGE'); ?>"><?= _('EDIT_PUBLIC_PAGE'); ?> </a>
+        </span></li>
 </ul>
 <input type="hidden" name = "country_id" id = "country_id" value="<?= $profile_data->country; ?>" />
 <input type="hidden" name = "state_id" id = "state_id" value="<?= $profile_data->state_id; ?>" />
@@ -38,17 +44,17 @@ foreach ($languages AS $key=>$value) {
 ?></div>
 <div id="usercurrencydialog" class="center" title="<?= _('PICK_YOUR_CURRENCY'); ?>"><?php
 foreach ($currencies AS $currency) {
-print '<div class="left mb1 mr1 px1 black bg-kclite field"><a href="'.Config::get('URL').'login/setcurr/'.$currency.'">'._('CURRENCY_'.strtoupper($currency)).'</a></div>';    
+print '<div class="left mb1 mr1 px1 black bg-kclite field"><a href="'.Config::get('URL').'login/setcurr/'.$currency.'">'._('CURRENCY_'.strtoupper($currency)).'</a></div>';
 };
 ?></div>
 <div id="userdistancedialog" class="center" title="<?= _('PICK_YOUR_DISTANCE_UNIT'); ?>"><?php
 foreach ($distance_units AS $distance_unit) {
-print '<div class="left mb1 mr1 px1 black bg-kclite field"><a href="'.Config::get('URL').'login/setdist/'.$distance_unit.'">'._('DISTANCE_UNIT_'.$distance_unit).'</a></div>';    
+print '<div class="left mb1 mr1 px1 black bg-kclite field"><a href="'.Config::get('URL').'login/setdist/'.$distance_unit.'">'._('DISTANCE_UNIT_'.$distance_unit).'</a></div>';
 };
 ?></div>
 <div id="userconsdialog" class="center" title="<?= _('PICK_YOUR_CONSUMPTION_UNIT'); ?>"><?php
 foreach ($cons_units AS $cons_unit) {
-print '<div class="left mb1 mr1 px1 black bg-kclite field"><a href="'.Config::get('URL').'login/setcons/'.$cons_unit.'">'._('CONSUMPTION_UNIT_'.$cons_unit).'</a></div>';    
+print '<div class="left mb1 mr1 px1 black bg-kclite field"><a href="'.Config::get('URL').'login/setcons/'.$cons_unit.'">'._('CONSUMPTION_UNIT_'.$cons_unit).'</a></div>';
 };
 ?></div>
 <div id="hometowndialog" class="center" title="<?= _('PICK_YOUR_HOMETOWN'); ?>"><?= _('PICK_YOUR_COUNTRY_FIRST'); ?></div>

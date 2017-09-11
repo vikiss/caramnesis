@@ -348,6 +348,15 @@ $( "#email_checkbox").click(function() {
     spinner.remove();
     });
 
+  $( "#pubpage_checkbox").click(function() {
+        cbchecked = '0';
+        if(this.checked) { cbchecked = '1'; }
+        var spinner = $('<i class="icon-spin3 spinner"> </i>');
+        $( "#pubpage_checkbox_cont" ).append(spinner);
+        $( "#responsebox" ).load( "/login/cbox/public_page/"+cbchecked );
+        spinner.remove();
+  });
+
 
 
 //delete confirmation

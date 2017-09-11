@@ -11,8 +11,16 @@ header("Pragma: no-cache");
 $fnamend =  str_replace(array('.',','),'-',microtime(true));
 $car_id = $_GET['car_id'];
 
-if (($owner_id = CarModel::getCarOwner($car_id))  && (CarModel::checkAccessLevel($car_id,Session::get('user_uuid')) >= 80)) {
-	
+if  (
+		(
+			($owner_id = CarModel::getCarOwner($car_id))  && (CarModel::checkAccessLevel($car_id,Session::get('user_uuid')) >= 80)
+		) or (
+			(Session::get('user_uuid') == $car_id)
+		)
+	)
+
+ {
+
 
 if (!preg_match('/^[A-Za-z0-9-]+$/',$car_id)) {
 exit_status('Error! Wrong car id!');
@@ -32,7 +40,7 @@ if(strtolower($_SERVER['REQUEST_METHOD']) != 'post'){
 if(array_key_exists('file',$_FILES) && $_FILES['file']['error'] == 0 ){
 
   $pic = $_FILES['file'];
-  
+
 if(!in_array(CarModel::get_extension($pic['name']),$allowed_nonimage_ext)){
   $info = getimagesize($pic['tmp_name']);
   if ($info === FALSE) {
@@ -41,15 +49,15 @@ if(!in_array(CarModel::get_extension($pic['name']),$allowed_nonimage_ext)){
 
   if(!in_array(CarModel::get_extension($pic['name']),$allowed_ext)){
 		exit_status('Only '.implode(',',$allowed_ext).' files are allowed!');
-	}	
+	}
 
-  
+
 $ext = pathinfo($pic['name'], PATHINFO_EXTENSION);
-  
+
   if(move_uploaded_file($pic['tmp_name'], $upload_dir.$fnamend.'.'.$ext)){
 		exit_status('File was uploaded successfuly!', $fnamend.'.'.$ext);
     //exit_status('File was uploaded successfuly! user: '.Session::get('user_uuid').' car: '.$car_id);
-	}           
+	}
 
 }
 } else {exit_status('Error! Wrong car id or insufficient permissions!');
