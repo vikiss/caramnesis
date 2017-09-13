@@ -36,7 +36,7 @@ class CarController extends Controller
     }
 
 
-      public function new_car_manual()
+      public function new_car()
     {
         $this->View->render('car/new_car', array(
             'makes' => CarModel::getCarMakeList('all')
@@ -44,7 +44,7 @@ class CarController extends Controller
     }
 
 
-        public function new_car()
+        public function new_car_vin()
     {
         $this->View->render('car/new_car_vin');
     }

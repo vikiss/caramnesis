@@ -1152,3 +1152,4 @@ border-color: transparent rgba(255, 64, 54, 0.67) transparent transparent;
 .no-close .ui-dialog-titlebar-close {
   display: none;
 }
+.columns {-webkit-columns: auto 120px; columns: auto 120px;}

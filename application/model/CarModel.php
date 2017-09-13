@@ -1100,7 +1100,8 @@ class CarModel
         $database = DatabaseFactory::getFactory()->getConnection();
 
         if ($fragment == 'all') {
-            $sql   = "SELECT * FROM car_makes ORDER BY make;";
+            //$sql   = "SELECT * FROM car_makes ORDER BY make;";
+            $sql   = "SELECT * FROM car_makes WHERE make NOT LIKE '%(%' ORDER BY make;";
             $query = $database->prepare($sql);
             $query->execute();
         } else {
