@@ -39,11 +39,7 @@ $cboxes = json_decode($saved_page->content);
                 <input type="text" name="title" id="title" class="block field mt1 col-12" value="<?= $saved_title; ?>" />
             </div>
             <div class="lblgrp"><label for="location"><?= _("PROFILE_PAGE_LOCATION"); ?></label>
-                <input type="text" name="location" id="location" class="block field mt1 col-12" value="<?= $saved_location; ?>" />
-            </div>
-            <div>
-                <input type="checkbox" class="cbrad" name="show_page" id="show_page" value="Y" <?php if (in_array("show_page", $cboxes)) echo 'checked'; ?> />
-                <label for="show_page"><?= _('SHOW_PROFILE_PAGE'); ?></label>
+                <input type="text" name="location" id="location" class="block field mt1 col-12" placeholder="1.234,1.234 (lat,lon)" value="<?= $saved_location; ?>" />
             </div>
             <div>
                 <input type="checkbox" class="cbrad" name="show_cars4sale" id="show_cars4sale" value="Y" <?php if (in_array("show_cars4sale", $cboxes)) echo 'checked'; ?> />

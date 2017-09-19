@@ -696,6 +696,10 @@ class CarModel
             'air_filter' => $event_data['air_filter'],
             'fuel_filter' => $event_data['fuel_filter'],
             'cabin_filter' => $event_data['cabin_filter'],
+            'timing_belt' => $event_data['timing_belt'],
+            'idler_pulley' => $event_data['idler_pulley'],
+            'tensioner_pulley' => $event_data['tensioner_pulley'],
+            'water_pump' => $event_data['water_pump'],
         );
 
       $database = DatabaseFactory::getFactory()->getConnection();

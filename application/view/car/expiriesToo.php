@@ -60,16 +60,21 @@ if ($saved) {if (array_key_exists($title, $saved)) {$saved_chapter = $saved[$tit
         <div class = "car-meta-txt small-field <?php if ($remaining_to_oil_change < 0) echo 'bg-red white bold'; else echo 'bg-kcms'; ?> col-6"
         id = "remaining-to-oil-change"><?= $remaining_to_oil_change; ?></div>
         <?php } ?>
-        <div class="small"><?= _('CHANGE_INTERVAL'); ?></div>
-        <input type = "text" class = "car-meta-txt small-field stealthfield col-6"
-        pattern="\d*" data-key = "oil_interval"
-        id = "oil-change-interval" value = "<?= $oil_interval; ?>" />
+        <?php if ($last_change) { ?>
+        <div class="small"><?= _('LAST_OIL_CHANGE'); ?></div>
+        <div class = "car-meta-txt small-field bg-kcms col-6"
+        id = "next-oil-change"><?= $last_change; ?></div>
+        <?php } ?>
         <?php if ($next_oil_change) { ?>
         <div class="small"><?= _('NEXT_OIL_CHANGE'); ?></div>
         <div class = "car-meta-txt small-field bg-kcms col-6"
         id = "next-oil-change"><?= $next_oil_change; ?></div>
         <?php } ?>
-        <a href="<?= Config::get('URL'); ?>/car/new_event/<?= $car_id; ?>/TAG_MAINTENANCE"><i class="icon-oil-change"> </i> <?= _('ENTER_NEW_OIL_CHANGE'); ?></a>
+        <div class="small"><?= _('CHANGE_INTERVAL'); ?></div>
+        <input type = "text" class = "car-meta-txt small-field stealthfield col-6"
+        pattern="\d*" data-key = "oil_interval"
+        id = "oil-change-interval" value = "<?= $oil_interval; ?>" />
+        <div class="smallish mt1"><a href="<?= Config::get('URL'); ?>car/new_event/<?= $car_id; ?>/TAG_MAINTENANCE"><i class="icon-oil-change"> </i> <?= _('ENTER_NEW_OIL_CHANGE'); ?></a></div>
 
 <?php  };
 
@@ -135,7 +140,7 @@ if ($saved) {if (array_key_exists($title, $saved)) {$saved_chapter = $saved[$tit
 <?php
         break;
 
-        case 'prev_odo':
+        case '---prev_odo':
           if (($saved_chapter) && ($saved_chapter->prev_odo)) {
 ?>
         <div class="small"><?= _($entryname); ?></div>

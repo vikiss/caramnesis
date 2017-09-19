@@ -56,13 +56,12 @@
 
 
                         }
-        } 
+        }
 ?>
-  
+
   <input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
   <div class="clearfix relative">
                      <div class="absolute top-0 right-0">
-                            <div id="carindex_expiry_list" class="smallish right-align"></div>
                             <div class="mono smallish mt1 pointer" id="odo_dlg_opnr"><?= $odometer; ?></div>
                      </div>
 
@@ -82,7 +81,7 @@
                             <div class="smallish mt1"><a href="<?= Config::get('URL') . 'car/index/' . $car_id; ?>" title="<?= $car_name; ?>"><?= $car_vin; ?></a></div>
                            <?php $car_plates = (array)$car_plates;
                            if  ($car_plates[0]) print '<div class="smallish mt1"><a href="'.Config::get('URL') . 'car/index/' . $car_id.'" title="'.$car_name.'">'.$car_plates[0].'</a></div>'; ?>
-
+<div id="carindex_expiry_list" class="smallish"></div>
 
                   <?php
                   if (CarModel::checkAccessLevel($car_id ,Session::get('user_uuid')) >= 98) { ?>

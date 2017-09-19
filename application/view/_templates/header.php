@@ -15,7 +15,7 @@
     if ($filename == 'view/car') {include('view-car-meta.php'); }
 ?>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="<?= Config::get('URL'); ?>css/basscss.css" />
+    <link rel="stylesheet" href="<?= Config::get('URL'); ?>css/basscss.css?ver=14" />
     <link rel="stylesheet" href="<?= Config::get('URL'); ?>css/fontello.css" />
     <link rel="stylesheet" href="<?= Config::get('URL'); ?>css/jquery-ui.css" />
     <link rel="stylesheet" href="<?= Config::get('URL'); ?>js/photoswipe/photoswipe.css">

@@ -13,7 +13,7 @@ $eventtypelist.= '</select>';
 $evtypechooser.= '</ul>';
 $taglist=''; $event_type_field = '';
 
-$existingevents = ''; $maintenance_panel = false;
+$existingevents = ''; $maintenance_panel = false; $timing_panel = false;
 if (($editing) && ($event_types)) {
    $event_type_field = array(); $taglist = array();
    foreach ($event_types AS $type) {
@@ -27,17 +27,26 @@ if (($editing) && ($event_types)) {
   count($taglist) > 0 ? $taglist = implode(PHP_EOL, $taglist) : $taglist = '';
  }
  $odo = 0;
-if ($editing) { if ($event->event_odo) {$odo = $event->event_odo; }; } else { $odo = $this->odo; }
+if ($editing)
+{
+    if ($event->event_odo) {$odo = $event->event_odo; };
+    if ((array_key_exists('timing_belt', $event_data)) && ($event_data['timing_belt'] == 'Y')) {$timing_panel = true;}
+} else {
+ $odo = $this->odo;
+}
 
 if ((!$editing) && ($this->initial_tag)) {
     $existingevents.='<li><a href="'.$this->initial_tag.'"><i class="icon-cancel white brdrw"> </i></a> <span>'._($this->initial_tag).'</span></li>';
     if ($this->initial_tag == 'TAG_MAINTENANCE') {$maintenance_panel = true;}
+    $event_type_field = $this->initial_tag;
 }
 
  if (!isset($event_time)) $event_time = time();
  $formaction = ($editing) ? 'eventEditSave' : 'create_event';
  $oil_interval = ($units->user_distance == 'km') ? $this->defaults['oil-km'] : $this->defaults['oil-miles'];
+ $timing_interval = ($units->user_distance == 'km') ? $this->defaults['distr-km'] : $this->defaults['distr-miles'];
  if ($this->oil_interval) $oil_interval = intval($this->oil_interval);
+ if ($this->distr_interval) $timing_interval = intval($this->distr_interval);
  $next_oil_change = intval($odo) + intval($oil_interval);
   ?>
 
@@ -101,7 +110,7 @@ if ((!$editing) && ($this->initial_tag)) {
                     <label for="cabin_filter"><?= _('CABIN_FILTER'); ?></label>
                 </div>
                 <div class="lblgrp">
-                    <label for="oil_interval"><?= _('CHANGE_INTERVAL'); ?></label>
+                    <label for="oil_interval"><?= _('OIL_CHANGE_INTERVAL'); ?></label>
                     <input type="number" min="1000" step="100" name="oil_interval" id="oil_interval" class="block field mt1" value="<?=
                      $oil_interval;
                      ?>" />
@@ -112,6 +121,42 @@ if ((!$editing) && ($this->initial_tag)) {
                      $next_oil_change;
                      ?>" />
                 </div>
+                <div>
+                    <input type="checkbox" class="cbrad" name="timing_belt" id="timing_belt" value="Y" <?php
+                      if (($editing) && (array_key_exists('timing_belt', $event_data)) && ($event_data['timing_belt'] == 'Y')) echo 'checked';
+                    ?> />
+                    <label for="timing_belt"><?= _('TIMING_BELT'); ?></label>
+                </div>
+
+                <div id="timing_belt_panel" class="<?php if (!$timing_panel) echo 'hide'; ?>">
+                    <div>
+                        <input type="checkbox" class="cbrad" name="idler_pulley" id="idler_pulley" value="Y" <?php
+                          if (($editing) && (array_key_exists('idler_pulley', $event_data)) && ($event_data['idler_pulley'] == 'Y')) echo 'checked';
+                        ?> />
+                        <label for="idler_pulley"><?= _('IDLER_PULLEY'); ?></label>
+                    </div>
+                    <div>
+                        <input type="checkbox" class="cbrad" name="tensioner_pulley" id="tensioner_pulley" value="Y" <?php
+                          if (($editing) && (array_key_exists('tensioner_pulley', $event_data)) && ($event_data['tensioner_pulley'] == 'Y')) echo 'checked';
+                        ?> />
+                        <label for="tensioner_pulley"><?= _('TENSIONER_PULLEY'); ?></label>
+                    </div>
+                    <div>
+                        <input type="checkbox" class="cbrad" name="water_pump" id="water_pump" value="Y" <?php
+                          if (($editing) && (array_key_exists('water_pump', $event_data)) && ($event_data['water_pump'] == 'Y')) echo 'checked';
+                        ?> />
+                        <label for="water_pump"><?= _('WATER_PUMP'); ?></label>
+                    </div>
+                    <div class="lblgrp">
+                        <label for="timing_interval"><?= _('TIMING_BELT_INTERVAL'); ?></label>
+                        <input type="number" min="1000" step="100" name="timing_interval" id="timing_interval" class="block field mt1" value="<?=
+                         $timing_interval;
+                         ?>" />
+                    </div>
+                </div>
+
+
+
             </div>
         </div>
         <input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />

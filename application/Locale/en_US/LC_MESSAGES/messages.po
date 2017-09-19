@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Caramnesis\n"
 "POT-Creation-Date: 2016-02-06 22:36+0200\n"
-"PO-Revision-Date: 2017-08-01 22:52+0200\n"
+"PO-Revision-Date: 2017-09-19 03:25+0200\n"
 "Last-Translator: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language-Team: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language: en_US\n"
@@ -2005,7 +2005,7 @@ msgid "VIN_NOT_FOUND_ENTER_CAR_DATA_MANUALLY"
 msgstr "VIN not found, please enter car data manually"
 
 msgid "CHECKING_VIN_DATA"
-msgstr "Checking IVN data"
+msgstr "Checking VIN data"
 
 msgid "RETEST_VIN"
 msgstr "Recheck VIN"
@@ -2064,3 +2064,93 @@ msgstr "Distance units changes"
 
 msgid "DISTANCE_mi"
 msgstr "miles"
+
+msgid "ALL_MAKES"
+msgstr "List all makes"
+
+msgid "LOGIN"
+msgstr "Login"
+
+msgid "PROFILE_PAGE_CONTACT_INFO"
+msgstr "Contact information"
+
+msgid "PREVIEW_PUBLIC_PAGE"
+msgstr "Preview my public page"
+
+msgid "EDIT_PUBLIC_PAGE"
+msgstr "Edit my public page"
+
+msgid "PUBLIC_PAGE"
+msgstr "Public profile page"
+
+msgid "ENABLE_PUBLIC_PAGE"
+msgstr "Enable my public profile page"
+
+msgid "SHOW_PROFILE_PAGE"
+msgstr "Show my profile page"
+
+msgid "SHOW_PARTCARS_4SALE_PROFILE_PAGE"
+msgstr "Show my part cars for sale"
+
+msgid "SHOW_CARS_4SALE_PROFILE_PAGE"
+msgstr "Show my cars for sale"
+
+msgid "PROFILE_PAGE_LOCATION"
+msgstr "Location coordinates"
+
+msgid "PROFILE_PAGE_TITLE"
+msgstr "Title"
+
+msgid "PROFILE_PAGE_DESCRIPTION"
+msgstr "Description"
+
+msgid "ENTER_NEW_OIL_CHANGE"
+msgstr "Enter new oil change"
+
+msgid "REMAINING_TO_OIL_CHANGE"
+msgstr "Remaining to oil change"
+
+msgid "SHOW_EXPIRY_STATUS"
+msgstr "Show status indicator on car homepage"
+
+msgid "NEW_OIL"
+msgstr "New oil"
+
+msgid "OIL_TYPE"
+msgstr "Oil type"
+
+msgid "OIL_FILTER"
+msgstr "Oil filter"
+
+msgid "AIR_FILTER"
+msgstr "Air filter"
+
+msgid "FUEL_FILTER"
+msgstr "Fuel filter"
+
+msgid "CABIN_FILTER"
+msgstr "Cabin filter"
+
+msgid "DAYS"
+msgstr "days"
+
+msgid "TYRE_DATA_2"
+msgstr "Winter tyre data"
+
+msgid "TYRE_DATA_3"
+msgstr "Alternative tyre data"
+
+msgid "IDLER_PULLEY"
+msgstr "Idler pulley"
+
+msgid "TENSIONER_PULLEY"
+msgstr "Tensioner pulley"
+
+msgid "WATER_PUMP"
+msgstr "Water pump"
+
+msgid "OIL_CHANGE_INTERVAL"
+msgstr "Oil change interval"
+
+msgid "TIMING_BELT_INTERVAL"
+msgstr "Timing belt/chain change interval"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Caramnesis\n"
 "POT-Creation-Date: 2016-02-06 22:36+0200\n"
-"PO-Revision-Date: 2017-08-01 22:48+0200\n"
+"PO-Revision-Date: 2017-09-19 03:29+0200\n"
 "Last-Translator: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language-Team: Vikis Satkevičius <vikis@skdn.com>\n"
 "Language: lt_LT\n"
@@ -2075,3 +2075,93 @@ msgstr "Atstumo matavimo vienetai sėkmingai pakeisti"
 
 msgid "DISTANCE_mi"
 msgstr "mylios"
+
+msgid "ALL_MAKES"
+msgstr "išvardinti visus gamintojus"
+
+msgid "LOGIN"
+msgstr "Prisijungti"
+
+msgid "PROFILE_PAGE_CONTACT_INFO"
+msgstr "Kontaktinė informacija"
+
+msgid "PREVIEW_PUBLIC_PAGE"
+msgstr "Peržioūrėti viešą profilį"
+
+msgid "EDIT_PUBLIC_PAGE"
+msgstr "Redaguoti viešą profilį"
+
+msgid "PUBLIC_PAGE"
+msgstr "Viešas profilis"
+
+msgid "ENABLE_PUBLIC_PAGE"
+msgstr "Įjungti viešą profilį"
+
+msgid "SHOW_PROFILE_PAGE"
+msgstr "Rodyti mano profilio puslapį"
+
+msgid "SHOW_PARTCARS_4SALE_PROFILE_PAGE"
+msgstr "Rodyti parduodamus dalimis automobilius"
+
+msgid "SHOW_CARS_4SALE_PROFILE_PAGE"
+msgstr "Rodyti parduodamus automobilius"
+
+msgid "PROFILE_PAGE_LOCATION"
+msgstr "Vietos koordinatės"
+
+msgid "PROFILE_PAGE_TITLE"
+msgstr "Pavadinimas"
+
+msgid "PROFILE_PAGE_DESCRIPTION"
+msgstr "Aprašymas"
+
+msgid "ENTER_NEW_OIL_CHANGE"
+msgstr "Įvesti tepalų keitimą"
+
+msgid "REMAINING_TO_OIL_CHANGE"
+msgstr "Lieka iki tepalų keitimo"
+
+msgid "SHOW_EXPIRY_STATUS"
+msgstr "Rodyti indikatorių automobilio puslapyje"
+
+msgid "NEW_OIL"
+msgstr "Nauji tepalai"
+
+msgid "OIL_TYPE"
+msgstr "Tepalų tipas"
+
+msgid "OIL_FILTER"
+msgstr "Tepalų filtras"
+
+msgid "AIR_FILTER"
+msgstr "Oro filtras"
+
+msgid "FUEL_FILTER"
+msgstr "Kuro filtras"
+
+msgid "CABIN_FILTER"
+msgstr "Salono filtras"
+
+msgid "DAYS"
+msgstr "d."
+
+msgid "TYRE_DATA_2"
+msgstr "Žieminių padangų duomenys"
+
+msgid "TYRE_DATA_3"
+msgstr "Alternatyvių padangų duomenys"
+
+msgid "IDLER_PULLEY"
+msgstr "Parazitinis guolis"
+
+msgid "TENSIONER_PULLEY"
+msgstr "Įtempėjas"
+
+msgid "WATER_PUMP"
+msgstr "Vandens siurblys"
+
+msgid "OIL_CHANGE_INTERVAL"
+msgstr "Teplų keitimo intervalas"
+
+msgid "TIMING_BELT_INTERVAL"
+msgstr "Paskirstymo diržo/grandinės keitimo intervalas"

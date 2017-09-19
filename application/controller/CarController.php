@@ -422,6 +422,10 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
         'air_filter' => Request::post('air_filter'),
         'fuel_filter' => Request::post('fuel_filter'),
         'cabin_filter' => Request::post('cabin_filter'),
+        'timing_belt' => Request::post('timing_belt'),
+        'idler_pulley' => Request::post('idler_pulley'),
+        'tensioner_pulley' => Request::post('tensioner_pulley'),
+        'water_pump' => Request::post('water_pump'),
         ));
         CarModel::updateCarLookupEntry(
             Request::post('car_id'),
@@ -447,6 +451,12 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
         if (Request::post('oil_interval')) { //write update interval to car meta
             CarModel::writeCarMeta(Request::post('car_id'), 'oil_interval', Request::post('oil_interval'));
         }
+
+        if (Request::post('timing_interval')) { //write updated timing belt interval to car meta
+            CarModel::writeCarMeta(Request::post('car_id'), 'distr_interval', Request::post('timing_interval'));
+        }
+
+
 
 
 
@@ -570,6 +580,7 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
             'owner' => $owner,
             'outstanding' => CarModel::getEventOutstandingStatus($event_id),
             'oil_interval' => CarModel::readCarMeta($event_array['c'], 'oil_interval'),
+            'distr_interval' => CarModel::readCarMeta($event_array['c'], 'distr_interval'),
             'defaults' => Config::get('DEFAULT_INTERVALS'),
         ));
     }
@@ -583,6 +594,7 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
             'car_id' => $car_id,
             'odo' => CarModel::getCarsField('car_odo', $car_id),
             'oil_interval' => CarModel::readCarMeta($car_id, 'oil_interval'),
+            'distr_interval' => CarModel::readCarMeta($car_id, 'distr_interval'),
             'defaults' => Config::get('DEFAULT_INTERVALS'),
             'initial_tag' => $tag,
         ));
@@ -649,10 +661,24 @@ $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('respons
         'air_filter' => Request::post('air_filter'),
         'fuel_filter' => Request::post('fuel_filter'),
         'cabin_filter' => Request::post('cabin_filter'),
+        'timing_belt' => Request::post('timing_belt'),
+        'idler_pulley' => Request::post('idler_pulley'),
+        'tensioner_pulley' => Request::post('tensioner_pulley'),
+        'water_pump' => Request::post('water_pump'),
+
         ));
         CarModel::deleteEvent(array('c' => Request::post('car_id'), 't' => Request::post('event_time'), 'm' => Request::post('event_microtime'), 'source' => 'edit' ));
         if (Request::post('todolist_checkbox')) {CarModel::addTodoItem($edited_event, Request::post('car_id'), Request::post('event_content')); }
         if (Request::post('tododone_checkbox')) {CarModel::removeTodoItem( Request::post('event_time').':'.Request::post('event_microtime'), Request::post('car_id')); }
+
+        if (Request::post('oil_interval')) { //write update interval to car meta
+            CarModel::writeCarMeta(Request::post('car_id'), 'oil_interval', Request::post('oil_interval'));
+        }
+
+        if (Request::post('timing_interval')) { //write updated timing belt interval to car meta
+            CarModel::writeCarMeta(Request::post('car_id'), 'distr_interval', Request::post('timing_interval'));
+        }
+
         Redirect::to('car/index/'.Request::post('car_id'));
     }
 

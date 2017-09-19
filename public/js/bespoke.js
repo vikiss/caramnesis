@@ -1401,3 +1401,30 @@ $("#set_car_public").on('change', function() {
         addEventTypeToList(evtype_id, evtype_name);
           $( ".evtypechooser" ).dialog( "close" );
         } );
+
+
+        $("#timing_belt").on('change', function() {
+            const checked = $(this).prop('checked');
+            if (checked) {
+            $( "#timing_belt_panel" ).removeClass('hide');
+          } else {
+            $( "#timing_belt_panel" ).addClass('hide');
+          }
+            });
+
+            $("#new_oil").on('change', function() {
+                const checked = $(this).prop('checked');
+                const oil_interval = parseInt($("#oil_interval").val());
+                const event_odo = parseInt($("#event_odo").val());
+                if (checked) {
+                $("#next-oil-change").val(event_odo + oil_interval);
+              } else {
+                $("#next-oil-change").val('');
+              }
+                });
+
+                $('#oil_interval').on('change', function() {
+                  const oil_interval = parseInt($(this).val());
+                  const event_odo = parseInt($("#event_odo").val());
+                $("#next-oil-change").val(event_odo + oil_interval);
+                });
