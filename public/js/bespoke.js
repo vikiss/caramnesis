@@ -1428,3 +1428,8 @@ $("#set_car_public").on('change', function() {
                   const event_odo = parseInt($("#event_odo").val());
                 $("#next-oil-change").val(event_odo + oil_interval);
                 });
+
+$( '.dropdown-toggle' ).click(function(e) {
+    $(".dropdown-menu" ).toggle("fast");
+    e.stopPropagation();
+});

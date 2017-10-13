@@ -95,39 +95,54 @@ if ($images)
 
      $event_link = Config::get('URL') . 'car/event/' . $event_id; ?>
 
-<div class="mt1 p1 border mw480 bg-kcultralite event <?= $eventclass; ?> <?=
-$event_types_tags; ?>" data-event="<?= $event_id; ?>"> <div class="clearfix
-relative"> <div class=""> <div class="inline smallish bold"><?= strftime('%x',
-$event_time); if ($entrytime or $oldversions) { ?> <a href="#" class="jqtooltip"
-title="<?= $entrytime.$oldversions; ?>"><i class="icon-history"> </i></a> <?php };
-?></div> <div class="inline"><?= $event_types_out; ?></div> <?php
-if($event->event_odo) { ?><div class="inline small"><?= $event->event_odo.'
-'.$units->user_distance; ?></div><?php }; ?> <?php if(($entry_data['amount']) &&
-($entry_data['amount'] > 0)) { ?><div class="inline small"><?=
-$entry_data['amount'].' '._('CURRENCY_'.$units->user_currency); ?></div><?php }; ?>
-<div class="right"> <a href="<?= Config::get('URL') . 'car/edit_event/' .
-$event_id; ?>" title="<?= _("EDIT"); ?>"><i class="icon-pencil"> </i></a> </div>
-<?php if ($public_access) : ?> <div class="right visibility_setting_private <?=
-$visprivclass; ?>" data-event="<?= $event_id; ?>"> <a href="#" title="<?=
-_("MAKE_EVENT_PUBLIC"); ?>"><i class="icon-lock"> </i></a> </div> <div
-class="right visibility_setting_public <?= $vispubclass; ?>" data-event="<?=
-$event_id; ?>"> <a href="#" title="<?=_("MAKE_EVENT_PRIVATE"); ?>"><i
-class="icon-lock-open-alt"> </i></a> </div> <?php endif; ?> </div> <a href="<?=
-$event_link; ?>" title="<?= _("VIEW"); ?>"> <div class="relative"> <?php if
-($image_out) { ?> <div class="relative pic480width"  style="background-image:
-url(<?= $image_out; ?>)"><?= $image_meta; ?></div> <?php }; ?> <div class="mt1
-smallish"><?= $event->event_content; ?></div> </div> </a> </div> </div>
-
-        <?php return $event_types_present; } ?>
-
-
-
-
-
-
-
-
-
+<div class="mt1 p1 border mw480 bg-kcultralite event <?= $eventclass; ?> <?= $event_types_tags; ?>" data-event="<?= $event_id; ?>">
+    <div class="clearfix relative">
+        <div class="">
+            <div class="inline smallish bold"><?php
+                echo strftime('%x', $event_time);
+                if ($entrytime or $oldversions) { ?>
+                    <a href="#" class="jqtooltip" title="<?= $entrytime.$oldversions; ?>"><i class="icon-history"> </i></a>
+                <?php }; ?>
+            </div>
+            <div class="inline"><?= $event_types_out; ?></div>
+            <?php if($event->event_odo) { ?>
+                <div class="inline small">
+                    <?= $event->event_odo.''.$units->user_distance; ?>
+                </div>
+            <?php };
+            if(($entry_data['amount']) && ($entry_data['amount'] > 0)) { ?>
+                <div class="inline small">
+                    <?= $entry_data['amount'].' '._('CURRENCY_'.$units->user_currency); ?>
+                </div>
+            <?php }; ?>
+            <div class="right">
+                <a href="<?= Config::get('URL') . 'car/edit_event/'.$event_id; ?>" title="<?= _("EDIT"); ?>"><i class="icon-pencil"> </i></a>
+            </div>
+            <?php if ($public_access) : ?>
+                <div class="right visibility_setting_private <?= $visprivclass; ?>" data-event="<?= $event_id; ?>">
+                    <a href="#" title="<?= _("MAKE_EVENT_PUBLIC"); ?>"><i class="icon-lock"> </i></a>
+                </div>
+                <div class="right visibility_setting_public <?= $vispubclass; ?>" data-event="<?= $event_id; ?>">
+                    <a href="#" title="<?=_("MAKE_EVENT_PRIVATE"); ?>"><i class="icon-lock-open-alt"> </i></a>
+                </div>
+            <?php endif; ?>
+        </div>
+        <a href="<?= $event_link; ?>" title="<?= _("VIEW"); ?>">
+            <div class="relative">
+                <?php if ($image_out) { ?>
+                    <div class="relative pic480width"  style="background-image: url(<?= $image_out; ?>)">
+                        <?= $image_meta; ?>
+                    </div>
+                <?php }; ?>
+                <div class="mt1 smallish">
+                    <?= nl2br($event->event_content); ?>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+<?php return $event_types_present;
+} ?>
 
 <input type="hidden" name="car_id" id="car_id" value = "<?= $car_id; ?>" />
 

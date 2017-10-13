@@ -9,7 +9,7 @@ $showmap = (is_array($location)) ? true : false;
 <div class="box"><?php $this->renderFeedbackMessages(); ?></div>
 <div class="mt1 md-col md-col-5 mr2">
 <h1><?= $page->title; ?></h1>
-<p><?= $page->description; ?></p>
+<p><?= nl2br($page->description); ?></p>
 <p class="py2 bold"><?= $page->contact; ?></p>
 <a href = "/profile/edit" class="smallish"><?= _('EDIT'); ?></a>
 </div>

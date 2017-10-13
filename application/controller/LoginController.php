@@ -109,71 +109,72 @@ class LoginController extends Controller
            'languages' => Config::get('AVAILABLE_LOCALES'),
            'currencies' => Config::get('CURRENCIES'),
            'distance_units' => Config::get('DISTANCE_UNITS'),
-           'cons_units' => Config::get('CONSUMPTION_UNITS')
+           'cons_units' => Config::get('CONSUMPTION_UNITS'),
+           'page_title' => Session::get('user_name'),
         ));
     }
-    
+
      public function country_list($country_id)
-    {    
+    {
         $this->View->renderWithoutHeaderAndFooter('login/country_list', array('countries' => UserModel::getCountryList(), 'selected_country' => $country_id));
     }
-    
+
      public function state_list($country_id, $state_id = '')
-    {    
+    {
         $this->View->renderWithoutHeaderAndFooter('login/state_list', array('states' => UserModel::getRegionList($country_id), 'selected_state' => $state_id));
     }
-    
+
        public function city_list($country_id, $state_id = '', $city = '')
-    {    
+    {
         $this->View->renderWithoutHeaderAndFooter(
                         'login/city_list',
                         array('cities' => UserModel::getCityList($country_id, $state_id), 'selected_city' => $city, 'state_id' => $state_id)
                         );
     }
-    
-    
+
+
     public function setlang($lang)
     {
         UserModel::setLanguage($lang, Session::get('user_uuid'));
         Redirect::to('login/showprofile');
     }
-    
+
      public function setcurr($currency)
     {
         UserModel::setCurrency($currency, Session::get('user_uuid'));
         Redirect::to('login/showprofile');
     }
-    
+
      public function setdist($distance_unit) //set distance unit
     {
         UserModel::setDistanceUnit($distance_unit, Session::get('user_uuid'));
         Redirect::to('login/showprofile');
     }
-    
-     public function setcons($cons_unit) //set consumption (MPG) unit  
+
+     public function setcons($cons_unit) //set consumption (MPG) unit
     {
         UserModel::setConsumptionUnit($cons_unit, Session::get('user_uuid'));
         Redirect::to('login/showprofile');
     }
-    
+
      public function setcountry($country_code, $old_country='') //set country
     {
         UserModel::setCountry($country_code, Session::get('user_uuid'), $old_country);
         Redirect::to('login/showprofile');
     }
-    
+
     public function setregion($state_id, $old_state_id) //set state / region / district
     {
         UserModel::setRegion($state_id, Session::get('user_uuid'), $old_state_id);
         Redirect::to('login/showprofile');
     }
-    
+
     public function resetregion() //set state / region / district
     {
         UserModel::resetRegion(Session::get('user_uuid'));
         Redirect::to('login/showprofile');
     }
-    
+
      public function setcity($city, $region='') //set state / region / district
     {
         UserModel::setCity($city, $region, Session::get('user_uuid'));
@@ -436,11 +437,11 @@ class LoginController extends Controller
     {
         CaptchaModel::generateAndShowCaptcha();
     }
-    
+
     public function cbox($field, $state) //send_sms cbchecked 0 1
     {
          $response = UserModel::setCbox($field, $state, Session::get('user_uuid'));
        $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('response' => $response, 'type' => 'truefalseicon'));
     }
-    
+
 }

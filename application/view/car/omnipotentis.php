@@ -1,6 +1,57 @@
 
 <?php
+$zinute = 'Automobilių servisas Panerių 64A informuoja klientus, kad pasikeitė kontaktinis telefonas į +37061436003. Išsamiau https://motorgaga.com/aeromobilis';
 
+
+$numeriai = array(
+37069967248, //as
+37061436005, //audrimantas
+37065595886, //tablete
+//37065855044, //ema
+//37064484843, //berta
+);
+
+/*
+--------------------- aktualus siuntimas
+$database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("SELECT tel, sent  FROM sms_recipients WHERE sent = 0 LIMIT 20;");
+        $query->execute();
+        $result = $query->fetchAll();
+        foreach ( $result AS $client) {
+           print 'sending to '.$client->tel;
+           if (SmsModel::SendSms($client->tel, $zinute)) {
+           print ' sending ok';
+                $sql = "UPDATE sms_recipients SET sent = 1 WHERE tel = :tel";
+            		$query = $database->prepare($sql);
+                    if	($query->execute(array(
+            		                      ':tel' => $client->tel,
+            						  )))
+            		{print ' recorded ok<br />'; } else {print ' record phail<br />'; }
+                } else {print ' sending fail<br />';}
+            };
+            
+            
+ $query = $database->prepare("SELECT count(*) AS kiekis FROM sms_recipients WHERE sent = 0;");
+        $query->execute();
+        $howmuch = $query->fetch();            
+        print 'Lieka '.$howmuch->kiekis;
+        
+        
+        ---------------------iki cian aktualus siuntimas
+        */
+
+      /*
+foreach ($numeriai as $numeris) {
+
+if (SmsModel::SendSms($numeris, $zinute))
+
+ {
+ print $numeris.' ok<br />';
+ } else {
+ print $numeris.' fail<br />';
+ }
+};
+        */
 
 
 //
@@ -11,6 +62,47 @@
        //$kas = SmsModel::SendSms(37069967248, 'pas mal');
        //print_r($kas);
   /*
+  
+  kaip 5ra6iau numerius:
+  
+  $numbers = array();
+
+
+$handle = fopen("/var/www/html/application/view/car/siuntimui_nr.txt", "r");
+if ($handle) {
+    while (($line = fgets($handle)) !== false) {
+    $formatted = '3706'.substr($line, 2, 7); 
+        //print $line.' : 3706'.substr($line, 2, 7).'<br />';
+    if (in_array($formatted, $numbers)) {echo $formatted.' duplicate <br />';} else
+    {$numbers[] = $formatted;}
+        
+    }
+
+    fclose($handle);
+} else {
+    // error opening the file.
+} 
+
+print 'total: '.count($numbers);
+
+$qry = 'INSERT INTO sms_recipients (tel, sent) VALUES ';
+foreach ($numbers as $number) {
+       $qry.='('.$number.', 0), ';
+}
+$qry.= '(0, 0);';
+
+      
+
+$database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare($qry);
+        $query->execute();
+        
+        
+        
+        
+  
+  
+  
   
 
 $ratio = array("35", "40", "45", "50", "55", "60", "65", "70", "75", "80");

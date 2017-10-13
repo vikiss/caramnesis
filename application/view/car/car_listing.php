@@ -26,7 +26,7 @@
 </a>
 
     </div>
-    <div class="left">
+    <div class="pic120mxht mt1 mr1 mb1">
         <a href="<?= Config::get('URL') . 'car/index/' . $id; ?>" title="<?= $row->car_name; ?>">
             <span class="bold"><?= $row->car_name; ?></span><br />
             <span class="smallish"><?= $row->car_make; ?> <?= $row->car_model; ?><br /><?= $plates_or_vin; ?></span>

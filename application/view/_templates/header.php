@@ -1,7 +1,12 @@
 <!doctype html>
 <html>
 <head>
-    <title>Motorgaga</title>
+<?php
+    $pagetitle = (property_exists($this, 'page_title')) ? $this->page_title : 'Motorgaga';
+    //MessageModel::getUnreadMessages(Session::get('user_uuid')); already set somewhere
+    ReminderModel::getReminderCount(Session::get('user_uuid')); //needs to be set here, maybe will be replaced by universal notification
+?>
+    <title><?= $pagetitle; ?></title>
     <meta charset="utf-8">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?ver=2">
@@ -15,7 +20,7 @@
     if ($filename == 'view/car') {include('view-car-meta.php'); }
 ?>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="<?= Config::get('URL'); ?>css/basscss.css?ver=14" />
+    <link rel="stylesheet" href="<?= Config::get('URL'); ?>css/basscss.css?ver=15" />
     <link rel="stylesheet" href="<?= Config::get('URL'); ?>css/fontello.css" />
     <link rel="stylesheet" href="<?= Config::get('URL'); ?>css/jquery-ui.css" />
     <link rel="stylesheet" href="<?= Config::get('URL'); ?>js/photoswipe/photoswipe.css">
@@ -67,24 +72,40 @@
         </div>
         <!-- my account -->
         <div class="col col-6 right-align ltop">
+
         <?php if (Session::userIsLoggedIn()) { ?>
-
-                <div id="msgcount" class="inline relative">
-                <?php MessageModel::getUnreadMessages(Session::get('user_uuid')); ?>
-                <a href="<?= Config::get('URL'); ?>message" class="sbtn py1" title="<?= _("MESSAGES").' ('.Session::get('unread_messages').')'; ?>"><i class ="icon-mail"> </i> <span class="sm-hide"><?= _("MESSAGES"); ?></span></a>
-                <div class="absolute top-0  right-0 bg-red small bold <?php if (Session::get('unread_messages') == 0) { echo 'hide '; } ?>"><?= Session::get('unread_messages'); ?></div>
-                </div>
-                <div id="reminderCount" class="inline relative">
-                <?php ReminderModel::getReminderCount(Session::get('user_uuid')); ?>
-                <a href="<?= Config::get('URL'); ?>message/reminders" class="sbtn py1" title="<?= _("REMINDERS").' ('.Session::get('active_reminders').')'; ?>"><i class ="icon-bell-alt"> </i> <span class="sm-hide"><?= _("REMINDERS"); ?></span></a>
-                <div class="absolute top-0  right-0 bg-red small bold <?php if (Session::get('active_reminders') == 0) { echo 'hide '; } ?>"><?= Session::get('active_reminders'); ?></div>
-                </div>
-                <a href="<?= Config::get('URL'); ?>login/showprofile" class="sbtn py1" title="<?= _("MENU_MY_ACCOUNT").' ('.Session::get('user_name').')'; ?>">
-                <i class ="icon-user"> </i> <span class="sm-hide"><?= _("MENU_MY_ACCOUNT"); ?></span></a>
-
-                <a href="<?= Config::get('URL'); ?>login/login/logout" class="sbtn py1" title="<?= _("MENU_LOGOUT"); ?>">
-                <i class ="icon-logout"> </i> </a>
-
+                            <div class="inline relative">
+                              <a href="javascript:;" class="dropdown-toggle sbtn py1">
+                                 <?= Session::get('user_name'); ?>
+                                <i class ="icon-down-open"> </i>
+                              </a>
+                              <ul class="dropdown-menu closeonclick mt2 z4 active list-reset left-align">
+                                <li>
+                                    <a class="py1 px2" href="<?= Config::get('URL'); ?>login/showprofile" title="<?= _("MENU_MY_ACCOUNT"); ?>">
+                                        <i class ="icon-user right"> </i>
+                                        <span><?= _("MENU_MY_ACCOUNT"); ?></span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="py1 px2" href="<?= Config::get('URL'); ?>message"  title="<?= _("MESSAGES"); ?>">
+                                        <i class ="icon-mail right"> </i>
+                                        <span><?= _("MESSAGES").' ('.Session::get('unread_messages').')'; ?></span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="py1 px2" href="<?= Config::get('URL'); ?>message/reminders" title="<?= _("REMINDERS"); ?>">
+                                        <span><?= _("REMINDERS").' ('.Session::get('active_reminders').')'; ?></span>
+                                        <i class ="icon-bell-alt right"> </i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="py1 px2" href="<?= Config::get('URL'); ?>login/login/logout" title="<?= _("MENU_LOGOUT"); ?>">
+                                        <i class ="icon-logout right"> </i>
+                                        <span><?= _("MENU_LOGOUT"); ?></span>
+                                    </a>
+                                </li>
+                              </ul>
+                          </div>
         <?php } else {
             if (!View::checkForActiveControllerAndAction($filename, "index/about")) { ?>
                  <a href="<?= Config::get('URL'); ?>aboutMotorGaga" class="sbtn py1"><?= _("MENU_ABOUT_CARAMNESIS"); ?></a>

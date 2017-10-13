@@ -1075,6 +1075,7 @@ hr {
 .textfield  {min-height: 50vh;}
 .pic120width {width: 120px; min-height: 120px; background-size: cover; background-repeat: no-repeat; background-position: center;}
 .pic120height {height: 120px;}
+.pic120mxht {max-height: 120px; overflow: hidden;}
 .pic480width {max-width: 480px; min-height: 240px; background-size: cover; background-repeat: no-repeat; background-position: center;}
 .red-triangle {width: 0;
 height: 0;
@@ -1153,3 +1154,28 @@ border-color: transparent rgba(255, 64, 54, 0.67) transparent transparent;
   display: none;
 }
 .columns {-webkit-columns: auto 120px; columns: auto 120px;}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+background: #fff;
+right: 0;
+left: auto;
+width: 220px;
+  }
+
+.dropdown-menu li a {
+  display: block;
+  clear: both;
+  white-space: nowrap;
+}
+
+.dropdown-menu li {
+  width: 100%;
+}
+
+.dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover {
+    color: #262626;
+    background-color: rgba(204, 204, 153, 0.37)
+}

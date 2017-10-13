@@ -12,60 +12,39 @@ mysql:
 class ReminderModel
 {
     public static function setReminder($car_id, $timestamp, $microtime, $content, $status) { //sets reminder, used in edit event form
-    
-    
-    
-      $database = DatabaseFactory::getFactory()->getConnection();
-    		$query = $database->prepare("INSERT INTO reminderset  
-        (car_id, time, content, status) VALUES 
-        (:car_id, :time, :content, :status);");
-        if	($query->execute(array(
-                ':car_id' => $car_id,
-                ':time' => $timestamp.'.'.$microtime, 
-                ':content' => $content,
-                ':status' => $status,
-						  )))
-              {
-              self::queueReminder($car_id, $timestamp, $microtime, $content, $status);
-              Session::add('feedback_positive', sprintf(_('REMINDER FOR %s SET'), CarModel::getCarName($car_id))); 
-              return true; 
-              }
-        Session::add('feedback_negative', _('FEEDBACK_REMINDER_CREATION_FAILED'));
-		        return false;
-  }
-    
-    
-    private static function queueReminder($car_id, $timestamp, $microtime, $content, $status) { // the same set reminder, only for mysql
-        
+
         $database = DatabaseFactory::getFactory()->getConnection();
 
-		$sql = "INSERT INTO reminders (car_id, car_name, owner_id, time, microtime, content, status)
+        $sql = "INSERT INTO reminders (car_id, car_name, owner_id, time, microtime, content, status)
                     VALUES (:car_id, :car_name, :owner_id, :time, :microtime,  :content,  :status)";
-		$query = $database->prepare($sql);
-		$query->execute(array(':car_id' => $car_id,
-							  ':car_name' => CarModel::getCarName($car_id),
-							  ':owner_id' => CarModel::getCarOwner($car_id),
-		                      ':time' => $timestamp,
-							  ':microtime' => $microtime,
-		                      ':content' => $content,
-		                      ':status' => $status,
-						  ));
-		$count =  $query->rowCount();
-		if ($count == 1) {
-			return true;
-		}
-        
-        return false;
-    }
-    
+        $query = $database->prepare($sql);
+        $query->execute(array(':car_id' => $car_id,
+                              ':car_name' => CarModel::getCarName($car_id),
+                              ':owner_id' => CarModel::getCarOwner($car_id),
+                              ':time' => $timestamp,
+                              ':microtime' => $microtime,
+                              ':content' => $content,
+                              ':status' => $status,
+                          ));
+        $count =  $query->rowCount();
+        if ($count == 1) {
+            return true;
+        }
+
+
+        Session::add('feedback_negative', _('FEEDBACK_REMINDER_CREATION_FAILED'));
+		        return false;
+        }
+
+
     public static function readPendingReminders($status) {  //read reminders than have timestamp lower than current
-        
+
         $database = DatabaseFactory::getFactory()->getConnection();
         $query = $database->prepare("SELECT * FROM reminders WHERE time <= :time AND status = :status");
         $query->execute(array(':time' => time(), ':status' => $status ));
        $messages = array();
         foreach ($query->fetchAll() as $message) {
-             array_walk_recursive($message, 'Filter::XSSFilter');           
+             array_walk_recursive($message, 'Filter::XSSFilter');
             $messages[] = array(
                                 'car_id' => $message->car_id,
                                 'car_name' => $message->car_name,
@@ -77,29 +56,29 @@ class ReminderModel
                                 );
         }
         return $messages;
-        
-        
+
+
     }
-	
-	
+
+
 	public static function checkReminderStatus($car_id, $timestamp) {  //check if corresponding mysql reminder entry exists and has status of Q, meaning user has not been notified yet
-        
+
         $database = DatabaseFactory::getFactory()->getConnection();
         $query = $database->prepare("SELECT status FROM reminders WHERE car_id = :car_id AND time <= :time LIMIT 1");
         $query->execute(array(':car_id' => $car_id, ':time' => $timestamp ));
-       
+
         if ($result = $query->fetch()) {
             return $result->status;
         }
-        
+
 		return false;
-        
+
     }
-	
-	
-    
+
+
+
      public static function deleteReminder($id) { //mysql
-        
+
         if (!$id) {
             return false;
         }
@@ -115,10 +94,10 @@ class ReminderModel
 
         return false;
     }
-	
-	
+
+
 	     public static function deleteReminderByCarTime($car_id, $timestamp) { //delete mysql reminder form cassandra view
-        
+
         if ((!$car_id) or (!$timestamp)) {
             return false;
         }
@@ -134,53 +113,10 @@ class ReminderModel
 
         return false;
     }
-	
-	
-	//UNUSED:
-	 public static function setReminderStatus($id, $status) {
-        
-        if ((!$id) or (strlen($status) !== 1)) {
-            return false;
-        }
-		
-		//do the same for its cassandra counterpart
-		$usercopy = self::getReminderById($id); //get car_id and time to identify the corresponding entry in cassandra
-		self::setReminderStatusUserCopy($usercopy->car_id, $usercopy->time, $status);
 
 
-        $database = DatabaseFactory::getFactory()->getConnection();
-        $sql = "UPDATE reminders SET status = :status WHERE id = :id";
-        $query = $database->prepare($sql);
-        $query->execute(array(':status' => $status,':id' => $id));
-        if ($query->rowCount() == 1) {
-            return true;
-        }
 
-        return false;
-    }
-	
-	
-		// UNUSED:
-		 public static function setReminderStatusUserCopy($car_id, $time, $status) { //set status in cassandra
-        
-        if ((!$car_id) or (strlen($status) !== 1)) {
-            return false;
-        }
-		
-    
-    
-    $database = DatabaseFactory::getFactory()->getConnection();
-        $query    = $database->prepare("UPDATE reminderset SET status = :status WHERE car_id = :car_id AND time = :time");
-        if ($query->execute(array(
-            ':status' => $status,
-            ':car_id' => $car_id,
-            ':time' => $time,
-        ))) { return true; }
-    
-        return false;
-    }
-	
-	
+
 	     public static function getReminderCount($uuid)  //mysql
     {
          $database = DatabaseFactory::getFactory()->getConnection();
@@ -192,8 +128,8 @@ class ReminderModel
         }
         return false;
     }
-	
-	
+
+
 	public static function getReminderById($id)  //mysql
     {
          $database = DatabaseFactory::getFactory()->getConnection();
@@ -204,20 +140,20 @@ class ReminderModel
         }
         return false;
     }
-	
+
 	public static function getReminders($car_id, $time = 0) { //cassandra reminder list, time = 'all' or number of seconds how far back we want the reminders, 0 = now
-		
+
 		$gtorlt = '>'; $timestamp = 0 ;
 		if ($time !== 'all') {
 			$timestamp = time() - intval($time);
 			if (intval($time) < 0 ) {
-			$gtorlt = '<';		
+			$gtorlt = '<';
 			}
-			
+
 		}
-    
-    
-    
+
+
+
     $database = DatabaseFactory::getFactory()->getConnection();
         $query    = $database->prepare("SELECT * FROM reminders WHERE car_id = :car_id and convert(`time`, decimal) $gtorlt :time ORDER BY convert(`time`, decimal) asc");
         //SLOW QUERY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! need to sort
@@ -226,24 +162,24 @@ class ReminderModel
             ':time' => $timestamp,
         ));
         if ($data = $query->fetchAll()) {
-        
+
             return $data;
         } else
             return false;
-    
-		
-	
-		
-		
+
+
+
+
+
 		return false;
 	}
-	
-	
+
+
 	public static function getReminder($car_id, $time, $microtime) { //cassandra
-  
-  
+
+
     $database = DatabaseFactory::getFactory()->getConnection();
-        $query    = $database->prepare("SELECT * FROM reminderset WHERE car_id = :car_id AND time = :time");
+        $query    = $database->prepare("SELECT * FROM reminders WHERE car_id = :car_id AND time = :time");
         $query->execute(array(
             ':car_id' => $car_id,
             ':time' => $time.'.'.$microtime,
@@ -253,32 +189,12 @@ class ReminderModel
         }
 		return false;
 	}
-	
-	
-	
-	public static function deleteReminderCass($car_id, $time, $microtime) { //cassandra
-		
-		 $level = CarModel::checkAccessLevel($car_id, Session::get('user_uuid'));
-        if ($level < 80) {
-            Session::add('feedback_negative', _('ACCESS_RESTRICTION'));
-            return false;
-        }
-        
-        
-      $database = DatabaseFactory::getFactory()->getConnection();
-      $query    = $database->prepare("DELETE FROM reminderset WHERE car_id = :car_id and time = :time");
-            if ($query->execute(array(
-            ':car_id' => $car_id,
-            ':time' => $time.'.'.$microtime,
-                ))) {
-		self::deleteReminderByCarTime($car_id, $time); //delete mysql copy if present
-		return true;
-		}
-	   return false;
-	}
-	
+
+
+
+
 	public static function MoveReminder($car_id, $old_reminder, $new_reminder, $content, $offset) {
-		
+
 			$timeofday = gettimeofday(); $microtime = $timeofday['usec'];
 			$date = DateTime::createFromFormat ('Y-m-d H:i' , $new_reminder.' 11:00' );
 			$timestamp = $date->getTimestamp();
@@ -288,19 +204,19 @@ class ReminderModel
 				$old_reminder = explode(':', $old_reminder);
 				self::deleteReminderCass($car_id, $old_reminder[0], $old_reminder[1]);
 				}
-		
+
 		return $timestamp.':'.$microtime;
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	     public static function IncrementActiveReminders($uuid)  
+
+
+
+
+
+
+	     public static function IncrementActiveReminders($uuid)
     {
-   
+
         $database = DatabaseFactory::getFactory()->getConnection();
         $query = $database->prepare("UPDATE users SET active_reminders = active_reminders + 1 WHERE user_uuid = :user_uuid LIMIT 1;");
         $query->execute(array(':user_uuid' => $uuid));
@@ -311,11 +227,11 @@ class ReminderModel
         }
         return false;
     }
-    
-    
-    public static function DecrementActiveReminders($uuid)  
+
+
+    public static function DecrementActiveReminders($uuid)
     {
-   
+   if (intval(Session::get('active_reminders')) > 0) {
         $database = DatabaseFactory::getFactory()->getConnection();
         $query = $database->prepare("UPDATE users SET active_reminders = active_reminders - 1 WHERE user_uuid = :user_uuid LIMIT 1;");
         $query->execute(array(':user_uuid' => $uuid));
@@ -327,12 +243,13 @@ class ReminderModel
 			};
             return true;
         }
+    }
         return false;
     }
-	
-	
+
+
 	public static function formatDate($date) {
-		
+
         //is it today :
 		if (date('Ymd', $date) == date('Ymd')) {
             return _('TODAY');
@@ -345,8 +262,7 @@ class ReminderModel
         }
 
     }
-	
-	
-    
-};    
-    
+
+
+
+};
