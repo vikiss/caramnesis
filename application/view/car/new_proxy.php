@@ -33,14 +33,14 @@ foreach ($this->cars as $car) {
       <div class="pic120width bg-white relative z1"  style="background-image: url(<?= Config::get('URL') .'car/image/'.$id.'/'.$car_image; ?>/120)"> </div>
       <?php } else { ?>
           <div class="pic120width bg-white relative center bg-kclite " >
-                 &nbsp;<br />&nbsp;<br/>
+                 &nbsp;<br />&nbsp;<br />
                      <i class="icon-camera"> </i>
           </div>
       <?php }; ?>
       </a>
 
           </div>
-          <div class="left">
+          <div class="pic120mxht mt1 mr1 mb1">
               <a href="<?= Config::get('URL') . 'car/index/' . $id; ?>" title="<?= $row->car_name; ?>">
                   <span class="bold"><?= $row->car_name; ?></span><br />
                   <i class="icon-user"> </i><?= UserModel::getUserNameByUUid($row->owner); ?><br />

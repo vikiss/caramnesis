@@ -53,29 +53,35 @@ class SmsModel
     }
 
     public static function sendSMSNotification($recipient, $message) //checks if it's ok to send SMS and sends it
-    //always returns true; enters sms in deferredSMS table if it's not OkToSensSMS at the time
+    // enters sms in deferredSMS table if it's not OkToSensSMS at the time
     {
+        $log = '';
      if ($phone_no = self::getUserPhoneForSms($recipient)) {
      if (self::OkToSendSMS(UserModel::getUserCountry($recipient))) {
-       self::SendSms($phone_no, $message);
+        $log.= 'trying to send to '.$phone_no.' ';
+       $log .= (self::SendSms($phone_no, $message)) ? 'OK' : 'failed';
       } else {
        self::queueDeferredSMS($recipient, $message);
+       $log.= 'Bad time to send to '.$phone_no.', deferring ';
       }
-     }
-     return true;
+  } else {
+      $log.= 'no SMS for user '.$recipient;
+  }
+     return $log;
     }
 
 
-    public static function sendQueudSms() { //sends all queud SMS
+    public static function sendQueudSms() { //sends all queued SMS
         $database = DatabaseFactory::getFactory()->getConnection();
         $query = $database->prepare("SELECT * FROM deferredSMS;");
         $query->execute();
         $result = $query->fetchAll();
+        $log = '';
         foreach ($result AS $row) {
-         self::sendSMSNotification($row->recipient, $row->content);
+         $log.='deferred: '.self::sendSMSNotification($row->recipient, $row->content).PHP_EOL;
          self::deleteQueudSms($row->id);
         }
-
+        return $log;
     }
 
 
