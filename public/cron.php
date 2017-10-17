@@ -47,9 +47,12 @@ bindtextdomain($domain, '/var/www/html/application/Locale'); bind_textdomain_cod
 		$body = $reminder['content'];
 
 		if (NotificationModel::queueNotification ($reminder['owner_id'], $subject, $body)) {
-			$log.=' :reminder queued for '.$reminder['car_name'].PHP_EOL;
+			$log.=' :reminder queued for '.$reminder['car_name'];
 			ReminderModel::IncrementActiveReminders($reminder['owner_id']);
-			ReminderModel::deleteReminder($reminder['id']);
+			if (ReminderModel::deleteReminder($reminder['id'], $reminder['car_id'], $reminder['timestamp'])) {
+                $log.=' deleted';
+            }
+            $log.=PHP_EOL;
 		}
 	}
 }

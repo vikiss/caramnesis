@@ -108,7 +108,7 @@ class ReminderModel
 
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "DELETE FROM reminders WHERE car_id = :car_id and time = :time LIMIT 1";
+        $sql = "DELETE FROM reminders WHERE car_id = :car_id and `time` = :time LIMIT 1";
         $query = $database->prepare($sql);
         $query->execute(array(':car_id' => $car_id, ':time' => $timestamp));
         if ($query->rowCount() == 1) {
@@ -243,6 +243,25 @@ class ReminderModel
 			if ($current_reminders > 0) {
             //Session::set('active_reminders', intval(Session::get('active_reminders')) - 1);
 			};
+            return true;
+        }
+    }
+        return false;
+    }
+
+
+    public static function resetActiveReminders($uuid)
+    {
+   if (intval(Session::get('active_reminders')) > 0) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("UPDATE users SET active_reminders = 0 WHERE user_uuid = :user_uuid LIMIT 1;");
+        $query->execute(array(':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            $current_reminders = intval(Session::get('active_reminders'));
+            if ($current_reminders > 0) {
+            //Session::set('active_reminders', 0);
+            };
             return true;
         }
     }

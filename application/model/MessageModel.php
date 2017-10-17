@@ -181,6 +181,20 @@ class MessageModel
         return false;
     }
 
+    public static function resetUnreadMessages($uuid)
+    {
+
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $query = $database->prepare("UPDATE users SET unread_messages = 0 WHERE user_uuid = :user_uuid LIMIT 1;");
+        $query->execute(array(':user_uuid' => $uuid));
+        $count = $query->rowCount();
+        if ($count == 1) {
+            Session::set('unread_messages', 0);
+            return true;
+        }
+        return false;
+    }
+
         public static function getUnreadMessages($uuid)
     {
 

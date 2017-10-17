@@ -14,6 +14,7 @@ class MessageController extends Controller
     $records = Config::get('MESSAGE_PAGING');
     if (intval($page) > 1) {$offset = ($page-1) * $records;}
     $messages = MessageModel::checkMessages(Session::get('user_uuid'), array('records' => $records, 'offset' => $offset));
+    MessageModel::resetUnreadMessages(Session::get('user_uuid'));
         $this->View->render('message/index', array('messages' => $messages));
     }
 
@@ -52,10 +53,11 @@ class MessageController extends Controller
         $this->View->renderWithoutHeaderAndFooter('message/remindercount', array('remindercount' => ReminderModel::getReminderCount(Session::get('user_uuid'))));
     }
 
-    public function reminders($since_when = 0)
+ public function reminders($since_when = 0)
     {
         $uuid = Session::get('user_uuid');
-    $reminders = ReminderModel::getReminders($uuid);
+        $reminders = ReminderModel::getReminders($uuid);
+        ReminderModel::resetActiveReminders($uuid);
         $this->View->render('message/reminders', array(
                                                        'reminders' => $reminders,
                                                        'cars' => CarModel::getCars($uuid),
