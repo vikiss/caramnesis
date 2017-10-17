@@ -1179,3 +1179,18 @@ width: 220px;
     color: #262626;
     background-color: rgba(204, 204, 153, 0.37)
 }
+
+.badge {
+    display: inline-block;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 13px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    border-radius: 50%;
+    position: absolute;
+    right: -5px;
+    top: -5px;
+}

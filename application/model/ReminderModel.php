@@ -77,7 +77,7 @@ class ReminderModel
 
 
 
-     public static function deleteReminder($id) { //mysql
+     public static function deleteReminder($id,$car_id, $timestamp) { //mysql
 
         if (!$id) {
             return false;
@@ -85,9 +85,13 @@ class ReminderModel
 
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "DELETE FROM reminders WHERE id = :id LIMIT 1";
+        $sql = "DELETE FROM reminders WHERE `id` = :id AND `car_id` = :car_id AND `time` = :time LIMIT 1";
         $query = $database->prepare($sql);
-        $query->execute(array(':id' => $id));
+        $query->execute(array(
+            ':id' => $id,
+            ':car_id' => $car_id,
+            ':time' => $timestamp,
+        ));
         if ($query->rowCount() == 1) {
             return true;
         }
@@ -175,14 +179,13 @@ class ReminderModel
 	}
 
 
-	public static function getReminder($car_id, $time, $microtime) { //cassandra
-
-
+	public static function getReminder($car_id, $time, $microtime) {
     $database = DatabaseFactory::getFactory()->getConnection();
-        $query    = $database->prepare("SELECT * FROM reminders WHERE car_id = :car_id AND time = :time");
+        $query    = $database->prepare("SELECT * FROM reminders WHERE car_id = :car_id AND time = :time AND microtime = :microtime");
         $query->execute(array(
             ':car_id' => $car_id,
-            ':time' => $time.'.'.$microtime,
+            ':time' => $time,
+            ':microtime' => $microtime,
         ));
         if ($data = $query->fetch()) {
             return $data;
@@ -201,8 +204,7 @@ class ReminderModel
 			if (intval($offset) > 0) { $timestamp = $timestamp - (86400 * intval($offset)); }
 			    self::setReminder($car_id, $timestamp, $microtime, $content, 'Q');
 			if ($old_reminder) {
-				$old_reminder = explode(':', $old_reminder);
-				self::deleteReminderCass($car_id, $old_reminder[0], $old_reminder[1]);
+                self::deleteReminderByCarTime($car_id, $old_reminder);
 				}
 
 		return $timestamp.':'.$microtime;

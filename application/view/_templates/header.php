@@ -3,7 +3,7 @@
 <head>
 <?php
     $pagetitle = (property_exists($this, 'page_title')) ? $this->page_title : 'Motorgaga';
-    //MessageModel::getUnreadMessages(Session::get('user_uuid')); already set somewhere
+    MessageModel::getUnreadMessages(Session::get('user_uuid'));
     ReminderModel::getReminderCount(Session::get('user_uuid')); //needs to be set here, maybe will be replaced by universal notification
 ?>
     <title><?= $pagetitle; ?></title>
@@ -20,7 +20,7 @@
     if ($filename == 'view/car') {include('view-car-meta.php'); }
 ?>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="<?= Config::get('URL'); ?>css/basscss.css?ver=15" />
+    <link rel="stylesheet" href="<?= Config::get('URL'); ?>css/basscss.css?ver=16" />
     <link rel="stylesheet" href="<?= Config::get('URL'); ?>css/fontello.css" />
     <link rel="stylesheet" href="<?= Config::get('URL'); ?>css/jquery-ui.css" />
     <link rel="stylesheet" href="<?= Config::get('URL'); ?>js/photoswipe/photoswipe.css">
@@ -73,7 +73,27 @@
         <!-- my account -->
         <div class="col col-6 right-align ltop">
 
-        <?php if (Session::userIsLoggedIn()) { ?>
+        <?php if (Session::userIsLoggedIn()) {
+            $unread_messages = intval(Session::get('unread_messages'));
+            $active_reminders  = intval(Session::get('active_reminders'));
+            $unread_messages_text = ($unread_messages > 0) ? ' <span class="bold">('.$unread_messages.')</span>' : '';
+            $active_reminders_text = ($active_reminders > 0) ? ' <span class="bold">('.$active_reminders.')</span>' : '';
+            if (($unread_messages > 0) || ($active_reminders > 0)) {
+        ?>
+                            <div class="inline sbtn py1">
+        <?php if ($unread_messages > 0) { ?>
+                                <a href="<?php echo Config::get('URL'); ?>message" class="white relative" title="<?= _("MESSAGES").' ('.$unread_messages.')'; ?>">
+                                    <i class ="icon-mail"> </i>
+                                    <span class="badge bg-maroon"><?= $unread_messages; ?></span>
+                                </a>
+        <?php }; if ($active_reminders > 0) { ?>
+                                <a href="<?php echo Config::get('URL'); ?>message/reminders" class="white relative" title="<?= _("REMINDERS").' ('.$active_reminders.')'; ?>">
+                                    <i class ="icon-bell-alt"> </i>
+                                    <span class="badge bg-purple"><?= $active_reminders; ?></span>
+                                </a>
+        <?php }; ?>
+                            </div>
+        <?php }; ?>
                             <div class="inline relative">
                               <a href="javascript:;" class="dropdown-toggle sbtn py1">
                                  <?= Session::get('user_name'); ?>
@@ -89,12 +109,12 @@
                                 <li>
                                     <a class="py1 px2" href="<?= Config::get('URL'); ?>message"  title="<?= _("MESSAGES"); ?>">
                                         <i class ="icon-mail right"> </i>
-                                        <span><?= _("MESSAGES").' ('.Session::get('unread_messages').')'; ?></span>
+                                        <span><?= _("MESSAGES").$unread_messages_text; ?></span>
                                     </a>
                                 </li>
                                 <li>
                                     <a class="py1 px2" href="<?= Config::get('URL'); ?>message/reminders" title="<?= _("REMINDERS"); ?>">
-                                        <span><?= _("REMINDERS").' ('.Session::get('active_reminders').')'; ?></span>
+                                        <span><?= _("REMINDERS").$active_reminders_text; ?></span>
                                         <i class ="icon-bell-alt right"> </i>
                                     </a>
                                 </li>

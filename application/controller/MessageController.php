@@ -7,7 +7,7 @@ class MessageController extends Controller
         parent::__construct();
         Auth::checkAuthentication();
     }
-    
+
      public function index($page = 0) //list of received messages for current user
     {
     $offset = 0;
@@ -16,7 +16,7 @@ class MessageController extends Controller
     $messages = MessageModel::checkMessages(Session::get('user_uuid'), array('records' => $records, 'offset' => $offset));
         $this->View->render('message/index', array('messages' => $messages));
     }
-    
+
      public function sent($page = 0) //list of sent messages for current user
     {
     $offset = 0;
@@ -25,7 +25,7 @@ class MessageController extends Controller
     $messages = MessageModel::checkSentMessages(Session::get('user_uuid'), array('records' => $records, 'offset' => $offset));
         $this->View->render('message/sent', array('messages' => $messages));
     }
-    
+
      public function send() //send a message to another user
     {
     MessageModel::sendMessage(
@@ -34,25 +34,25 @@ class MessageController extends Controller
         Request::post('message'),
         Request::post('subject')
                               ) ;
-    Redirect::to('message/index');                               
+    Redirect::to('message/index');
     }
-    
+
  public function new_message()
     {
         $this->View->render('message/new_message');
     }
-    
+
  public function msgcount()
     {
         $this->View->renderWithoutHeaderAndFooter('message/msgcount', array('msgcount' => MessageModel::getUnreadMessages(Session::get('user_uuid'))));
     }
-    
+
  public function remindercount()
     {
         $this->View->renderWithoutHeaderAndFooter('message/remindercount', array('remindercount' => ReminderModel::getReminderCount(Session::get('user_uuid'))));
     }
-    
-    public function reminders($since_when = 0) 
+
+    public function reminders($since_when = 0)
     {
         $uuid = Session::get('user_uuid');
     $reminders = ReminderModel::getReminders($uuid);
@@ -63,12 +63,12 @@ class MessageController extends Controller
                                                        )
                             );
     }
-    
+
 public function reply_message($timeuuid)
     {
         $this->View->render('message/reply_message', array('message' => MessageModel::getMessage(Session::get('user_uuid'), $timeuuid, '')));
-    }    
-    
+    }
+
      public function single($timeuuid, $recipient = '') //recipient needed to let sender look at the same message body
     {
         $message = MessageModel::getMessage(Session::get('user_uuid'), $timeuuid, $recipient);
@@ -76,7 +76,7 @@ public function reply_message($timeuuid)
         $this->View->render('message/single', array('message' => $message));
                             }
     }
-    
+
       public function reminder($car_id, $time, $microtime, $msgstatus)  //look at a single reminder to postpone it, unmark as active
     {
         $reminder = ReminderModel::getReminder($car_id, $time, $microtime);
@@ -87,9 +87,9 @@ public function reply_message($timeuuid)
         }}
         $this->View->render('message/reminder', array('reminder' => $reminder));
     }
-    
-    
-    public function del_cass_reminder($car_id, $time, $microtime)  //delete reminder
+
+
+    /*public function del_cass_reminder($car_id, $time, $microtime)  //delete reminder
     {
         $reminder = ReminderModel::getReminder($car_id, $time, $microtime);
         $result = '';
@@ -97,9 +97,9 @@ public function reply_message($timeuuid)
             $result = ReminderModel::deleteReminderCass($car_id, $time, $microtime);
         }
         $this->View->renderWithoutHeaderAndFooter('car/generic_response', array('response' => $result, 'type' => 'truefalseicon'));
-    }   
-    
-    
+    }*/
+
+
     public function delete_reminder()  //same delete cass reminder except with posted data and no ajax
     {
         $reminder = ReminderModel::getReminder(
@@ -107,28 +107,28 @@ public function reply_message($timeuuid)
             Request::post('dlg_time'),
             Request::post('dlg_microtime')
                                                );
-        $result = '';
+
     if ($reminder !== false) {
-            if (ReminderModel::deleteReminderCass(
+            if (ReminderModel::deleteReminder(
+            $reminder->id,
             Request::post('dlg_car_id'),
-            Request::post('dlg_time'),
-            Request::post('dlg_microtime')
-                                                  ))
+            Request::post('dlg_time')
+            ))
             {
                 Session::add('feedback_positive', _('REMINDER_DELETED'));
-                 
+
             } else {
                 Session::add('feedback_negative', _('REMINDER_DELETE_FAILED'));
-                }
+            }
         }
         Redirect::to('message/reminders');
     }
-    
-    
-    
 
-    
-    
-    
-    
+
+
+
+
+
+
+
 }

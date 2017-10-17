@@ -7,7 +7,7 @@
     <script src="/js/i18n/datepicker-<?= strtolower($userlang); ?>.js"></script>
     <?php }; ?>
     <script>var lang='<?= strtolower(Session::get('user_lang')); ?>';</script>
-    <script src="/js/bespoke.js"></script>
+    <script src="/js/bespoke.js?ver=2"></script>
 
 
     <script>
